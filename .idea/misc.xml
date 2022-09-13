@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/Patrice/Desktop/KODAGE/APPS/AssuranceContractHandler/app/src/main/res/drawable/ic_folder.xml" value="0.18" />
+        <entry key="..\:/Users/Patrice/Desktop/KODAGE/APPS/AssuranceContractHandler/app/src/main/res/drawable/round_drawable.xml" value="0.172" />
+        <entry key="..\:/Users/Patrice/Desktop/KODAGE/APPS/AssuranceContractHandler/app/src/main/res/layout/activity_main.xml" value="0.2579162410623085" />
+        <entry key="..\:/Users/Patrice/Desktop/KODAGE/APPS/AssuranceContractHandler/app/src/main/res/layout/content_main.xml" value="0.2630208333333333" />
+        <entry key="..\:/Users/Patrice/Desktop/KODAGE/APPS/AssuranceContractHandler/app/src/main/res/layout/fragment_first.xml" value="0.2630208333333333" />
+        <entry key="..\:/Users/Patrice/Desktop/KODAGE/APPS/AssuranceContractHandler/app/src/main/res/layout/fragment_second.xml" value="0.25" />
+        <entry key="..\:/Users/Patrice/Desktop/KODAGE/APPS/AssuranceContractHandler/app/src/main/res/menu/menu_main.xml" value="0.2630208333333333" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>
