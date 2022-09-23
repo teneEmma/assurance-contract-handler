@@ -1,4 +1,4 @@
-package com.kod.assurancecontracthandler
+package com.kod.assurancecontracthandler.views.mainactivity
 
 import android.os.Bundle
 import com.google.android.material.snackbar.Snackbar
@@ -9,8 +9,8 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
+import com.kod.assurancecontracthandler.R
 import com.kod.assurancecontracthandler.databinding.ActivityMainBinding
-
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration

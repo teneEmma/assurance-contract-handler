@@ -5,7 +5,7 @@
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
     <string name="save">SAUVEGARDER</string>
-    <string name="validate">VALIDER</string>
+    <string name="upload">UPLOAD</string>
     <string name="cancel">ANNULER</string>
 
     <string name="hello_first_fragment">Hello first fragment</string>
@@ -13,4 +13,5 @@
     <string name="importFile">Importer Un Fichier...</string>
     <string name="contrat_file_name">fiche_des_contrats.xls</string>
     <string name="file_description">excel file</string>
+    <string name="success_select">selected successfully</string>
 </resources>
