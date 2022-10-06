@@ -7,36 +7,42 @@ import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
 import android.provider.OpenableColumns
-import android.system.ErrnoException
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.snackbar.Snackbar
 import com.kod.assurancecontracthandler.R
-import com.kod.assurancecontracthandler.common.model.IntentRequestCodes
 import com.kod.assurancecontracthandler.common.model.MimeTypes
 import com.kod.assurancecontracthandler.databinding.FragmentFirstBinding
-import org.apache.poi.ss.usermodel.Row
-import org.apache.poi.xssf.usermodel.XSSFWorkbook
+import com.kod.assurancecontracthandler.viewmodels.exceldocviewmodel.ExcelDocumentsViewModel
+import com.kod.assurancecontracthandler.viewmodels.exceldocviewmodel.ExcelDocumentsViewModelFactory
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.io.File
-import java.io.FileInputStream
-import java.io.FileNotFoundException
-
 
 class FirstFragment : Fragment() {
 
     private var _binding: FragmentFirstBinding? = null
     private val binding get() = _binding!!
+    private lateinit var resultLauncher: ActivityResultLauncher<Intent>
+    lateinit var excelDocumentVM: ExcelDocumentsViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         checkAndGrantPermission()
+        excelDocumentVM = ViewModelProvider(this,
+            ExcelDocumentsViewModelFactory(requireActivity().application)
+        )
+            .get(ExcelDocumentsViewModel::class.java)
         _binding = FragmentFirstBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -44,21 +50,32 @@ class FirstFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        resultLauncher = registerForActivityResult(ActivityResultContracts
+            .StartActivityForResult()){
+                result->
+            if (result.resultCode == Activity.RESULT_OK && result.data != null){
+                documentActivityResult(result.data)
+            }
+        }
+
         binding.actvImportFile.setOnClickListener {
+//            checkAndGrantPermission()
             getDocument()
             toast("Clicked")
         }
+
     }
 
     private fun checkAndGrantPermission(){
-        val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()){ permissions->
+        val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts
+            .RequestMultiplePermissions()){ permissions->
             permissions.entries.forEach {
                 Log.e("isGranted", "${it.key} -- ${it.value}")
             }
         }
 
-        Log.e("filesDir", "${requireActivity().filesDir}")
-        requestPermissionLauncher.launch(arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE))
+        requestPermissionLauncher.launch(arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.READ_EXTERNAL_STORAGE))
     }
 
     private fun getDocument(){
@@ -66,29 +83,19 @@ class FirstFragment : Fragment() {
             type = MimeTypes.EXCEL_2007_SUP.value
             addCategory(Intent.CATEGORY_OPENABLE)
         }
-        startActivityForResult(intent, IntentRequestCodes.OPEN_DOCUMENT.value)
+        resultLauncher.launch(intent)
     }
 
-    private fun snack(message: String){
-        Snackbar.make(requireView(), message, Snackbar.LENGTH_SHORT).show()
-    }
-
-    private fun toast(message: String){
-        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
-    }
-
-    @Deprecated("Deprecated in Java")
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK && requestCode == 10000 && data?.data != null){
-            val selectedDocUri: Uri? = data.data
+    private fun documentActivityResult(data: Intent?) {
+            val selectedDocUri: Uri? = data?.data
             val file = selectedDocUri?.path?.let { File(it) }
             var selectedFileName: String? = null
 
              if (selectedDocUri.toString().startsWith("content://")) {
                 var cursor: Cursor? = null
                 try {
-                    cursor = selectedDocUri?.let { requireActivity().contentResolver.query(it, null, ":", null, "") }
+                    cursor = selectedDocUri?.let { requireActivity().contentResolver.query(it,
+                        null, ":", null, "") }
                     if (cursor != null && cursor.moveToFirst()) {
                         val nameIndex =
                             cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
@@ -102,50 +109,27 @@ class FirstFragment : Fragment() {
                 selectedFileName = file?.name
             }
             snack("$selectedFileName ${resources.getString(R.string.success_select)}")
-            Log.e("file name", selectedFileName.toString())
 
             var path = selectedDocUri?.path
-            Log.e("path", path.toString())
-            if (path != null) {
+            if (path != null && selectedFileName != null) {
                 path = path.substring(path.indexOf(":") +1)
-                if (selectedFileName != null) {
-                    openFile(path)
+                lifecycleScope.launch(Dispatchers.IO){
+                    excelDocumentVM.readDocumentContent(path)
                 }
             }
-
-            Log.e("path", path.toString())
-
             binding.textviewSecond.text = selectedFileName
-        }
-    }
-
-    private fun openFile(path: String){
-//        val externalStorageDirectory: File =
-//            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)
-
-        var inputStream: FileInputStream? = null
-        val folder = File("/storage/emulated/0/$path")
-        try{
-             inputStream = FileInputStream(folder)
-        }catch (e: java.lang.Exception){
-            if(e is FileNotFoundException && e.cause is ErrnoException){
-                toast("please you need to grant App permission")
-            }
-        }
-
-        if (inputStream != null){
-            val workBook = XSSFWorkbook(inputStream)
-            val sheet = workBook.getSheetAt(0)
-            val numberOfRows = sheet.physicalNumberOfRows
-            for (rowIndex in 0..numberOfRows){
-                val row: Row = sheet.getRow(rowIndex)
-                Log.e("ROW", "Of index: $rowIndex has value: $row")
-            }
-        }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun snack(message: String){
+        Snackbar.make(requireView(), message, Snackbar.LENGTH_SHORT).show()
+    }
+
+    private fun toast(message: String){
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 }
