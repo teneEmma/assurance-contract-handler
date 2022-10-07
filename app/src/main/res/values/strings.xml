@@ -14,4 +14,13 @@
     <string name="contrat_file_name">fiche_des_contrats.xls</string>
     <string name="file_description">excel file</string>
     <string name="success_select">selected successfully</string>
+    <string name="column_attestation">000*Z*0112233</string>
+    <string name="column_carteRose">00011333</string>
+    <string name="column_assure">CLIENT ASSURE</string>
+    <string name="column_effet">2000/01/01</string>
+    <string name="column_echeance">2000/01/01</string>
+    <string name="column_id">01</string>
+    <string name="add_document">Add Document</string>
+    <string name="base_de_donnees_vide">BASE DE DONNEES VIDE</string>
+    <string name="base_de_donnee_vide">Base De Donnee Vide</string>
 </resources>

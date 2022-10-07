@@ -4,14 +4,14 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.kod.assurancecontracthandler.model.Contract
-import com.kod.assurancecontracthandler.Dao.contractDAO
+import com.kod.assurancecontracthandler.Dao.ContractDAO
 import com.kod.assurancecontracthandler.common.constants.ConstantsVariables
+import com.kod.assurancecontracthandler.model.ContractDbDto
 
-@Database(entities = [Contract::class], version = 1, exportSchema = true)
+@Database(entities = [ContractDbDto::class], version = 1, exportSchema = true)
 abstract class ContractDatabase: RoomDatabase() {
 
-    abstract fun contractDao(): contractDAO
+    abstract fun contractDao(): ContractDAO
 
     companion object{
         @Volatile
@@ -26,8 +26,7 @@ abstract class ContractDatabase: RoomDatabase() {
         }
 
         private fun buildDatabase(context: Context): ContractDatabase{
-            return Room.databaseBuilder(context,
-            ContractDatabase::class.java, ConstantsVariables.dataBaseName)
+            return Room.databaseBuilder(context, ContractDatabase::class.java, "contract_database")
                 .build()
         }
     }

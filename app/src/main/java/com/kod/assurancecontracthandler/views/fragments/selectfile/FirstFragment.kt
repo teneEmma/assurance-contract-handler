@@ -17,10 +17,14 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.kod.assurancecontracthandler.R
 import com.kod.assurancecontracthandler.common.model.MimeTypes
 import com.kod.assurancecontracthandler.databinding.FragmentFirstBinding
+import com.kod.assurancecontracthandler.model.ContractDbDto
+import com.kod.assurancecontracthandler.viewmodels.databaseviewmodel.DBViewModel
+import com.kod.assurancecontracthandler.viewmodels.databaseviewmodel.DBViewModelFactory
 import com.kod.assurancecontracthandler.viewmodels.exceldocviewmodel.ExcelDocumentsViewModel
 import com.kod.assurancecontracthandler.viewmodels.exceldocviewmodel.ExcelDocumentsViewModelFactory
 import kotlinx.coroutines.Dispatchers
@@ -33,6 +37,8 @@ class FirstFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
     lateinit var excelDocumentVM: ExcelDocumentsViewModel
+    lateinit var dbViewModel: DBViewModel
+    lateinit var listOfContracts: List<ContractDbDto>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,8 +47,9 @@ class FirstFragment : Fragment() {
         checkAndGrantPermission()
         excelDocumentVM = ViewModelProvider(this,
             ExcelDocumentsViewModelFactory(requireActivity().application)
-        )
-            .get(ExcelDocumentsViewModel::class.java)
+        )[ExcelDocumentsViewModel::class.java]
+        dbViewModel = ViewModelProvider(this,
+            DBViewModelFactory(requireActivity().application))[DBViewModel::class.java]
         _binding = FragmentFirstBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -58,10 +65,21 @@ class FirstFragment : Fragment() {
             }
         }
 
+        excelDocumentVM.listOfContracts.observe(viewLifecycleOwner){
+            listOfContracts = it
+        }
+
+        binding.btnCancelFile.setOnClickListener {
+            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
+        }
+
+        binding.btnSaveFile.setOnClickListener {
+            addContracts(listOfContracts)
+            toast("Document Sauvegardé Avec Success")
+        }
+
         binding.actvImportFile.setOnClickListener {
-//            checkAndGrantPermission()
             getDocument()
-            toast("Clicked")
         }
 
     }
@@ -113,9 +131,7 @@ class FirstFragment : Fragment() {
             var path = selectedDocUri?.path
             if (path != null && selectedFileName != null) {
                 path = path.substring(path.indexOf(":") +1)
-                lifecycleScope.launch(Dispatchers.IO){
-                    excelDocumentVM.readDocumentContent(path)
-                }
+                readDocument(path)
             }
             binding.textviewSecond.text = selectedFileName
     }
@@ -131,5 +147,15 @@ class FirstFragment : Fragment() {
 
     private fun toast(message: String){
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun addContracts(contracts: List<ContractDbDto>){
+        dbViewModel.addContracts(contracts)
+    }
+
+    private fun readDocument(path: String){
+        lifecycleScope.launch(Dispatchers.IO){
+            excelDocumentVM.readDocumentContent(path)
+        }
     }
 }

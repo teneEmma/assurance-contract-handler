@@ -23,46 +23,50 @@ interface ModelSchemaStructurer {
                 }
             }
             row.isNotEmpty() && row[0] is Double -> {
-                val contract : Contract = setContractObj(row)
-//                Log.e("List Of Contracts", contract.toString())
-                SheetCursorPosition.RowContent(contract)
+                setContractObj(row)
+//                    Log.e("List Of Contracts", contract.toString())
             }
             else -> SheetCursorPosition.EmptyRow()
         }
     }
 
-    private fun setContractObj(params: List<Any?>): Contract {
-        return Contract(
-            params[0] as Double,
-            params[1] ,
-            params[2] ,
-            params[3] ,
-            params[4] ,
-            params[5],
-            params[6] ,
-            params[7] ,
-            params[8] ,
-            params[9] ,
-            params[10] ,
-            params[11] ,
-            params[12] ,
-            params[13] ,
-            params[14] ,
-            params[15],
-            params[16] ,
-            params[17] ,
-            params[18] ,
-            params[19] ,
-            params[20] ,
-            params[21] ,
-            params[22] ,
-            params[23] ,
-            params[24] ,
-            params[25],
-            params[26] ,
-            params[27] ,
-            params[28],
-            params[29]
-        )
+    private fun setContractObj(params: List<Any?>): SheetCursorPosition<T> {
+        return try {
+            val contract = Contract(
+                params[0] as Double,
+                params[1] ,
+                params[2] ,
+                params[3] ,
+                params[4] ,
+                params[5],
+                params[6] ,
+                params[7] ,
+                params[8] ,
+                params[9] ,
+                params[10] ,
+                params[11] ,
+                params[12] ,
+                params[13] ,
+                params[14] ,
+                params[15],
+                params[16] ,
+                params[17] ,
+                params[18] ,
+                params[19] ,
+                params[20] ,
+                params[21] ,
+                params[22] ,
+                params[23] ,
+                params[24] ,
+                params[25],
+                params[26] ,
+                params[27] ,
+                params[28],
+                params[29]
+            )
+            SheetCursorPosition.RowContent(contract)
+        }catch (e: Throwable){
+            SheetCursorPosition.EmptyRow("Couldn't Convert File. Please Verify it has a good format")
+        }
     }
 }

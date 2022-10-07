@@ -8,6 +8,6 @@ import java.util.Date
 data class ContractDbDto(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
-    val contract: Contract,
-    val date: Date
+    val contract: Contract?,
+    val date: Long
 )

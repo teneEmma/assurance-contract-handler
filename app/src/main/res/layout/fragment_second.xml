@@ -4,7 +4,53 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".views.fragments.filevisualizer.SecondFragment">
+    tools:context=".views.fragments.contractsvisualizer.ContractListFragment">
 
+    <ImageView
+        android:id="@+id/iv_empty_database"
+        android:layout_width="300dp"
+        android:layout_height="350dp"
+        android:src="@drawable/ic_file"
+        android:tooltipText="Empty Databse"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/purple_500"
+        android:visibility="gone"
+        android:contentDescription="@string/base_de_donnee_vide" />
+
+    <TextView
+        android:id="@+id/tv_empty_database"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/base_de_donnees_vide"
+        android:textAlignment="center"
+        android:textColor="@color/purple_700"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/iv_empty_database"
+        android:visibility="gone"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_list_contract"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="true"
+        android:clipToPadding="true"
+        android:scrollbars="horizontal"
+        tools:listitem="@layout/rv_item" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/addExcelFile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_upload_file"
+        app:backgroundTint="@color/purple_500"
+        app:rippleColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:contentDescription="@string/add_document" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

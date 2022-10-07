@@ -1,25 +1,34 @@
 package com.kod.assurancecontracthandler.viewmodels.databaseviewmodel
 
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.kod.assurancecontracthandler.model.ContractDbDto
 import com.kod.assurancecontracthandler.model.database.ContractDatabase
 import com.kod.assurancecontracthandler.repository.ContractRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class DBViewModel(application: Application): AndroidViewModel(application) {
 
     private val repository: ContractRepository
     init{
-        val database = ContractDatabase.getDatabase(application)
-        val contractDAO = database.contractDao()
+        val contractDAO = ContractDatabase.getDatabase(application.applicationContext).contractDao()
         repository = ContractRepository(contractDAO)
     }
 
     fun addContracts(contracts: List<ContractDbDto>){
         viewModelScope.launch {
             repository.addContracts(contracts)
+        }
+    }
+
+    private val _allContracts = MutableLiveData<List<ContractDbDto>>()
+    val allContracts: LiveData<List<ContractDbDto>> = _allContracts
+
+    fun fetchAllContracts() {
+        viewModelScope.launch {
+            _allContracts.postValue(repository.readAllContracts().value)
         }
     }
 }

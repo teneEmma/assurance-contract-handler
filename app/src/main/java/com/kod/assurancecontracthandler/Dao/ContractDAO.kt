@@ -9,7 +9,7 @@ import androidx.room.Update
 import com.kod.assurancecontracthandler.model.ContractDbDto
 
 @Dao
-sealed interface contractDAO{
+sealed interface ContractDAO{
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addContract(contract: ContractDbDto)
