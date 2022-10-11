@@ -70,14 +70,14 @@ class FirstFragment : Fragment() {
         }
 
         binding.btnCancelFile.setOnClickListener {
-            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
+            backToVisualize()
         }
 
         binding.btnSaveFile.setOnClickListener {
             addContracts(listOfContracts)
             Log.e("LISTE ACTUALISEE", listOfContracts.toString())
             toast("Document Sauvegardé Avec Success")
-
+            backToVisualize()
         }
 
         binding.actvImportFile.setOnClickListener {
@@ -128,7 +128,6 @@ class FirstFragment : Fragment() {
             } else if (selectedDocUri.toString().startsWith("file://")) {
                 selectedFileName = file?.name
             }
-            snack("$selectedFileName ${resources.getString(R.string.success_select)}")
 
             var path = selectedDocUri?.path
             if (path != null && selectedFileName != null) {
@@ -159,5 +158,8 @@ class FirstFragment : Fragment() {
         lifecycleScope.launch(Dispatchers.IO){
             excelDocumentVM.readDocumentContent(path)
         }
+    }
+    private fun backToVisualize(){
+        findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
     }
 }

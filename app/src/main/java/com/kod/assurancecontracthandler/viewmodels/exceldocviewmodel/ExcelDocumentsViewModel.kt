@@ -46,7 +46,7 @@ class ExcelDocumentsViewModel(application: Application) : AndroidViewModel(appli
 
 //                        Log.e("COLUMN", "Column: ${cell.columnIndex} has value: $cellValue")
 //                    if(cellValue != null) {
-                        rowContentRead.add(cellValue)
+                    rowContentRead.add(cellValue)
 //                    }
                 }
                 when(val sheetCursor = verifyRowScheme(rowContentRead, header)){
@@ -60,7 +60,7 @@ class ExcelDocumentsViewModel(application: Application) : AndroidViewModel(appli
                         header = sheetCursor.headers
                     }
                     is SheetCursorPosition.RowContent -> {
-                        val contractDbDto = ContractDbDto(row.rowNum, sheetCursor.content, 0)
+                        val contractDbDto = ContractDbDto(row.rowNum, sheetCursor.content, Date())
                         Log.e("CONTRACT DAO", contractDbDto.toString())
                         allDocumentRows.add(contractDbDto)
                     }
@@ -69,6 +69,9 @@ class ExcelDocumentsViewModel(application: Application) : AndroidViewModel(appli
                         //TODO: Implement the part for SheetCursor.EmptyRow or show a toast message
                     }
                 }
+            }
+            allDocumentRows.forEach {
+                it.id = 0
             }
             _listOfContracts.postValue(allDocumentRows)
         }

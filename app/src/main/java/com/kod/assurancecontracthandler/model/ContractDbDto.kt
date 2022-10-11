@@ -8,8 +8,8 @@ import java.util.Date
 @Entity(tableName = "contract")
 data class ContractDbDto(
     @PrimaryKey(autoGenerate = true)
-    val id: Int,
+    var id: Int,
     @Embedded
     val contract: Contract?,
-    val date: Long
+    val date: Date?
 )

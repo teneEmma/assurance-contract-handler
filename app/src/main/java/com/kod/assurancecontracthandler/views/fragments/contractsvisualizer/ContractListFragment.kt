@@ -25,13 +25,12 @@ class ContractListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentSecondBinding.inflate(inflater, container, false)
+        dbViewModel = ViewModelProvider(this,
+            DBViewModelFactory(requireActivity().application))[DBViewModel::class.java]
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        dbViewModel = ViewModelProvider(this,
-            DBViewModelFactory(requireActivity().application))[DBViewModel::class.java]
-        updateContractsList()
 
         dbViewModel.allContracts.observe(viewLifecycleOwner){listContracts->
             if(listContracts == null){
@@ -47,6 +46,8 @@ class ContractListFragment : Fragment() {
         binding.addExcelFile.setOnClickListener {
             addExcelFile()
         }
+
+        updateContractsList()
     }
 
     override fun onDestroyView() {
