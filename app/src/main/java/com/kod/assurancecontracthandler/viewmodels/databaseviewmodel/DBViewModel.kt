@@ -30,7 +30,6 @@ class DBViewModel(application: Application): AndroidViewModel(application) {
     fun fetchAllContracts() {
         viewModelScope.launch(Dispatchers.IO) {
             _allContracts.postValue(repository.readAllContracts())
-            Log.e("allContracts", repository.readAllContracts().toString())
         }
     }
 }

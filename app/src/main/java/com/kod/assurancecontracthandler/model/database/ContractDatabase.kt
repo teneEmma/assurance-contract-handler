@@ -6,12 +6,11 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.kod.assurancecontracthandler.Dao.ContractDAO
-import com.kod.assurancecontracthandler.common.constants.ConstantsVariables
-import com.kod.assurancecontracthandler.common.utilities.TimeConveters
+import com.kod.assurancecontracthandler.common.utilities.TimeConverters
 import com.kod.assurancecontracthandler.model.ContractDbDto
 
 @Database(entities = [ContractDbDto::class], version = 1, exportSchema = true)
-@TypeConverters(TimeConveters::class)
+@TypeConverters(TimeConverters::class)
 abstract class ContractDatabase: RoomDatabase() {
 
     abstract fun contractDao(): ContractDAO

@@ -19,6 +19,7 @@ class ContractListFragment : Fragment() {
     private var _binding: FragmentSecondBinding? = null
     private val binding get() = _binding!!
     private lateinit var dbViewModel: DBViewModel
+    private lateinit var listContracts: List<ContractDbDto>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,12 +41,15 @@ class ContractListFragment : Fragment() {
                 binding.ivEmptyDatabase.visibility = View.GONE
                 binding.tvEmptyDatabase.visibility = View.GONE
                 setRecyclerView(listContracts)
+                this.listContracts = listContracts
             }
         }
 
         binding.addExcelFile.setOnClickListener {
             addExcelFile()
         }
+
+        swipeToRefresh()
 
         updateContractsList()
     }
@@ -59,6 +63,13 @@ class ContractListFragment : Fragment() {
         dbViewModel.fetchAllContracts()
     }
 
+    private fun swipeToRefresh(){
+        binding.swipeToRefresh.setOnRefreshListener {
+            updateContractsList()
+            setRecyclerView(listContracts)
+            binding.swipeToRefresh.isRefreshing = false
+        }
+    }
     private fun setRecyclerView(list: List<ContractDbDto>){
         val rvAdapter = ContractListAdapter(list)
         binding.rvListContract.adapter = rvAdapter

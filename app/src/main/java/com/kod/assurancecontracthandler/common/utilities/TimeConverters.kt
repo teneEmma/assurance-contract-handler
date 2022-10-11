@@ -3,7 +3,7 @@ package com.kod.assurancecontracthandler.common.utilities
 import androidx.room.TypeConverter
 import java.util.Date
 
-class TimeConveters {
+class TimeConverters {
     @TypeConverter
     fun fromTimestampToDate(timeStamp: Long?): Date?{
         return timeStamp?.let { Date(it) }
