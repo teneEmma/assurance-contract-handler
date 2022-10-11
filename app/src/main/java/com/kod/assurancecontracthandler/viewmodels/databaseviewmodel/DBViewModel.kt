@@ -24,13 +24,13 @@ class DBViewModel(application: Application): AndroidViewModel(application) {
         }
     }
 
-    private var _allContracts = MutableLiveData<List<ContractDbDto>>()
-    var allContracts: LiveData<List<ContractDbDto>> = _allContracts
+    private val _allContracts = MutableLiveData<List<ContractDbDto>>()
+    val allContracts: LiveData<List<ContractDbDto>> = _allContracts
 
     fun fetchAllContracts() {
         viewModelScope.launch(Dispatchers.IO) {
-            allContracts = repository.readAllContracts()
-            Log.e("allContracts", repository.readAllContracts().value.toString())
+            _allContracts.postValue(repository.readAllContracts())
+            Log.e("allContracts", repository.readAllContracts().toString())
         }
     }
 }

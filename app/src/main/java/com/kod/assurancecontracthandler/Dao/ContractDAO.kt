@@ -21,5 +21,5 @@ sealed interface ContractDAO{
     suspend fun updateContract(contract: ContractDbDto)
 
     @Query("SELECT * FROM contract ORDER BY id ASC")
-    fun readDatabase(): LiveData<List<ContractDbDto>>
+    fun readDatabase(): List<ContractDbDto>?
 }

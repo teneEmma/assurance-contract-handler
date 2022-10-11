@@ -5,17 +5,12 @@ import com.kod.assurancecontracthandler.model.ContractDbDto
 
 class ContractRepository(private val contractDao: ContractDAO) {
 
-    suspend fun addContract(contract: ContractDbDto){
-        contractDao.addContract(contract)
-    }
+    suspend fun addContract(contract: ContractDbDto) = contractDao.addContract(contract)
 
-    suspend fun addContracts(contracts: List<ContractDbDto>){
-        contractDao.addContracts(contracts)
-    }
+    suspend fun addContracts(contracts: List<ContractDbDto>) = contractDao.addContracts(contracts)
 
-    suspend fun updateContract(contract: ContractDbDto){
-        contractDao.updateContract(contract)
-    }
+    suspend fun updateContract(contract: ContractDbDto) = contractDao.updateContract(contract)
+
     fun readAllContracts() = contractDao.readDatabase()
 
 }
