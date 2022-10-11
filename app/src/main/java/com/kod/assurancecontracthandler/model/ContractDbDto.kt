@@ -1,5 +1,6 @@
 package com.kod.assurancecontracthandler.model
 
+import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.util.Date
@@ -8,6 +9,7 @@ import java.util.Date
 data class ContractDbDto(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
+    @Embedded
     val contract: Contract?,
     val date: Long
 )

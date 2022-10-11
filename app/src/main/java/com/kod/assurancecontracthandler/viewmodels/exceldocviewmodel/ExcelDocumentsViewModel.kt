@@ -3,6 +3,7 @@ package com.kod.assurancecontracthandler.viewmodels.exceldocviewmodel
 import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.kod.assurancecontracthandler.common.utilities.ModelSchemaStructurer
@@ -20,6 +21,9 @@ class ExcelDocumentsViewModel(application: Application) : AndroidViewModel(appli
     private val _listOfContracts =  MutableLiveData<kotlin.collections.List<ContractDbDto>>()
     val listOfContracts = _listOfContracts
 
+    private val _toastMessages = MutableLiveData<String>()
+    val toastMessages: LiveData<String> = _toastMessages
+
     fun readDocumentContent(path: String){
         viewModelScope.launch {
             val inputStream: FileInputStream
@@ -28,6 +32,7 @@ class ExcelDocumentsViewModel(application: Application) : AndroidViewModel(appli
             val workBook = XSSFWorkbook(inputStream)
             val sheet = workBook.getSheetAt(0)
             val allDocumentRows: MutableList<ContractDbDto> = mutableListOf()
+            var header = listOf<String>()
 
             val rowIterator: Iterator<Row> = sheet.iterator()
             while(rowIterator.hasNext()){
@@ -40,18 +45,29 @@ class ExcelDocumentsViewModel(application: Application) : AndroidViewModel(appli
                     val cellValue = getCell(cell)
 
 //                        Log.e("COLUMN", "Column: ${cell.columnIndex} has value: $cellValue")
-                    rowContentRead.add(cellValue)
-//                    Log.e("ROW SCHEME", verifyRowScheme(rowContentRead, sheet).toString())
+//                    if(cellValue != null) {
+                        rowContentRead.add(cellValue)
+//                    }
                 }
-                val sheetCursor = verifyRowScheme(rowContentRead, sheet)
-                if(sheetCursor is SheetCursorPosition.RowContent){
-                    val contractDbDto = ContractDbDto(row.rowNum, sheetCursor.content, Date())
-                    allDocumentRows.add(contractDbDto)
-                }else if(sheetCursor is SheetCursorPosition.BeginningOfSheet){
-                    //TODO: Implement the case of end of file
-                }
-                else if(sheetCursor is SheetCursorPosition.Footer){
-                    //TODO: Implement the case of a footer
+                when(val sheetCursor = verifyRowScheme(rowContentRead, header)){
+                    is SheetCursorPosition.BeginningOfSheet -> {
+                        //TODO: Implement the case of end of file
+                    }
+                    is SheetCursorPosition.Footer -> {
+                        //TODO: Implement the case of a footer
+                    }
+                    is SheetCursorPosition.HeaderOfSheet -> {
+                        header = sheetCursor.headers
+                    }
+                    is SheetCursorPosition.RowContent -> {
+                        val contractDbDto = ContractDbDto(row.rowNum, sheetCursor.content, 0)
+                        Log.e("CONTRACT DAO", contractDbDto.toString())
+                        allDocumentRows.add(contractDbDto)
+                    }
+                    is SheetCursorPosition.EmptyRow -> {
+                        _toastMessages.postValue(sheetCursor.error.toString())
+                        //TODO: Implement the part for SheetCursor.EmptyRow or show a toast message
+                    }
                 }
             }
             _listOfContracts.postValue(allDocumentRows)

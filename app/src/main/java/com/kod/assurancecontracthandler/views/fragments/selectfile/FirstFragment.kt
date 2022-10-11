@@ -75,7 +75,9 @@ class FirstFragment : Fragment() {
 
         binding.btnSaveFile.setOnClickListener {
             addContracts(listOfContracts)
+            Log.e("LISTE ACTUALISEE", listOfContracts.toString())
             toast("Document Sauvegardé Avec Success")
+
         }
 
         binding.actvImportFile.setOnClickListener {

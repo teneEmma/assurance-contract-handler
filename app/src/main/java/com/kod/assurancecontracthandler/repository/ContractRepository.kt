@@ -16,6 +16,6 @@ class ContractRepository(private val contractDao: ContractDAO) {
     suspend fun updateContract(contract: ContractDbDto){
         contractDao.updateContract(contract)
     }
-    suspend fun readAllContracts() = contractDao.readDatabase()
+    fun readAllContracts() = contractDao.readDatabase()
 
 }
