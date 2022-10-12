@@ -7,6 +7,7 @@ import com.kod.assurancecontracthandler.model.ContractDbDto
 import com.kod.assurancecontracthandler.model.database.ContractDatabase
 import com.kod.assurancecontracthandler.repository.ContractRepository
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -24,12 +25,18 @@ class DBViewModel(application: Application): AndroidViewModel(application) {
         }
     }
 
-    private val _allContracts = MutableLiveData<List<ContractDbDto>>()
-    val allContracts: LiveData<List<ContractDbDto>> = _allContracts
+    private val _allContracts = MutableLiveData<List<ContractDbDto>?>()
+    val allContracts: LiveData<List<ContractDbDto>?> = _allContracts
 
     fun fetchAllContracts() {
         viewModelScope.launch(Dispatchers.IO) {
             _allContracts.postValue(repository.readAllContracts())
+        }
+    }
+
+    fun searchClient(str: String){
+        viewModelScope.launch(Dispatchers.IO) {
+            _allContracts.postValue(repository.searchForClient(str))
         }
     }
 }

@@ -33,6 +33,7 @@ class ExcelDocumentsViewModel(application: Application) : AndroidViewModel(appli
             val sheet = workBook.getSheetAt(0)
             val allDocumentRows: MutableList<ContractDbDto> = mutableListOf()
             var header = listOf<String>()
+            var date = Date()
 
             val rowIterator: Iterator<Row> = sheet.iterator()
             while(rowIterator.hasNext()){
@@ -51,7 +52,7 @@ class ExcelDocumentsViewModel(application: Application) : AndroidViewModel(appli
                 }
                 when(val sheetCursor = verifyRowScheme(rowContentRead, header)){
                     is SheetCursorPosition.BeginningOfSheet -> {
-                        //TODO: Implement the case of end of file
+                        date = sheetCursor.date
                     }
                     is SheetCursorPosition.Footer -> {
                         //TODO: Implement the case of a footer
@@ -60,7 +61,7 @@ class ExcelDocumentsViewModel(application: Application) : AndroidViewModel(appli
                         header = sheetCursor.headers
                     }
                     is SheetCursorPosition.RowContent -> {
-                        val contractDbDto = ContractDbDto(row.rowNum, sheetCursor.content, Date())
+                        val contractDbDto = ContractDbDto(row.rowNum, sheetCursor.content, date)
                         Log.e("CONTRACT DAO", contractDbDto.toString())
                         allDocumentRows.add(contractDbDto)
                     }

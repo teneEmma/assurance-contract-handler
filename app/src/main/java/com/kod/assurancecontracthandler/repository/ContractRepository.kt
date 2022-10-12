@@ -13,4 +13,6 @@ class ContractRepository(private val contractDao: ContractDAO) {
 
     fun readAllContracts() = contractDao.readDatabase()
 
+    fun searchForClient(searchKey: String) = contractDao.searchForAClient(searchKey)
+
 }

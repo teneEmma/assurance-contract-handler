@@ -7,6 +7,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.kod.assurancecontracthandler.model.ContractDbDto
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 sealed interface ContractDAO{
@@ -22,4 +23,11 @@ sealed interface ContractDAO{
 
     @Query("SELECT * FROM contract ORDER BY id ASC")
     fun readDatabase(): List<ContractDbDto>?
+
+    @Query("SELECT * FROM contract WHERE assure LIKE :searchKey " +
+            "OR attestation LIKE :searchKey " +
+            "OR mark LIKE :searchKey " +
+            "OR immatriculation LIKE :searchKey " +
+            "OR APPORTEUR LIKE :searchKey")
+    fun searchForAClient(searchKey: String): List<ContractDbDto>
 }

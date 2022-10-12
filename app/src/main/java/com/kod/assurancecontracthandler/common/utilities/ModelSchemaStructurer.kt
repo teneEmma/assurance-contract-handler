@@ -15,12 +15,13 @@ interface ModelSchemaStructurer {
     fun verifyRowScheme(row: List<Any?>, header: List<String>): SheetCursorPosition<T>{
         Log.e("ROW CONTENT", row.toString())
         return when{
-            row.isNotEmpty() && row[0] is String ->{
+            row.isNotEmpty() && row[3] is String && row[7] !is Double ->{
+                val timeConverters = TimeConverters()
                 if(row.any{ it.toString().contains("SEMAINE DU")}){
-                    Log.e("DATE", formatDateFromExcelHeader(row[3].toString()).toString())
-                    SheetCursorPosition.BeginningOfSheet()
+                    Log.e("DATE", timeConverters.dateFromExcelHeader(row[3].toString()).toString())
+                    SheetCursorPosition.BeginningOfSheet(timeConverters.dateFromExcelHeader(row[3].toString())["endDate"]!!)
                 }else if(row.any{ it.toString().contains("MOIS DE")}){
-                    SheetCursorPosition.BeginningOfSheet()
+                    SheetCursorPosition.BeginningOfSheet(timeConverters.dateFromExcelHeader(row[3].toString())["endDate"]!!)
                 }else if(row.any { it.toString().contains("ATTESTATION") }){
                     SheetCursorPosition.HeaderOfSheet(row as List<String>)
                 }
@@ -32,44 +33,6 @@ interface ModelSchemaStructurer {
                 setContractObj(row as MutableList<Any?>, header as MutableList<String>)
             }
             else -> SheetCursorPosition.EmptyRow()
-        }
-    }
-
-    private fun formatDateFromExcelHeader(str: String): HashMap<String, Date>{
-        var beginningDate: Date = Date()
-        var endDate: Date = Date()
-        val hashMap: HashMap<String, Date> = hashMapOf()
-        val dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
-        var endLocalDate: LocalDate
-        var startLocalDate: LocalDate
-        if(str.contains("SEMAINE DU")){
-            val splitStr = str.split("AU")
-            endLocalDate = LocalDate.parse("${splitStr[1].trim().split('-')[0]}-" +
-                    "${splitStr[1].trim().split('-')[1]}-20${splitStr[1].trim().split('-')[2]}", dateFormatter)
-            startLocalDate = LocalDate.parse("${splitStr[0].substringAfter("DU").trim().split('-')[0]}-" +
-                    "${splitStr[0].substringAfter("DU").trim().split('-')[1]}-20${splitStr[0].substringAfter("DU").trim().split('-')[2]}", dateFormatter)
-            endDate = Date(endLocalDate.year, endLocalDate.monthValue, endLocalDate.dayOfMonth)
-            beginningDate = Date(startLocalDate.year, startLocalDate.monthValue,
-            startLocalDate.dayOfMonth)
-            Log.e("START DATE||END DATE", "$endDate && $beginningDate")
-            Log.e("DATE||END", "$endLocalDate && $startLocalDate")
-
-            hashMap["startDate"] = beginningDate
-            hashMap["endDate"] = endDate
-            return hashMap
-        }else if (str.contains("MOIS DE")){
-            val splitStr = str.split("MOIS DE")
-            ConstantsVariables.months.forEachIndexed { index, month ->
-                if (splitStr[1].substringBefore('2').trim()==month){
-                    endLocalDate = LocalDate.parse("30-${month+1}-${splitStr[1].substringAfter(month)}")
-                    startLocalDate = LocalDate.parse("01-${month+1}-${splitStr[1].substringAfter(month)}")
-                    hashMap["startDate"] = beginningDate
-                    hashMap["endDate"] = endDate
-                }
-            }
-            return hashMap
-        }else{
-            return hashMap
         }
     }
 
