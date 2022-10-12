@@ -15,8 +15,7 @@ import com.kod.assurancecontracthandler.viewmodels.databaseviewmodel.DBViewModel
 
 class ContractListFragment : Fragment(), SearchView.OnQueryTextListener {
 
-    private var _binding: FragmentSecondBinding? = null
-    private val binding get() = _binding!!
+    private lateinit var binding: FragmentSecondBinding
     private lateinit var dbViewModel: DBViewModel
     private lateinit var listContracts: List<ContractDbDto>
 
@@ -29,7 +28,7 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentSecondBinding.inflate(inflater, container, false)
+        binding = FragmentSecondBinding.inflate(inflater, container, false)
         dbViewModel = ViewModelProvider(this,
             DBViewModelFactory(requireActivity().application))[DBViewModel::class.java]
         return binding.root
@@ -55,11 +54,6 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener {
         updateContractsList()
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
     @Deprecated("Deprecated in ")
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_main, menu)
@@ -71,7 +65,7 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener {
         searchView.setOnQueryTextListener(this)
     }
 
-    private fun searchForAClient(str: String){
+    private fun searchForClient(str: String){
         val queryStr = "%$str%"
         swipeToRefresh(queryStr)
         dbViewModel.searchClient(queryStr)
@@ -91,7 +85,7 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener {
     }
     private fun swipeToRefresh(str: String){
         binding.swipeToRefresh.setOnRefreshListener {
-            searchForAClient(str)
+            searchForClient(str)
             setRecyclerView(listContracts)
             binding.swipeToRefresh.isRefreshing = false
         }
@@ -110,14 +104,14 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener {
 
     override fun onQueryTextSubmit(query: String?): Boolean {
         if (query != null) {
-            searchForAClient(query)
+            searchForClient(query)
         }
         return true
     }
 
     override fun onQueryTextChange(newText: String?): Boolean {
         if (newText != null) {
-            searchForAClient(newText)
+            searchForClient(newText)
         }
         return true
     }
