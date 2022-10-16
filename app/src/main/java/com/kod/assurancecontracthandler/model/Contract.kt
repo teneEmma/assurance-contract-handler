@@ -1,5 +1,7 @@
 package com.kod.assurancecontracthandler.model
 
+import java.util.Date
+
 data class Contract(
     val index: Int,
     val attestation: String? ="",
@@ -8,8 +10,8 @@ data class Contract(
     val compagnie: String? = "",
     val telephone: String? = null,
     val assure: String? = "",
-    val effet: Int? = null,
-    val echeance: Int?= null,
+    val effet: Date? = null,
+    val echeance: Date?= null,
     val puissanceVehicule: String? = "",
     val mark: String? = "",
     val immatriculation: String? = "",

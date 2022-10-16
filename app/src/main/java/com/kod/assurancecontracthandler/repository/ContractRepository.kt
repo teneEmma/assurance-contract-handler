@@ -1,5 +1,6 @@
 package com.kod.assurancecontracthandler.repository
 
+import androidx.sqlite.db.SimpleSQLiteQuery
 import com.kod.assurancecontracthandler.Dao.ContractDAO
 import com.kod.assurancecontracthandler.model.ContractDbDto
 
@@ -13,6 +14,6 @@ class ContractRepository(private val contractDao: ContractDAO) {
 
     fun readAllContracts() = contractDao.readDatabase()
 
-    fun searchForClient(searchKey: String) = contractDao.searchForAClient(searchKey)
+    fun searchForClient(query: SimpleSQLiteQuery) = contractDao.searchForAClient(query)
 
 }

@@ -9,7 +9,8 @@ import java.util.Date
 data class ContractDbDto(
     @PrimaryKey(autoGenerate = true)
     var id: Int,
+    val sheetCreationDateStart: Date = Date(),
+    val sheetCreationDateEnd: Date = Date(),
     @Embedded
-    val contract: Contract?,
-    val date: Date?
+    val contract: Contract?
 )

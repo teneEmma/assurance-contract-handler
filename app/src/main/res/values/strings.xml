@@ -25,4 +25,24 @@
     <string name="add_document">Add Document</string>
     <string name="base_de_donnees_vide">BASE DE DONNEES VIDE</string>
     <string name="base_de_donnee_vide">Base De Donnee Vide</string>
+    <string name="filtrer_nom_de_l_apporteur">Filtrer Nom De L\'apporteur</string>
+    <string name="n_d_immatriculation">N° D\'Immatriculation</string>
+    <string name="n_attestation">N° Attestation</string>
+    <string name="carte_rose">Carte Rose</string>
+    <string name="prix">PRIX</string>
+    <string name="prix_min">2000XAF</string>
+    <string name="prix_max">500000XAF</string>
+    <string name="puissance_min">01CV-ESS</string>
+    <string name="puissance_max">30CV-ESS</string>
+    <string name="prixSeperator">-</string>
+    <string name="reset">RESET</string>
+    <string name="appliquer">APPLIQUER</string>
+    <array name="price_range">
+        <item>1000</item>
+        <item>500000</item>
+    </array>
+    <array name="puissance_range">
+        <item>1</item>
+        <item>30</item>
+    </array>
 </resources>

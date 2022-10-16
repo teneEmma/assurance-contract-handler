@@ -10,6 +10,8 @@ import com.kod.assurancecontracthandler.common.utilities.ModelSchemaStructurer
 import com.kod.assurancecontracthandler.model.ContractDbDto
 import com.kod.assurancecontracthandler.usecases.SheetCursorPosition
 import kotlinx.coroutines.launch
+import org.apache.poi.hssf.usermodel.HSSFCell
+import org.apache.poi.hssf.usermodel.HSSFDateUtil
 import org.apache.poi.ss.usermodel.Cell
 import org.apache.poi.ss.usermodel.Row
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
@@ -33,7 +35,8 @@ class ExcelDocumentsViewModel(application: Application) : AndroidViewModel(appli
             val sheet = workBook.getSheetAt(0)
             val allDocumentRows: MutableList<ContractDbDto> = mutableListOf()
             var header = listOf<String>()
-            var date = Date()
+            var startDate = Date()
+            var endDate = Date()
 
             val rowIterator: Iterator<Row> = sheet.iterator()
             while(rowIterator.hasNext()){
@@ -45,6 +48,11 @@ class ExcelDocumentsViewModel(application: Application) : AndroidViewModel(appli
                     val cell = cellIterator.next()
                     val cellValue = getCell(cell)
 
+                    if (cell.cellType == HSSFCell.CELL_TYPE_NUMERIC){
+                        if(HSSFDateUtil.isCellDateFormatted(cell)){
+                            Log.e("DAAAATEEEEEEEE", cell.dateCellValue.toString())
+                        }
+                    }
 //                        Log.e("COLUMN", "Column: ${cell.columnIndex} has value: $cellValue")
 //                    if(cellValue != null) {
                     rowContentRead.add(cellValue)
@@ -52,7 +60,8 @@ class ExcelDocumentsViewModel(application: Application) : AndroidViewModel(appli
                 }
                 when(val sheetCursor = verifyRowScheme(rowContentRead, header)){
                     is SheetCursorPosition.BeginningOfSheet -> {
-                        date = sheetCursor.date
+                        startDate = sheetCursor.startDate
+                        endDate = sheetCursor.endDate
                     }
                     is SheetCursorPosition.Footer -> {
                         //TODO: Implement the case of a footer
@@ -61,7 +70,9 @@ class ExcelDocumentsViewModel(application: Application) : AndroidViewModel(appli
                         header = sheetCursor.headers
                     }
                     is SheetCursorPosition.RowContent -> {
-                        val contractDbDto = ContractDbDto(row.rowNum, sheetCursor.content, date)
+                        val contractDbDto = ContractDbDto(
+                            row.rowNum, contract = sheetCursor.content,
+                            sheetCreationDateStart = startDate, sheetCreationDateEnd = endDate)
                         Log.e("CONTRACT DAO", contractDbDto.toString())
                         allDocumentRows.add(contractDbDto)
                     }

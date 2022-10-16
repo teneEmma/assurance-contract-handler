@@ -5,7 +5,9 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.RawQuery
 import androidx.room.Update
+import androidx.sqlite.db.SimpleSQLiteQuery
 import com.kod.assurancecontracthandler.model.ContractDbDto
 import kotlinx.coroutines.flow.Flow
 
@@ -24,10 +26,6 @@ sealed interface ContractDAO{
     @Query("SELECT * FROM contract ORDER BY id ASC")
     fun readDatabase(): List<ContractDbDto>?
 
-    @Query("SELECT * FROM contract WHERE assure LIKE :searchKey " +
-            "OR attestation LIKE :searchKey " +
-            "OR mark LIKE :searchKey " +
-            "OR immatriculation LIKE :searchKey " +
-            "OR APPORTEUR LIKE :searchKey")
-    fun searchForAClient(searchKey: String): List<ContractDbDto>
+    @RawQuery
+    fun searchForAClient(query: SimpleSQLiteQuery): List<ContractDbDto>
 }

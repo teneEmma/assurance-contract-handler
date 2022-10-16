@@ -5,8 +5,6 @@ import com.kod.assurancecontracthandler.common.constants.ConstantsVariables
 import com.kod.assurancecontracthandler.model.Contract
 import com.kod.assurancecontracthandler.usecases.SheetCursorPosition
 import org.apache.poi.ss.formula.functions.T
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.collections.HashMap
 
@@ -19,10 +17,15 @@ interface ModelSchemaStructurer {
                 val timeConverters = TimeConverters()
                 if(row.any{ it.toString().contains("SEMAINE DU")}){
                     Log.e("DATE", timeConverters.dateFromExcelHeader(row[3].toString()).toString())
-                    SheetCursorPosition.BeginningOfSheet(timeConverters.dateFromExcelHeader(row[3].toString())["endDate"]!!)
+                    SheetCursorPosition.BeginningOfSheet(
+                        timeConverters.dateFromExcelHeader(row[3].toString())["startDate"]!!,
+                        timeConverters.dateFromExcelHeader(row[3].toString())["endDate"]!!)
                 }else if(row.any{ it.toString().contains("MOIS DE")}){
-                    SheetCursorPosition.BeginningOfSheet(timeConverters.dateFromExcelHeader(row[3].toString())["endDate"]!!)
+                    SheetCursorPosition.BeginningOfSheet(
+                        timeConverters.dateFromExcelHeader(row[3].toString())["startDate"]!!,
+                        timeConverters.dateFromExcelHeader(row[3].toString())["endDate"]!!)
                 }else if(row.any { it.toString().contains("ATTESTATION") }){
+                    @Suppress("UNCHECKED_CAST")
                     SheetCursorPosition.HeaderOfSheet(row as List<String>)
                 }
                 else{
@@ -44,7 +47,7 @@ interface ModelSchemaStructurer {
                         if (ConstantsVariables.contractIntTypes.contains(valueIndex)){
 //                            Log.e("isDOUBLE $valueIndex", params[valueIndex].toString())
                             params[valueIndex] =
-                                convertString_DoubleToInt(params[valueIndex].toString())
+                                convertAStringContainingDoubleToInt(params[valueIndex].toString())
                         }else{
                             params[valueIndex] = params[valueIndex].toString()
                         }
@@ -64,7 +67,7 @@ interface ModelSchemaStructurer {
         }
         return params
     }
-    private fun convertString_DoubleToInt(str: String): Int?{
+    private fun convertAStringContainingDoubleToInt(str: String): Int?{
         var string = str
         if (string.contains('E')){
             string = string.split("E")[0]
@@ -113,8 +116,8 @@ interface ModelSchemaStructurer {
                 params[4] as String?,
                 params[5] as String?,
                 params[6] as String?,
-                params[7] as Int?,
-                params[8] as Int?,
+                params[7] as Date?,
+                params[8] as Date?,
                 params[9] as String?,
                 params[10] as String?,
                 params[11] as String?,

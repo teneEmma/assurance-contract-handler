@@ -1,28 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginVertical="2dp"
-    android:layout_marginHorizontal="5dp"
     tools:context=".views.fragments.contractsvisualizer.ContractListFragment">
+
+    <HorizontalScrollView
+        android:id="@+id/horizontal_sv_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none"
+        android:background="@color/design_default_color_primary"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true">
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chipGroup_search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:singleSelection="true"
+            android:singleLine="true">
+
+        </com.google.android.material.chip.ChipGroup>
+
+    </HorizontalScrollView>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeToRefresh"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="2dp"
+        android:layout_marginHorizontal="5dp"
+        android:layout_below="@id/horizontal_sv_search"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_list_contract"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clickable="true"
-            android:clipToPadding="true"
             android:scrollbars="horizontal"
             tools:listitem="@layout/rv_item" />
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
@@ -33,12 +51,10 @@
         android:layout_height="200dp"
         android:src="@drawable/ic_add_circle"
         android:tooltipText="Empty Databse"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:visibility="gone"
-        android:contentDescription="@string/base_de_donnee_vide" />
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:contentDescription="@string/base_de_donnee_vide"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/tv_empty_database"
@@ -48,8 +64,7 @@
         android:textAlignment="center"
         android:textColor="@color/design_default_color_error"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/iv_empty_database"
+        android:layout_below="@id/iv_empty_database"
         android:visibility="gone"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -62,8 +77,8 @@
         android:src="@drawable/ic_upload_file"
         app:backgroundTint="@color/purple_500"
         app:rippleColor="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
         android:contentDescription="@string/add_document" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>
