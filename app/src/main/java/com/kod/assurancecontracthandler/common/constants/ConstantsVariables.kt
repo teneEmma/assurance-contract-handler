@@ -12,7 +12,8 @@ object ConstantsVariables {
         "APPORTEUR"
     )
     val sizeOfRow = headerNames.size
-    val contractIntTypes = listOf(0,2,7,8,12,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28)
+    val contractIntTypes = listOf(0,2,12,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28)
+    val contractDateTypes = listOf(7,8)
     val months = listOf("JANVIER","FEVRIER","MARS","AVRIL", "MAI", "JUIN", "JUILLET", "AOUT",
     "SEPTEMBRE","OCTOBRE","NOVEMBRE","DECEMBRE")
     val chipNames = listOf("Assure", "N° Police", "Attestaion", "Compagnie",

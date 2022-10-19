@@ -13,7 +13,7 @@ interface ModelSchemaStructurer {
     fun verifyRowScheme(row: List<Any?>, header: List<String>): SheetCursorPosition<T>{
         Log.e("ROW CONTENT", row.toString())
         return when{
-            row.isNotEmpty() && row[3] is String && row[7] !is Double ->{
+            row.isNotEmpty() && row[3] is String && row[7] !is Date ->{
                 val timeConverters = TimeConverters()
                 if(row.any{ it.toString().contains("SEMAINE DU")}){
                     Log.e("DATE", timeConverters.dateFromExcelHeader(row[3].toString()).toString())
@@ -40,7 +40,7 @@ interface ModelSchemaStructurer {
     }
 
     private fun validateValues(params: MutableList<Any?>): MutableList<Any?>{
-        params.forEachIndexed { valueIndex, _ ->
+        params.forEachIndexed {  valueIndex, _ ->
             when {
                 params[valueIndex] is Double -> {
                     if(params[valueIndex].toString().contains(".*[.E].*".toRegex()) ){

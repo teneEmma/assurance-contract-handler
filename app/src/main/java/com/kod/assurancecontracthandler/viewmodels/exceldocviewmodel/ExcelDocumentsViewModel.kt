@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.kod.assurancecontracthandler.common.utilities.ModelSchemaStructurer
 import com.kod.assurancecontracthandler.model.ContractDbDto
 import com.kod.assurancecontracthandler.usecases.SheetCursorPosition
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.apache.poi.hssf.usermodel.HSSFCell
 import org.apache.poi.hssf.usermodel.HSSFDateUtil
@@ -27,9 +28,10 @@ class ExcelDocumentsViewModel(application: Application) : AndroidViewModel(appli
     val toastMessages: LiveData<String> = _toastMessages
 
     fun readDocumentContent(path: String){
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             val inputStream: FileInputStream
-            val file = File("/storage/emulated/0/$path")
+            val extractedPath = path.substring(path.indexOf(":") +1)
+            val file = File("/storage/emulated/0/$extractedPath")
             inputStream = FileInputStream(file)
             val workBook = XSSFWorkbook(inputStream)
             val sheet = workBook.getSheetAt(0)
@@ -46,11 +48,11 @@ class ExcelDocumentsViewModel(application: Application) : AndroidViewModel(appli
                 Log.e("ROW", "Row: ${row.rowNum}")
                 while(cellIterator.hasNext()){
                     val cell = cellIterator.next()
-                    val cellValue = getCell(cell)
+                    var cellValue = getCell(cell)
 
                     if (cell.cellType == HSSFCell.CELL_TYPE_NUMERIC){
                         if(HSSFDateUtil.isCellDateFormatted(cell)){
-                            Log.e("DAAAATEEEEEEEE", cell.dateCellValue.toString())
+                            cellValue = cell.dateCellValue
                         }
                     }
 //                        Log.e("COLUMN", "Column: ${cell.columnIndex} has value: $cellValue")

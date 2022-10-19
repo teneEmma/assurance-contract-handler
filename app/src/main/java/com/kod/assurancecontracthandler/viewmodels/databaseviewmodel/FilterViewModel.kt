@@ -3,7 +3,7 @@ package com.kod.assurancecontracthandler.viewmodels.databaseviewmodel
 import androidx.lifecycle.ViewModel
 
 class FilterViewModel: ViewModel() {
-    var searchChip: Int? = null
+    var searchChip: Int? = 1
     var filterChip: List<Int>? = null
     var apporteur: String? = null
     var immatriculation: String? = null

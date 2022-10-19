@@ -51,6 +51,7 @@ class DBViewModel(application: Application): AndroidViewModel(application) {
             5-> query += """ immatriculation LIKE "%$str%" """
             6-> query += """ mark LIKE "%$str%" """
             7-> query += """ APPORTEUR LIKE "%$str%""""
+            else->return SimpleSQLiteQuery("")
         }
 
         return SimpleSQLiteQuery( query)

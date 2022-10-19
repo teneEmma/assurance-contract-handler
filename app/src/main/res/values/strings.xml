@@ -30,6 +30,7 @@
     <string name="n_attestation">N° Attestation</string>
     <string name="carte_rose">Carte Rose</string>
     <string name="prix">PRIX</string>
+    <string name="puissance">PUISSANCE</string>
     <string name="prix_min">2000XAF</string>
     <string name="prix_max">500000XAF</string>
     <string name="puissance_min">01CV-ESS</string>
@@ -37,6 +38,10 @@
     <string name="prixSeperator">-</string>
     <string name="reset">RESET</string>
     <string name="appliquer">APPLIQUER</string>
+    <string name="main_group_slider_title">FILTRER LES PRIX OU LA PUISSANCE</string>
+    <string name="permission_str">Accordez Moi Les Permissions necessaires pourouvoir Accesder Aux Differents Fichiers</string>
+    <string name="permission_heatder_str">PAS D\'ACCESS AUX FICHIERS</string>
+    <string name="grant_permission">DONNER LES PERMISSION</string>
     <array name="price_range">
         <item>1000</item>
         <item>500000</item>
