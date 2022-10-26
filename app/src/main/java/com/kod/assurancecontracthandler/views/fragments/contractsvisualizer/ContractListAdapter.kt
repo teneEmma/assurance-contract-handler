@@ -8,6 +8,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.kod.assurancecontracthandler.R
 import com.kod.assurancecontracthandler.model.ContractDbDto
+import java.text.SimpleDateFormat
+import java.util.*
 
 class ContractListAdapter(private val listContracts: List<ContractDbDto>): RecyclerView.Adapter<ContractListAdapter.ContractViewHolder>() {
 
@@ -22,8 +24,11 @@ class ContractListAdapter(private val listContracts: List<ContractDbDto>): Recyc
         fun bindItems(contract: ContractDbDto){
             id.text = contract.id.toString()
             assurerName.text = contract.contract!!.assure.toString()
-            dateContracted.text = contract.contract.effet.toString()
-            expiryDate.text = contract.contract.echeance.toString()
+            dateContracted.text = contract.contract.effet?.let {
+                SimpleDateFormat("dd/MM/yy", Locale.getDefault()).format(it) }
+            expiryDate.text = contract.contract.echeance?.let {
+                SimpleDateFormat("dd/MM/yy", Locale.getDefault()).format(it)
+            }
             attestation.text = contract.contract.attestation.toString()
             carteGrise.text = contract.contract.carteRose.toString()
             setBackgroundColor(Integer.parseInt(id.text.toString()))

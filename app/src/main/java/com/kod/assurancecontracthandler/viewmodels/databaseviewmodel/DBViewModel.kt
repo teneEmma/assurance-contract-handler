@@ -35,6 +35,7 @@ class DBViewModel(application: Application): AndroidViewModel(application) {
         }
     }
 
+
     fun searchClient(str: String, id: Int){
         viewModelScope.launch(Dispatchers.IO) {
             _allContracts.postValue(filterList(repository.searchForClient(generateQuery(str, id))))

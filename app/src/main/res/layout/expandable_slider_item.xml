@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/et_title_prix_slider"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:gravity="center"
+            android:text="@string/prix"/>
+
+        <com.google.android.material.slider.RangeSlider
+            android:id="@+id/prix_slider"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_marginTop="10dp"
+            android:valueFrom="1000"
+            android:valueTo="500000"
+            android:stepSize="1000"
+            app:values="@array/price_range"
+            android:contentDescription="@string/prix"/>
+
+        <LinearLayout
+            android:id="@+id/ll_et_price_range"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/et_price_range_min"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/prix_min"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:text="@string/prixSeperator"/>
+
+            <TextView
+                android:id="@+id/et_price_range_max"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="@string/prix_max"/>
+
+        </LinearLayout>
+
+</LinearLayout>

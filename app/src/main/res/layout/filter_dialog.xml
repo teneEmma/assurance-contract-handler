@@ -1,136 +1,197 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:padding="5dp"
     android:layout_margin="4dp"
     android:background="@drawable/dialog_round">
 
-        <HorizontalScrollView
-            android:id="@+id/horizontal_sv_filter"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:scrollbars="none"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentStart="true">
+            android:orientation="vertical">
 
-                <com.google.android.material.chip.ChipGroup
-                    android:id="@+id/chipGroup_filter"
-                    android:singleLine="true"
+                <HorizontalScrollView
+                    android:id="@+id/horizontal_sv_filter"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scrollbars="none"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentStart="true">
+
+                        <com.google.android.material.chip.ChipGroup
+                            android:id="@+id/chipGroup_filter"
+                            android:singleLine="true"
+                            android:layout_marginTop="10dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:singleLine="true"
+                            app:singleSelection="false">
+
+                        </com.google.android.material.chip.ChipGroup>
+
+                </HorizontalScrollView>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/il_filtrerAppoteur"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/horizontal_sv_filter"
+                    android:layout_alignParentStart="true"
+                    android:padding="5dp"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    app:hintEnabled="true"
+                    app:hintTextColor="@color/purple_500"
+                    android:hint="@string/filtrer_nom_de_l_apporteur"
+                    app:endIconMode="clear_text"
+                    app:endIconTint="@color/black">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/et_filtrerApporteur"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:layout_alignParentTop="true"
+                            android:inputType="text"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/il_filtrerImmatriculation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/il_filtrerAppoteur"
+                    android:layout_alignParentStart="true"
+                    android:padding="5dp"
                     android:layout_marginTop="10dp"
-                    android:layout_width="wrap_content"
-                    app:checkedChip="@id/attestationChip_filter"
-                    android:layout_height="wrap_content">
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    app:hintEnabled="true"
+                    app:hintTextColor="@color/purple_500"
+                    android:hint="@string/n_d_immatriculation"
+                    app:endIconMode="clear_text"
+                    app:endIconTint="@color/black"
+                    android:visibility="gone">
 
-                        <com.google.android.material.chip.Chip
-                            android:id="@+id/attestationChip_filter"
-                            style="@style/Widget.MaterialComponents.Chip.Filter"
-                            android:layout_width="wrap_content"
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/et_filtrerimmatriculation"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Attestation"/>
+                            android:layout_alignParentStart="true"
+                            android:layout_alignParentTop="true"
+                            android:inputType="text"/>
 
-                        <com.google.android.material.chip.Chip
-                            android:id="@+id/nPolicechip_filter"
-                            style="@style/Widget.MaterialComponents.Chip.Filter"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="N° Police"/>
+                </com.google.android.material.textfield.TextInputLayout>
 
-                        <com.google.android.material.chip.Chip
-                            android:id="@+id/assureChip_filter"
-                            style="@style/Widget.MaterialComponents.Chip.Filter"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Assure"/>
-
-                        <com.google.android.material.chip.Chip
-                            android:id="@+id/compagnieChip_filter"
-                            style="@style/Widget.MaterialComponents.Chip.Filter"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Compagnie"/>
-
-                        <com.google.android.material.chip.Chip
-                            android:id="@+id/immatriculationChip_filter"
-                            style="@style/Widget.MaterialComponents.Chip.Filter"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Immatriculation"/>
-
-
-                        <com.google.android.material.chip.Chip
-                            android:id="@+id/apporteurChip_filter"
-                            style="@style/Widget.MaterialComponents.Chip.Filter"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Apporteur"/>
-
-                </com.google.android.material.chip.ChipGroup>
-
-        </HorizontalScrollView>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/il_filtrerAppoteur"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/horizontal_sv_filter"
-            android:layout_alignParentStart="true"
-            android:padding="5dp"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            app:hintEnabled="true"
-            app:hintTextColor="@color/purple_500"
-            android:hint="@string/filtrer_nom_de_l_apporteur"
-            app:endIconMode="clear_text"
-            app:endIconTint="@color/black">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_filtrerApporteur"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/il_filtrerCompagnie"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_below="@id/il_filtrerImmatriculation"
                     android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"
-                    android:inputType="text"/>
+                    android:padding="5dp"
+                    android:layout_marginTop="10dp"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    app:hintEnabled="true"
+                    app:hintTextColor="@color/purple_500"
+                    android:hint="@string/nom_de_compagnie"
+                    app:endIconMode="clear_text"
+                    app:endIconTint="@color/black"
+                    android:visibility="gone">
 
-        </com.google.android.material.textfield.TextInputLayout>
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/et_filtrerCompagnie"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:layout_alignParentTop="true"
+                            android:inputType="text"/>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/il_filtrerImmatriculation"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/il_filtrerAppoteur"
-            android:layout_alignParentStart="true"
-            android:padding="5dp"
-            android:layout_marginTop="10dp"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            app:hintEnabled="true"
-            app:hintTextColor="@color/purple_500"
-            android:hint="@string/n_d_immatriculation"
-            app:endIconMode="clear_text"
-            app:endIconTint="@color/black">
+                </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_filtrerimmatriculation"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/il_filtrerAssure"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_below="@id/il_filtrerCompagnie"
                     android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"
-                    android:inputType="text"/>
+                    android:padding="5dp"
+                    android:layout_marginTop="10dp"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    app:hintEnabled="true"
+                    app:hintTextColor="@color/purple_500"
+                    android:hint="@string/nom_assure"
+                    app:endIconMode="clear_text"
+                    app:endIconTint="@color/black"
+                    android:visibility="gone">
 
-        </com.google.android.material.textfield.TextInputLayout>
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/et_filtrerAssure"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:layout_alignParentTop="true"
+                            android:inputType="text"/>
 
-        <RelativeLayout
-            android:id="@+id/layout_attestationCarte"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_below="@id/il_filtrerImmatriculation">
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/il_filtrerMark"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/il_filtrerAssure"
+                    android:layout_alignParentStart="true"
+                    android:padding="5dp"
+                    android:layout_marginTop="10dp"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    app:hintEnabled="true"
+                    app:hintTextColor="@color/purple_500"
+                    android:hint="@string/mark_vehicule"
+                    app:endIconMode="clear_text"
+                    app:endIconTint="@color/black"
+                    android:visibility="gone">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/et_filtrerMark"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:layout_alignParentTop="true"
+                            android:inputType="text"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/il_filtrerPolice"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/il_filtrerMark"
+                    android:layout_alignParentStart="true"
+                    android:padding="5dp"
+                    android:layout_marginTop="10dp"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    app:hintEnabled="true"
+                    app:hintTextColor="@color/purple_500"
+                    android:hint="@string/n_de_police"
+                    app:endIconMode="clear_text"
+                    app:endIconTint="@color/black"
+                    android:visibility="gone">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/et_filtrerPolice"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:layout_alignParentTop="true"
+                            android:inputType="text"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/il_filtrerAttestation"
-                    android:layout_width="150dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_below="@id/il_filtrerPolice"
                     android:layout_alignParentStart="true"
                     android:padding="5dp"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -138,7 +199,8 @@
                     app:hintTextColor="@color/purple_500"
                     android:hint="@string/n_attestation"
                     app:endIconMode="clear_text"
-                    app:endIconTint="@color/black">
+                    app:endIconTint="@color/black"
+                    android:visibility="gone">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/et_filtrerAttestation"
@@ -152,17 +214,17 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/il_filtrerCarteRose"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_toEndOf="@id/il_filtrerAttestation"
-                    android:layout_toStartOf="@id/btn_date_picker"
+                    android:layout_below="@id/il_filtrerAttestation"
                     android:padding="5dp"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     app:hintEnabled="true"
                     app:hintTextColor="@color/purple_500"
                     android:hint="@string/carte_rose"
                     app:endIconMode="clear_text"
-                    app:endIconTint="@color/black">
+                    app:endIconTint="@color/black"
+                    android:visibility="gone">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/et_filtrerCarteRose"
@@ -176,66 +238,88 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
 
-                <androidx.appcompat.widget.AppCompatImageButton
-                    android:id="@+id/btn_date_picker"
-                    android:layout_width="wrap_content"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/il_filtrerDate"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:src="@drawable/calendrier"
-                    android:layout_alignParentEnd="true"
-                    android:backgroundTint="@color/white"/>
+                    android:layout_below="@id/il_filtrerCarteRose"
+                    android:padding="5dp"
+                    android:clickable="false"
+                    android:focusable="false"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    app:hintEnabled="true"
+                    app:hintTextColor="@color/purple_500"
+                    android:hint="@string/select_date"
+                    app:endIconMode="clear_text"
+                    app:endIconTint="@color/black">
 
-        </RelativeLayout>
+                        <EditText
+                            android:id="@+id/btn_date_picker"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:focusable="false"
+                            android:clickable="false"
+                            android:drawableEnd="@drawable/ic_calendar"
+                            android:drawableTint="?attr/colorPrimaryVariant"
+                            android:layout_marginTop="5dp"
+                            android:backgroundTint="@color/white"
+                            android:autofillHints="Date" />
 
-        <ExpandableListView
-            android:id="@+id/expandable_lv_sliders"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:dividerHeight="0.5dp"
-            android:divider="@android:color/darker_gray"
-            android:indicatorLeft="?android:attr/expandableListPreferredChildIndicatorLeft"
-            android:layout_below="@id/layout_attestationCarte" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/expandable_lv_sliders"
-            android:layout_alignParentStart="true"
-            android:layout_marginTop="8dp">
+                <ExpandableListView
+                    android:id="@+id/expandable_lv_sliders"
+                    android:layout_width="match_parent"
+                    android:layout_height="250dp"
+                    android:layout_marginTop="10dp"
+                    android:nestedScrollingEnabled="true"
+                    android:isScrollContainer="false"
+                    android:dividerHeight="1dp"
+                    android:divider="@android:color/darker_gray"
+                    android:layout_below="@id/il_filtrerDate" />
 
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btnReset"
-                    style="@style/Widget.AppCompat.Button.Borderless"
-                    android:layout_width="wrap_content"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:background="@drawable/btn_round"
-                    android:paddingHorizontal="40dp"
-                    android:text="@string/reset"
-                    android:textColor="@color/red"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:textAlignment="center"
-                    android:drawableLeft="@drawable/outline_cancel_24"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:layout_below="@id/expandable_lv_sliders"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginTop="8dp">
 
-                <Button
-                    android:id="@+id/btnAppliquerFiltre"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:background="@drawable/btn_round"
-                    android:text="@string/appliquer"
-                    android:textSize="18sp"
-                    android:drawableLeft="@drawable/baseline_filter_list_24"
-                    app:backgroundTint="@color/design_default_color_primary"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/btnReset"
-                    app:layout_constraintTop_toTopOf="parent" />
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/btnReset"
+                            style="@style/Widget.AppCompat.Button.Borderless"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="8dp"
+                            android:background="@drawable/btn_round"
+                            android:paddingHorizontal="40dp"
+                            android:text="@string/reset"
+                            android:textColor="@color/red"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:textAlignment="center"
+                            android:drawableLeft="@drawable/outline_cancel_24"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+                        <Button
+                            android:id="@+id/btnAppliquerFiltre"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:background="@drawable/btn_round"
+                            android:text="@string/appliquer"
+                            android:textSize="18sp"
+                            android:drawableLeft="@drawable/baseline_filter_list_24"
+                            app:backgroundTint="@color/design_default_color_primary"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/btnReset"
+                            app:layout_constraintTop_toTopOf="parent" />
 
-</RelativeLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </LinearLayout>
+
+</ScrollView>

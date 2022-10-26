@@ -4,13 +4,14 @@ import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.os.Message
 import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.core.util.Pair
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,25 +20,29 @@ import com.google.android.material.chip.ChipGroup
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.kod.assurancecontracthandler.R
 import com.kod.assurancecontracthandler.common.constants.ConstantsVariables
+import com.kod.assurancecontracthandler.common.utilities.TimeConverters
 import com.kod.assurancecontracthandler.databinding.FilterDialogBinding
 import com.kod.assurancecontracthandler.databinding.FragmentSecondBinding
 import com.kod.assurancecontracthandler.model.ContractDbDto
 import com.kod.assurancecontracthandler.viewmodels.databaseviewmodel.DBViewModel
 import com.kod.assurancecontracthandler.viewmodels.databaseviewmodel.DBViewModelFactory
 import com.kod.assurancecontracthandler.viewmodels.databaseviewmodel.FilterViewModel
+import kotlin.collections.HashMap
 
 class ContractListFragment : Fragment(), SearchView.OnQueryTextListener, MenuItem.OnActionExpandListener{
 
     private lateinit var binding: FragmentSecondBinding
     private lateinit var dbViewModel: DBViewModel
-    private lateinit var listContracts: List<ContractDbDto>
+    private lateinit var listContracts: MutableLiveData<List<ContractDbDto>?>
     private lateinit var filterViewModel: FilterViewModel
     private lateinit var filterBinding: FilterDialogBinding
-    private var chipIds: List<Int>?= null
+    private lateinit var expandableAdapter: ExpandableSliderAdapter
+    lateinit var listTextViews: List<View>
+    lateinit var dialog: Dialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true);
+        setHasOptionsMenu(true)
     }
 
     override fun onCreateView(
@@ -47,21 +52,21 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener, MenuIte
         binding = FragmentSecondBinding.inflate(inflater, container, false)
         dbViewModel = ViewModelProvider(this,
             DBViewModelFactory(requireActivity().application))[DBViewModel::class.java]
+        listContracts = dbViewModel.allContracts as MutableLiveData<List<ContractDbDto>?>
         filterViewModel = ViewModelProvider(this)[FilterViewModel::class.java]
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        dbViewModel.allContracts.observe(viewLifecycleOwner){listContracts->
+        listContracts.observe(viewLifecycleOwner){listContracts->
             if(listContracts == null){
                binding.ivEmptyDatabase.visibility = View.VISIBLE
                binding.tvEmptyDatabase.visibility = View.VISIBLE
             }else{
                 binding.ivEmptyDatabase.visibility = View.GONE
                 binding.tvEmptyDatabase.visibility = View.GONE
-                setRecyclerView(listContracts)
-                this.listContracts = listContracts
+                setRecyclerView()
             }
         }
 
@@ -81,51 +86,94 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener, MenuIte
         searchView.queryHint = "Faire une recherche..."
         searchView.isSubmitButtonEnabled = true
         searchView.setOnQueryTextListener(this)
-        chipChecked()
+        searchChipChecked()
     }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         item.setOnActionExpandListener(this)
         when(item.itemId){
             R.id.action_filter-> {
                 filterBinding = FilterDialogBinding.inflate(layoutInflater)
-                if (filterBinding != null) {
-                    showDialog(filterBinding)
-                    filterBinding.btnDatePicker.setOnClickListener {
-                        showDatePickerDialog()
-                    }
+                listTextViews = listOf(filterBinding.ilFiltrerAppoteur,
+                    filterBinding.ilFiltrerImmatriculation, filterBinding.ilFiltrerAttestation,
+                    filterBinding.ilFiltrerCarteRose, filterBinding.ilFiltrerCompagnie,
+                    filterBinding.ilFiltrerAssure, filterBinding.ilFiltrerMark,
+                    filterBinding.ilFiltrerPolice)
+                showDialog()
+                showChips(filterBinding.chipGroupFilter, ConstantsVariables.filterChipNames, com.google.android.material.R.style.Widget_MaterialComponents_Chip_Filter)
+                filterBinding.btnDatePicker.setOnClickListener {
+                    showDatePickerDialog()
                 }
-                  entriesListener()
+                setExpandableListView()
+                entriesListener()
             }
         }
 
         return true
     }
 
+    private fun setExpandableListView(){
+        val groupTitleList = listOf("FILTRER LES PRIX", "FILTRER LA PUISSANCE")
+        val childTitleList = listOf(listOf("DTA", "PN", "ACC", "FC", "TVA", "CR", "PTTC", "ENCAIS", "REVER", "SOLDE"),
+        listOf("PUISSANCE"))
+        val childDataList: HashMap<String, List<String>> = hashMapOf()
+
+        groupTitleList.forEachIndexed { index, _ ->
+            childDataList[groupTitleList[index]] = childTitleList[index]
+        }
+
+        expandableAdapter = ExpandableSliderAdapter(requireContext(),
+        groupTitleList, childDataList
+        )
+
+        filterBinding.expandableLvSliders.setAdapter(expandableAdapter)
+        filterBinding.expandableLvSliders.setOnChildClickListener { _, v, groupPosition, childPosition, _ ->
+            toast(childDataList[groupTitleList[groupPosition]]?.get(childPosition)!!)
+            expandableAdapter.makeOthersVisible(groupPosition, childPosition, v)
+            true
+        }
+    }
+
     private fun entriesListener() {
-        filterBinding.chipGroupFilter.setOnCheckedStateChangeListener { group, checkedIds ->
-            val list = filterViewModel.filterChip as MutableList
-            checkedIds.forEachIndexed { index, i ->
-                when(checkedIds[index]){
-                    R.id.attestationChip_filter-> list.add(ConstantsVariables.ChipIds.ATTESTATION.index)
-                    R.id.nPolicechip_filter-> list.add(ConstantsVariables.ChipIds.N_POLICE.index)
-                    R.id.assureChip_filter-> list.add(ConstantsVariables.ChipIds.ASSURE.index)
-                    R.id.compagnieChip_filter-> list.add(ConstantsVariables.ChipIds.COMPAGNIE.index)
-                    R.id.immatriculationChip_filter-> list.add(ConstantsVariables.ChipIds.IMMATRICULATION.index)
-                    R.id.apporteurChip_filter-> list.add(ConstantsVariables.ChipIds.APPORTEUR.index)
+        filterBinding.chipGroupFilter.setOnCheckedStateChangeListener { _, checkedIds ->
+            Log.e("CHECKED IDS", checkedIds.toString())
+            filterViewModel.filterChip = checkedIds
+            listTextViews.forEachIndexed { index, v ->
+                if (checkedIds.contains(index+1)){
+                    v.visibility = View.VISIBLE
+                }else{
+                    v.visibility = View.GONE
                 }
             }
-            filterViewModel.filterChip = checkedIds
         }
+
+        filterBinding.btnReset.setOnClickListener {
+            filterBinding.etFiltrerAttestation.text?.clear().also { filterViewModel.attestation = "" }
+            filterBinding.etFiltrerApporteur.text?.clear().also { filterViewModel.apporteur = "" }
+            filterBinding.etFiltrerimmatriculation.text?.clear().also { filterViewModel.immatriculation= "" }
+            filterBinding.etFiltrerCarteRose.text?.clear().also { filterViewModel.carteRose = "" }
+            filterBinding.etFiltrerCompagnie.text?.clear().also { filterViewModel.compagnie = "" }
+            filterBinding.etFiltrerAssure.text?.clear().also { filterViewModel.assure = "" }
+            filterBinding.etFiltrerMark.text?.clear().also { filterViewModel.mark = "" }
+            filterBinding.etFiltrerPolice.text?.clear().also { filterViewModel.nPolice = "" }
+            filterViewModel.prixSlidersValue?.clear()
+            filterViewModel.puissanceSliderValue?.clear()
+            filterBinding.chipGroupFilter.clearCheck()
+            filterBinding.expandableLvSliders.clearChoices()
+        }
+
         filterBinding.btnAppliquerFiltre.setOnClickListener {
             filterViewModel.apporteur = filterBinding.etFiltrerApporteur.text.toString()
             filterViewModel.immatriculation = filterBinding.etFiltrerimmatriculation.text.toString()
             filterViewModel.attestation = filterBinding.etFiltrerAttestation.text.toString()
             filterViewModel.carteRose = filterBinding.etFiltrerCarteRose.text.toString()
-            filterViewModel.minPrix = filterBinding.prixSlider.values[0].toInt()
-            filterViewModel.maxPrix = filterBinding.prixSlider.values[1].toInt()
-            filterViewModel.minPuissance = filterBinding.puissanceSlider.values[0].toInt()
-            filterViewModel.maxPuissance = filterBinding.puissanceSlider.values[1].toInt()
-
+            filterViewModel.compagnie = filterBinding.etFiltrerCompagnie.text.toString()
+            filterViewModel.assure = filterBinding.etFiltrerAssure.text.toString()
+            filterViewModel.mark = filterBinding.etFiltrerMark.text.toString()
+            filterViewModel.nPolice = filterBinding.etFiltrerPolice.text.toString()
+            filterViewModel.prixSlidersValue = expandableAdapter.getSliderValuesGrp1()
+            filterViewModel.puissanceSliderValue = expandableAdapter.getSliderValuesGrp2()
+            applyFilter()
+            dialog.cancel()
         }
     }
 
@@ -154,9 +202,10 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener, MenuIte
         return layoutParams
     }
 
-    private fun showChips(chipGroup: ChipGroup){
-        ConstantsVariables.chipNames.forEachIndexed { index, chipName ->
-            val chip = Chip(requireContext(), null, com.google.android.material.R.style.Widget_MaterialComponents_Chip_Choice)
+    private fun showChips(chipGroup: ChipGroup, listStr: List<String>, style: Int){
+        listStr.forEachIndexed { index, chipName ->
+            val chip = Chip(requireContext(), null, style)
+            chip.id = index+1
             chip.isCheckable = true
             if (index==0){
                 chip.isChecked = true
@@ -166,8 +215,9 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener, MenuIte
             chipGroup.addView(chip)
         }
     }
-    private fun showDialog(filterBinding: FilterDialogBinding){
-        val dialog = Dialog(requireContext())
+
+    private fun showDialog(){
+        dialog = Dialog(requireContext())
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setContentView(filterBinding.root)
@@ -193,8 +243,10 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener, MenuIte
     private fun toast(message: String){
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
-    private fun chipChecked(){
-        binding.chipGroupSearch.setOnCheckedStateChangeListener { group, checkedIds ->
+
+    private fun searchChipChecked(){
+        binding.chipGroupSearch.setOnCheckedStateChangeListener { _, checkedIds ->
+            Log.e("checkedIds ", checkedIds.toString())
             if (checkedIds.size > 0) {
                 filterViewModel.searchChip = checkedIds[0]
                 return@setOnCheckedStateChangeListener
@@ -212,20 +264,19 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener, MenuIte
     private fun swipeToRefresh(){
         binding.swipeToRefresh.setOnRefreshListener {
             updateContractsList()
-            setRecyclerView(listContracts)
-            binding.swipeToRefresh.isRefreshing = false
-        }
-    }
-    private fun swipeToRefresh(str: String){
-        binding.swipeToRefresh.setOnRefreshListener {
-            searchForClient(str, filterViewModel.searchChip)
-            setRecyclerView(listContracts)
             binding.swipeToRefresh.isRefreshing = false
         }
     }
 
-    private fun setRecyclerView(list: List<ContractDbDto>){
-        val rvAdapter = ContractListAdapter(list)
+    private fun swipeToRefresh(str: String){
+        binding.swipeToRefresh.setOnRefreshListener {
+            searchForClient(str, filterViewModel.searchChip)
+            binding.swipeToRefresh.isRefreshing = false
+        }
+    }
+
+    private fun setRecyclerView(){
+        val rvAdapter = listContracts.value?.let { ContractListAdapter(it) }
         binding.rvListContract.adapter = rvAdapter
         binding.rvListContract.layoutManager =LinearLayoutManager(context)
         binding.rvListContract.setHasFixedSize(true)
@@ -252,10 +303,18 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener, MenuIte
     override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
         when(item?.itemId){
             R.id.action_search->{
-                showChips(binding.chipGroupSearch)
+                showChips(binding.chipGroupSearch, ConstantsVariables.searchChipNames,
+                com.google.android.material.R.style.Widget_MaterialComponents_Chip_Action)
             }
         }
         return true
+    }
+
+    private fun applyFilter(){
+        val timeConverter = TimeConverters()
+        Log.e("LIST CONTRACTS", dbViewModel.allContracts.value.toString())
+        Log.e("LIST SIZE", dbViewModel.allContracts.value?.size.toString())
+        listContracts.value =  dbViewModel.allContracts.value?.let { filterViewModel.filterFields(it) }
     }
 
     override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {

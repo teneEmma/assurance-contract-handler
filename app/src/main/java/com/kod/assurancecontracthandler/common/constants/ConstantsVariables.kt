@@ -16,8 +16,12 @@ object ConstantsVariables {
     val contractDateTypes = listOf(7,8)
     val months = listOf("JANVIER","FEVRIER","MARS","AVRIL", "MAI", "JUIN", "JUILLET", "AOUT",
     "SEPTEMBRE","OCTOBRE","NOVEMBRE","DECEMBRE")
-    val chipNames = listOf("Assure", "N° Police", "Attestaion", "Compagnie",
+    val searchChipNames = listOf("Assure", "N° Police", "Attestaion", "Compagnie",
         "Immatriculation", "Mark", "Apporteur")
+
+    val filterChipNames = listOf("Apporteur", "Immatriculation", "Attestation", "Carte Rose",
+        "Compagnie", "Assure", "Mark", "N° Police")
+
 
     enum class ChipIds(val index: Int, val nameStr: String){
         ATTESTATION(1, headerNames[1]),

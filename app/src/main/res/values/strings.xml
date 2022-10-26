@@ -4,8 +4,8 @@
     <string name="action_search">Search</string>
     <string name="action_filter">Filter</string>
     <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
+    <string name="first_fragment_label">Importer Des Fichiers</string>
+    <string name="second_fragment_label">Base De Donée</string>
     <string name="save">SAUVEGARDER</string>
     <string name="upload">UPLOAD</string>
     <string name="cancel">ANNULER</string>
@@ -27,6 +27,10 @@
     <string name="base_de_donnee_vide">Base De Donnee Vide</string>
     <string name="filtrer_nom_de_l_apporteur">Filtrer Nom De L\'apporteur</string>
     <string name="n_d_immatriculation">N° D\'Immatriculation</string>
+    <string name="nom_de_compagnie">Nom de Compagnie</string>
+    <string name="nom_assure">Assure</string>
+    <string name="mark_vehicule">Marque du Vehicule</string>
+    <string name="n_de_police">N° de Police</string>
     <string name="n_attestation">N° Attestation</string>
     <string name="carte_rose">Carte Rose</string>
     <string name="prix">PRIX</string>
@@ -38,10 +42,11 @@
     <string name="prixSeperator">-</string>
     <string name="reset">RESET</string>
     <string name="appliquer">APPLIQUER</string>
-    <string name="main_group_slider_title">FILTRER LES PRIX OU LA PUISSANCE</string>
+    <string name="main_group_slider_title">FILTRER LES PRIX</string>
     <string name="permission_str">Accordez Moi Les Permissions necessaires pourouvoir Accesder Aux Differents Fichiers</string>
     <string name="permission_heatder_str">PAS D\'ACCESS AUX FICHIERS</string>
     <string name="grant_permission">DONNER LES PERMISSION</string>
+    <string name="select_date">Selectioner Une Date</string>
     <array name="price_range">
         <item>1000</item>
         <item>500000</item>
