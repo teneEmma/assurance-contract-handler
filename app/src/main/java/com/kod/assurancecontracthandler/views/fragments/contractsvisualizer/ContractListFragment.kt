@@ -10,7 +10,6 @@ import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.core.util.Pair
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -111,6 +110,7 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener, MenuIte
         return true
     }
 
+    
     private fun setExpandableListView(){
         val groupTitleList = listOf("FILTRER LES PRIX", "FILTRER LA PUISSANCE")
         val childTitleList = listOf(listOf("DTA", "PN", "ACC", "FC", "TVA", "CR", "PTTC", "ENCAIS", "REVER", "SOLDE"),
@@ -300,8 +300,8 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener, MenuIte
         return true
     }
 
-    override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
-        when(item?.itemId){
+    override fun onMenuItemActionExpand(p0: MenuItem): Boolean {
+        when(p0.itemId){
             R.id.action_search->{
                 showChips(binding.chipGroupSearch, ConstantsVariables.searchChipNames,
                 com.google.android.material.R.style.Widget_MaterialComponents_Chip_Action)
@@ -317,8 +317,8 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener, MenuIte
         listContracts.value =  dbViewModel.allContracts.value?.let { filterViewModel.filterFields(it) }
     }
 
-    override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
-        when(item?.itemId){
+    override fun onMenuItemActionCollapse(p0: MenuItem): Boolean {
+        when(p0.itemId){
             R.id.action_search->{
                 binding.chipGroupSearch.isActivated = false
                 binding.chipGroupSearch.clearCheck()

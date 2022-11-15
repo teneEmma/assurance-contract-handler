@@ -16,10 +16,7 @@
                     android:id="@+id/horizontal_sv_filter"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:scrollbars="none"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentLeft="true">
+                    android:scrollbars="none">
 
                         <com.google.android.material.chip.ChipGroup
                             android:id="@+id/chipGroup_filter"
@@ -38,8 +35,6 @@
                     android:id="@+id/il_filtrerAppoteur"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/horizontal_sv_filter"
-                    android:layout_alignParentStart="true"
                     android:padding="5dp"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     app:hintEnabled="true"
@@ -62,8 +57,6 @@
                     android:id="@+id/il_filtrerImmatriculation"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/il_filtrerAppoteur"
-                    android:layout_alignParentStart="true"
                     android:padding="5dp"
                     android:layout_marginTop="10dp"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -88,8 +81,6 @@
                     android:id="@+id/il_filtrerCompagnie"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/il_filtrerImmatriculation"
-                    android:layout_alignParentStart="true"
                     android:padding="5dp"
                     android:layout_marginTop="10dp"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -114,8 +105,6 @@
                     android:id="@+id/il_filtrerAssure"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/il_filtrerCompagnie"
-                    android:layout_alignParentStart="true"
                     android:padding="5dp"
                     android:layout_marginTop="10dp"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -140,8 +129,6 @@
                     android:id="@+id/il_filtrerMark"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/il_filtrerAssure"
-                    android:layout_alignParentStart="true"
                     android:padding="5dp"
                     android:layout_marginTop="10dp"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -166,8 +153,6 @@
                     android:id="@+id/il_filtrerPolice"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/il_filtrerMark"
-                    android:layout_alignParentStart="true"
                     android:padding="5dp"
                     android:layout_marginTop="10dp"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -192,8 +177,6 @@
                     android:id="@+id/il_filtrerAttestation"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/il_filtrerPolice"
-                    android:layout_alignParentStart="true"
                     android:padding="5dp"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     app:hintEnabled="true"
@@ -217,7 +200,6 @@
                     android:id="@+id/il_filtrerCarteRose"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/il_filtrerAttestation"
                     android:padding="5dp"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     app:hintEnabled="true"
@@ -243,7 +225,6 @@
                     android:id="@+id/il_filtrerDate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/il_filtrerCarteRose"
                     android:padding="5dp"
                     android:clickable="false"
                     android:focusable="false"
@@ -260,12 +241,13 @@
                             android:layout_height="wrap_content"
                             android:focusable="false"
                             android:clickable="false"
+                            android:hint="@string/select_date"
                             android:drawableEnd="@drawable/ic_calendar"
                             android:drawableTint="?attr/colorPrimaryVariant"
                             android:layout_marginTop="5dp"
                             android:backgroundTint="@color/white"
                             android:autofillHints="Date"
-                            android:drawableRight="@drawable/ic_calendar" />
+                            android:inputType="date" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -277,14 +259,11 @@
                     android:nestedScrollingEnabled="true"
                     android:isScrollContainer="false"
                     android:dividerHeight="1dp"
-                    android:divider="@android:color/darker_gray"
-                    android:layout_below="@id/il_filtrerDate" />
+                    android:divider="@android:color/darker_gray"/>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/expandable_lv_sliders"
-                    android:layout_alignParentStart="true"
                     android:layout_marginTop="8dp">
 
                         <androidx.appcompat.widget.AppCompatButton

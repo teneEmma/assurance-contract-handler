@@ -14,7 +14,9 @@
         android:layout_marginBottom="5dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_toStartOf="@id/dates">
+        android:layout_toStartOf="@id/dates"
+        android:layout_alignParentLeft="true"
+        android:layout_toLeftOf="@id/dates">
 
         <TextView
             android:id="@+id/column_id"
@@ -30,7 +32,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:text="@string/column_assure"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            android:layout_marginLeft="20dp" />
 
     </LinearLayout>
 
@@ -41,7 +44,9 @@
         android:layout_marginStart="8dp"
         android:orientation="vertical"
         android:layout_alignParentEnd="true"
-        android:layout_centerVertical="true">
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="8dp"
+        android:layout_alignParentRight="true">
 
         <TextView
             android:id="@+id/title_effet"
@@ -86,7 +91,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="52dp"
         android:orientation="horizontal"
-        android:layout_below="@id/nameNumber">
+        android:layout_below="@id/nameNumber"
+        android:layout_marginLeft="52dp">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -115,7 +121,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="25dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_marginLeft="25dp">
 
             <TextView
                 android:id="@+id/title_carteRose"

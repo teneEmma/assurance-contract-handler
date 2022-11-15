@@ -22,8 +22,10 @@ class TimeConverters {
     //PRODUCTION ORION-LIMBE MOIS DE JANVIER 2022
     fun dateFromExcelHeader(str: String): HashMap<String, Date?>{
         val hashMap = hashMapOf<String, Date?> ()
+        Log.e("Semaine ", str)
         if(str.contains("SEMAINE DU")){
-            if (!str.contains("AU")){
+            if (!str.contains("AU") && !str.contains("au")){
+                Log.e("Semaine ", "Doesn't contain")
                 return hashMap
             }
             val splitStr = str.split("AU")
