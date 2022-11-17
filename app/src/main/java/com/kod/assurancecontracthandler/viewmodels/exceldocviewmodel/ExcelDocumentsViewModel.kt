@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.kod.assurancecontracthandler.common.utilities.ModelSchemaStructurer
+import com.kod.assurancecontracthandler.model.Contract
 import com.kod.assurancecontracthandler.model.ContractDbDto
 import com.kod.assurancecontracthandler.usecases.SheetCursorPosition
 import kotlinx.coroutines.Dispatchers
@@ -55,10 +56,7 @@ class ExcelDocumentsViewModel(application: Application) : AndroidViewModel(appli
                             cellValue = cell.dateCellValue
                         }
                     }
-//                        Log.e("COLUMN", "Column: ${cell.columnIndex} has value: $cellValue")
-//                    if(cellValue != null) {
                     rowContentRead.add(cellValue)
-//                    }
                 }
                 when(val sheetCursor = verifyRowScheme(rowContentRead, header)){
                     is SheetCursorPosition.BeginningOfSheet -> {
@@ -102,4 +100,29 @@ class ExcelDocumentsViewModel(application: Application) : AndroidViewModel(appli
         }
     }
 
+    object something {
+        fun something(){
+            val allHeaders = hashMapOf<String, Any>(
+                Pair("N°", Int),
+                Pair("ATTESTATION", String),
+                Pair("CARTE ROSE", String),
+                Pair( "N°POLICE", Date())
+            )
+            val header = listOf("ATTESTAION", "N°")
+            val values = listOf<Any>("109*A*5846", 5)
+            val ctr = Contract(0)
+
+            if(allHeaders.containsKey(header[1])){
+                val aa= Contract::class.members
+                aa.forEach {
+                    Log.e("fields", it.name )
+                }
+            }
+            val tyeList = listOf(String.Companion::class.java, Int.Companion::class.java)
+            val str = ""
+            if (tyeList[1] == str.javaClass.componentType){
+                val some = str.javaClass.simpleName
+            }
+        }
+    }
 }

@@ -84,4 +84,5 @@ dependencies {
     //Firebase stuffs
     implementation 'com.google.firebase:firebase-crashlytics-ktx:18.3.2'
     implementation 'com.google.firebase:firebase-analytics-ktx:21.2.0'
+    implementation "org.jetbrains.kotlin:kotlin-reflect:1.7.10"
 }

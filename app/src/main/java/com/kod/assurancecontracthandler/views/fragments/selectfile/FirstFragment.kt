@@ -1,13 +1,14 @@
 package com.kod.assurancecontracthandler.views.fragments.selectfile
 
 import android.Manifest
+import android.app.Activity
 import android.app.Dialog
-import android.database.Cursor
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
-import android.provider.OpenableColumns
+import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -15,7 +16,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -29,26 +29,56 @@ import com.kod.assurancecontracthandler.viewmodels.databaseviewmodel.DBViewModel
 import com.kod.assurancecontracthandler.viewmodels.databaseviewmodel.DBViewModelFactory
 import com.kod.assurancecontracthandler.viewmodels.exceldocviewmodel.ExcelDocumentsViewModel
 import com.kod.assurancecontracthandler.viewmodels.exceldocviewmodel.ExcelDocumentsViewModelFactory
-import java.io.File
 
 class FirstFragment : Fragment() {
 
     private var _binding: FragmentFirstBinding? = null
     private val binding get() = _binding!!
-//    private lateinit var resultLauncher: ActivityResultLauncher<Intent>
     private lateinit var excelDocumentVM: ExcelDocumentsViewModel
-    lateinit var dbViewModel: DBViewModel
+    private lateinit var dbViewModel: DBViewModel
     private lateinit var listOfContracts: List<ContractDbDto>
-    lateinit var openDoc:  ActivityResultLauncher<Array<String>>
-    private lateinit var requestPermissionLauncher: ActivityResultLauncher<Array<String>>
-    var permissions : Map<String, Boolean>? = null
+    private var permissions : Map<String, Boolean>? = null
+    private val contentResolver = activity?.applicationContext?.contentResolver
+    private val documentLauncher: ActivityResultLauncher<Intent> =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ result->
+            if (result.resultCode == Activity.RESULT_OK){
+                val intentData= result.data
+                if (intentData != null && intentData.data != null){
+                    val pickedFileUri = intentData.data
+                    if (pickedFileUri != null) {
+                        val path = getDocumentMetadata(pickedFileUri)
+                        if(path != null)
+                            readDocument(path)
+                        else
+                            Toast.makeText(requireContext(), "No Path Found", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        }
+    private val requestPermissionLauncher: ActivityResultLauncher<Array<String>> =
+        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()){ permissions->
+        permissions.entries.forEach {
+            this.permissions = permissions
+            Log.e("isGranted", "${it.key} -- ${it.value}")
+            if (!it.value){
+                longSnack("${getPermissionString(it.key.substringAfter("permission."))} Needed")
+                return@registerForActivityResult
+            }
+            getDocument()
+        }
+    }
 
+    private fun getPermissionString(mapVal: String): String{
+        return if(mapVal.contains("WRITE"))
+            "WRITING PERMISSION"
+        else
+            "READ PERMISSION"
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        checkAndGrantPermission()
         excelDocumentVM = ViewModelProvider(this,
             ExcelDocumentsViewModelFactory(requireActivity().application)
         )[ExcelDocumentsViewModel::class.java]
@@ -60,24 +90,6 @@ class FirstFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-//        resultLauncher = registerForActivityResult(ActivityResultContracts
-//            .StartActivityForResult()){
-//                result->
-//            if (result.resultCode == Activity.RESULT_OK && result.data != null){
-////                documentActivityResult(result.data)
-//            }
-//        }
-
-        openDoc = registerForActivityResult(ActivityResultContracts.OpenDocument()){uri->
-            if (uri != null) {
-                documentActivityResult(uri)
-                return@registerForActivityResult
-            }
-
-            toast("Aucun Fichier N'a Ete Selectioné")
-            setVisualEffects(false)
-        }
 
         excelDocumentVM.listOfContracts.observe(viewLifecycleOwner){
             listOfContracts = it
@@ -95,22 +107,11 @@ class FirstFragment : Fragment() {
         }
 
         binding.actvImportFile.setOnClickListener {
-            getDocument()
+            checkAndGrantPermission()
         }
     }
 
     private fun checkAndGrantPermission(){
-        val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts
-            .RequestMultiplePermissions()){ permissions->
-            permissions.entries.forEach {
-                this.permissions = permissions
-                Log.e("isGranted", "${it.key} -- ${it.value}")
-                if (!it.value){
-                    toast("${it.key.substringAfter("permission.")} Needed")
-                }
-            }
-        }
-
         requestPermissionLauncher.launch(arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.READ_EXTERNAL_STORAGE))
     }
@@ -128,51 +129,44 @@ class FirstFragment : Fragment() {
     }
 
     private fun getDocument(){
-//        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
-//            type = MimeTypes.EXCEL_2007_SUP.value
-//            addCategory(Intent.CATEGORY_OPENABLE)
-//        }
-//        resultLauncher.launch(intent)
-
         permissions?.forEach { (_, value) ->
             if (!value){
                 showPermissionDialog()
                 return
             }
         }
-
-        openDoc.launch(arrayOf(MimeTypes.EXCEL_2007_SUP.value, MimeTypes.EXCEL_2007.value))
+        pickFile()
     }
 
-    private fun documentActivityResult(uri: Uri) {
-        val file = uri.path?.let { File(it) }
-        var selectedFileName = file?.name
-
-        if (uri.toString().startsWith("content://")) {
-            var cursor: Cursor? = null
-            try {
-                cursor = uri?.let { requireActivity().contentResolver.query(it,
-                    null, ":", null, "") }
-                if (cursor != null && cursor.moveToFirst()) {
-                    val nameIndex =
-                        cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
-                    cursor.moveToFirst()
-                    selectedFileName = cursor.getString(nameIndex)
-                }
-            } finally {
-                cursor?.close()
-            }
-        } else if (uri.toString().startsWith("file://")) {
-            selectedFileName = file?.name
+    private fun pickFile(){
+        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+            addCategory(Intent.CATEGORY_OPENABLE)
+            type = MimeTypes.EXCEL_2007_SUP.value
+            action = Intent.ACTION_GET_CONTENT
         }
 
-        val path = uri.path
-        if (path != null && selectedFileName != null) {
-            readDocument(path)
+        documentLauncher.launch(intent)
+    }
+
+    private fun getDocumentMetadata(pickedUri: Uri): String?{
+        var path: String? = null
+        val projection = arrayOf(MediaStore.Files.FileColumns.DATA)
+        val cursor = contentResolver?.query(pickedUri, projection,
+            null, null, null, null)
+
+        Log.e("CURSOR", cursor.toString())
+        if(cursor == null)
+            path = pickedUri.path
+        else{
+            cursor.moveToFirst()
+            val columnIndex = cursor.getColumnIndexOrThrow(projection[0])
+            cursor.getString(columnIndex)
+            cursor.close()
         }
 
         setVisualEffects(true)
-        binding.textviewSecond.text = selectedFileName
+        binding.textviewSecond.text = pickedUri.lastPathSegment?.substringAfter(":")
+        return if(path == null || path.isEmpty()) pickedUri.path else path
     }
 
     override fun onDestroyView() {
@@ -180,7 +174,11 @@ class FirstFragment : Fragment() {
         _binding = null
     }
 
-    private fun snack(message: String){
+    private fun longSnack(message: String){
+        Snackbar.make(requireView(), message, Snackbar.LENGTH_LONG).show()
+    }
+
+    private fun shortSnack(message: String){
         Snackbar.make(requireView(), message, Snackbar.LENGTH_SHORT).show()
     }
 
@@ -200,7 +198,7 @@ class FirstFragment : Fragment() {
         findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
     }
 
-    fun setVisualEffects(isEnabled: Boolean){
+    private fun setVisualEffects(isEnabled: Boolean){
         if (isEnabled){
             binding.imageExcel.visibility = View.VISIBLE
             binding.textviewSecond.visibility = View.VISIBLE

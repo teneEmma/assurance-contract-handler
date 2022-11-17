@@ -26,6 +26,7 @@ import com.kod.assurancecontracthandler.model.ContractDbDto
 import com.kod.assurancecontracthandler.viewmodels.databaseviewmodel.DBViewModel
 import com.kod.assurancecontracthandler.viewmodels.databaseviewmodel.DBViewModelFactory
 import com.kod.assurancecontracthandler.viewmodels.databaseviewmodel.FilterViewModel
+import com.kod.assurancecontracthandler.viewmodels.exceldocviewmodel.ExcelDocumentsViewModel
 import kotlin.collections.HashMap
 
 class ContractListFragment : Fragment(), SearchView.OnQueryTextListener, MenuItem.OnActionExpandListener{
@@ -71,6 +72,7 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener, MenuIte
 
         binding.addExcelFile.setOnClickListener {
             addExcelFile()
+            ExcelDocumentsViewModel.something.something()
         }
 
         updateContractsList()
