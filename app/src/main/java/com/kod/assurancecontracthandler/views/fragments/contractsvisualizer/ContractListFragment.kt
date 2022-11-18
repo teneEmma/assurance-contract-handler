@@ -72,7 +72,6 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener, MenuIte
 
         binding.addExcelFile.setOnClickListener {
             addExcelFile()
-            ExcelDocumentsViewModel.something.something()
         }
 
         updateContractsList()

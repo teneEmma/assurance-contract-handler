@@ -1,14 +1,11 @@
 package com.kod.assurancecontracthandler.views.fragments.selectfile
 
 import android.Manifest
-import android.app.Activity
 import android.app.Dialog
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -29,6 +26,7 @@ import com.kod.assurancecontracthandler.viewmodels.databaseviewmodel.DBViewModel
 import com.kod.assurancecontracthandler.viewmodels.databaseviewmodel.DBViewModelFactory
 import com.kod.assurancecontracthandler.viewmodels.exceldocviewmodel.ExcelDocumentsViewModel
 import com.kod.assurancecontracthandler.viewmodels.exceldocviewmodel.ExcelDocumentsViewModelFactory
+import java.io.FileInputStream
 
 class FirstFragment : Fragment() {
 
@@ -38,34 +36,32 @@ class FirstFragment : Fragment() {
     private lateinit var dbViewModel: DBViewModel
     private lateinit var listOfContracts: List<ContractDbDto>
     private var permissions : Map<String, Boolean>? = null
-    private val contentResolver = activity?.applicationContext?.contentResolver
-    private val documentLauncher: ActivityResultLauncher<Intent> =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ result->
-            if (result.resultCode == Activity.RESULT_OK){
-                val intentData= result.data
-                if (intentData != null && intentData.data != null){
-                    val pickedFileUri = intentData.data
-                    if (pickedFileUri != null) {
-                        val path = getDocumentMetadata(pickedFileUri)
-                        if(path != null)
-                            readDocument(path)
-                        else
-                            Toast.makeText(requireContext(), "No Path Found", Toast.LENGTH_SHORT).show()
-                    }
+    private val documentLauncher =
+        registerForActivityResult(ActivityResultContracts.OpenDocument()){ uri->
+            if (uri != null) {
+                val excelFile = context?.contentResolver?.openFileDescriptor(uri, "r")
+                val fileDescriptor = excelFile?.fileDescriptor
+                val inputStream = FileInputStream(fileDescriptor)
+                val fileName = uri.path?.substringAfter(":")
+                readDocument(inputStream)
+                if (fileName != null) {
+                    showViews(fileName)
                 }
-            }
+            } else
+                shortSnack("Aucun Fichier Selectionés")
         }
     private val requestPermissionLauncher: ActivityResultLauncher<Array<String>> =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()){ permissions->
-        permissions.entries.forEach {
             this.permissions = permissions
-            Log.e("isGranted", "${it.key} -- ${it.value}")
-            if (!it.value){
-                longSnack("${getPermissionString(it.key.substringAfter("permission."))} Needed")
-                return@registerForActivityResult
+            permissions.entries.forEach {
+                Log.e("isGranted", "${it.key} -- ${it.value}")
+                if (!it.value){
+                    longSnack("${getPermissionString(it.key.substringAfter("permission."))} Needed")
+                    showPermissionDialog()
+                    return@registerForActivityResult
+                }
             }
-            getDocument()
-        }
+            pickFile()
     }
 
     private fun getPermissionString(mapVal: String): String{
@@ -107,11 +103,11 @@ class FirstFragment : Fragment() {
         }
 
         binding.actvImportFile.setOnClickListener {
-            checkAndGrantPermission()
+            requestPermissions()
         }
     }
 
-    private fun checkAndGrantPermission(){
+    private fun requestPermissions(){
         requestPermissionLauncher.launch(arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.READ_EXTERNAL_STORAGE))
     }
@@ -124,49 +120,17 @@ class FirstFragment : Fragment() {
         dialog.show()
 
         dialogBinding.btnDialogPositive.setOnClickListener {
-            //TODO: Go to permission page and ask user to grant permission
+            requestPermissions()
         }
-    }
-
-    private fun getDocument(){
-        permissions?.forEach { (_, value) ->
-            if (!value){
-                showPermissionDialog()
-                return
-            }
-        }
-        pickFile()
     }
 
     private fun pickFile(){
-        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
-            addCategory(Intent.CATEGORY_OPENABLE)
-            type = MimeTypes.EXCEL_2007_SUP.value
-            action = Intent.ACTION_GET_CONTENT
-        }
-
-        documentLauncher.launch(intent)
+        documentLauncher.launch(arrayOf(MimeTypes.EXCEL_2007_SUP.value, MimeTypes.EXCEL_2007.value))
     }
 
-    private fun getDocumentMetadata(pickedUri: Uri): String?{
-        var path: String? = null
-        val projection = arrayOf(MediaStore.Files.FileColumns.DATA)
-        val cursor = contentResolver?.query(pickedUri, projection,
-            null, null, null, null)
-
-        Log.e("CURSOR", cursor.toString())
-        if(cursor == null)
-            path = pickedUri.path
-        else{
-            cursor.moveToFirst()
-            val columnIndex = cursor.getColumnIndexOrThrow(projection[0])
-            cursor.getString(columnIndex)
-            cursor.close()
-        }
-
+    private fun showViews(name: String){
         setVisualEffects(true)
-        binding.textviewSecond.text = pickedUri.lastPathSegment?.substringAfter(":")
-        return if(path == null || path.isEmpty()) pickedUri.path else path
+        binding.textviewSecond.text = name
     }
 
     override fun onDestroyView() {
@@ -190,8 +154,8 @@ class FirstFragment : Fragment() {
         dbViewModel.addContracts(contracts)
     }
 
-    private fun readDocument(path: String){
-            excelDocumentVM.readDocumentContent(path)
+    private fun readDocument(inputStream: FileInputStream){
+            excelDocumentVM.readDocumentContent(inputStream)
     }
 
     private fun backToVisualize(){

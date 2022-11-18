@@ -19,6 +19,7 @@ import org.apache.poi.ss.usermodel.Row
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import java.io.File
 import java.io.FileInputStream
+import java.io.InputStream
 import java.util.*
 
 class ExcelDocumentsViewModel(application: Application) : AndroidViewModel(application), ModelSchemaStructurer{
@@ -28,12 +29,8 @@ class ExcelDocumentsViewModel(application: Application) : AndroidViewModel(appli
     private val _toastMessages = MutableLiveData<String>()
     val toastMessages: LiveData<String> = _toastMessages
 
-    fun readDocumentContent(path: String){
+    fun readDocumentContent(inputStream: FileInputStream){
         viewModelScope.launch(Dispatchers.IO) {
-            val inputStream: FileInputStream
-            val extractedPath = path.substring(path.indexOf(":") +1)
-            val file = File("/storage/emulated/0/$extractedPath")
-            inputStream = FileInputStream(file)
             val workBook = XSSFWorkbook(inputStream)
             val sheet = workBook.getSheetAt(0)
             val allDocumentRows: MutableList<ContractDbDto> = mutableListOf()
@@ -97,32 +94,6 @@ class ExcelDocumentsViewModel(application: Application) : AndroidViewModel(appli
             Cell.CELL_TYPE_FORMULA -> cell.cellFormula
             Cell.CELL_TYPE_ERROR -> cell.errorCellValue
             else -> null
-        }
-    }
-
-    object something {
-        fun something(){
-            val allHeaders = hashMapOf<String, Any>(
-                Pair("N°", Int),
-                Pair("ATTESTATION", String),
-                Pair("CARTE ROSE", String),
-                Pair( "N°POLICE", Date())
-            )
-            val header = listOf("ATTESTAION", "N°")
-            val values = listOf<Any>("109*A*5846", 5)
-            val ctr = Contract(0)
-
-            if(allHeaders.containsKey(header[1])){
-                val aa= Contract::class.members
-                aa.forEach {
-                    Log.e("fields", it.name )
-                }
-            }
-            val tyeList = listOf(String.Companion::class.java, Int.Companion::class.java)
-            val str = ""
-            if (tyeList[1] == str.javaClass.componentType){
-                val some = str.javaClass.simpleName
-            }
         }
     }
 }
