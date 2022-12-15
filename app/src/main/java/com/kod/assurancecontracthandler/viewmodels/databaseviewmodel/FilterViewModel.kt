@@ -1,8 +1,11 @@
 package com.kod.assurancecontracthandler.viewmodels.databaseviewmodel
 
 import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.kod.assurancecontracthandler.model.ContractDbDto
+import kotlin.math.max
 
 class FilterViewModel: ViewModel() {
     var searchChip: Int? = 1
@@ -20,9 +23,16 @@ class FilterViewModel: ViewModel() {
     var minDate: Long? = null
     var maxDate: Long? = null
 
+    private val _isSearching = MutableLiveData<Boolean>()
+    val isSearching :LiveData<Boolean>
+        get() = _isSearching
+    private val _success = MutableLiveData<Boolean>(false)
+    val success :LiveData<Boolean>
+        get() = _success
     private fun checkField(field: String?) : Boolean = !field.isNullOrEmpty()
 
     fun filterFields(listContracts: List<ContractDbDto>): List<ContractDbDto>{
+        _isSearching.value = true
         var filteredValues: List<ContractDbDto> = listContracts
         if(checkField(apporteur)) {
             filteredValues = filteredValues.filter { this.apporteur?.let { value ->
@@ -56,7 +66,24 @@ class FilterViewModel: ViewModel() {
             filteredValues = filteredValues.filter { this.nPolice?.let { value ->
                 it.contract?.numeroPolice?.uppercase()?.contains(value.uppercase()) } == true }
         }
-
+        _success.value = filteredValues.isNotEmpty()
+        _isSearching.value = false
         return filteredValues
+    }
+
+    fun clearData(){
+        apporteur = null
+        immatriculation = null
+        apporteur = null
+        attestation = null
+        carteRose = null
+        compagnie = null
+        mark = null
+        nPolice = null
+        minDate = null
+        maxDate = null
+        searchChip = null
+        filterChip = null
+        //TODO: Equally set all the slider values to zero
     }
 }

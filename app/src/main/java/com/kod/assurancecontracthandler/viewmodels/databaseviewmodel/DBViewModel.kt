@@ -1,16 +1,13 @@
 package com.kod.assurancecontracthandler.viewmodels.databaseviewmodel
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.*
 import androidx.sqlite.db.SimpleSQLiteQuery
 import com.kod.assurancecontracthandler.model.ContractDbDto
 import com.kod.assurancecontracthandler.model.database.ContractDatabase
 import com.kod.assurancecontracthandler.repository.ContractRepository
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class DBViewModel(application: Application): AndroidViewModel(application) {
 
@@ -26,8 +23,14 @@ class DBViewModel(application: Application): AndroidViewModel(application) {
         }
     }
 
+    fun addContract(contract: ContractDbDto){
+        viewModelScope.launch {
+            repository.addContract(contract)
+        }
+    }
+
     private val _allContracts = MutableLiveData<List<ContractDbDto>?>()
-    val allContracts: LiveData<List<ContractDbDto>?> = _allContracts
+    val allContracts: LiveData<List<ContractDbDto>?>? = _allContracts
 
     fun fetchAllContracts() {
         viewModelScope.launch(Dispatchers.IO) {
@@ -45,13 +48,14 @@ class DBViewModel(application: Application): AndroidViewModel(application) {
     private fun generateQuery(str: String, id: Int): SimpleSQLiteQuery{
         var query = "SELECT * FROM contract WHERE"
         when(id){
-            1-> query += """ assure LIKE "%$str%" """
-            2-> query += """ numeroPolice LIKE "%$str%" """
+            1-> query += """ APPORTEUR LIKE "%$str%" """
+            2-> query += """ assure LIKE "%$str%" """
             3-> query += """ attestation LIKE "%$str%" """
-            4-> query += """ compagnie LIKE "%$str%" """
-            5-> query += """ immatriculation LIKE "%$str%" """
-            6-> query += """ mark LIKE "%$str%" """
-            7-> query += """ APPORTEUR LIKE "%$str%""""
+            4-> query += """ carteRose LIKE "%$str%" """
+            5-> query += """ compagnie LIKE "%$str%" """
+            6-> query += """ immatriculation LIKE "%$str%" """
+            7-> query += """ mark LIKE "%$str%" """
+            8-> query += """ numeroPolice LIKE "%$str%""""
             else->return SimpleSQLiteQuery("")
         }
 
