@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".views.fragments.home.customerdetails.CustomerDetailsActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/iv_customer_profile"
+            android:background="@drawable/background_gradient"
+            android:layout_width="match_parent"
+            android:layout_height="280dp"
+            android:src="@drawable/icons8_administrator" />
+
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:dividerInsetEnd="10dp"
+            app:dividerInsetStart="10dp"
+            android:layout_below="@id/iv_customer_profile"
+            app:dividerThickness="2dp"/>
+
+        <TextView
+            android:id="@+id/tv_customerName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/divider"
+            android:layout_margin="10dp"
+            android:text="NOM1 NOM2 Prenom"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_customerNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/divider"
+            android:text="691234567"
+            android:layout_alignParentEnd="true"
+            android:layout_margin="10dp"
+            android:layout_alignBottom="@id/tv_customer_name"
+            android:textStyle="italic"
+            android:textSize="15dp"/>
+
+        <TextView
+            android:id="@+id/tv_contact_customer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_customerName"
+            android:layout_alignParentStart="true"
+            android:text="Contactez le"
+            android:layout_margin="10dp"/>
+
+        <com.google.android.material.button.MaterialButtonToggleGroup
+            android:id="@+id/toggle_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            app:singleSelection="true"
+            android:layout_below="@id/tv_contact_customer">
+
+            <Button
+                android:id="@+id/callBtn"
+                style="@style/ToggleButton"
+                app:icon="@drawable/icons8_phone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAlignment="gravity" />
+
+            <Button
+                android:id="@+id/smsBtn"
+                style="@style/ToggleButton"
+                app:icon="@drawable/icons8_sms"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAlignment="gravity"/>
+
+            <Button
+                android:id="@+id/whatsappBtn"
+                style="@style/ToggleButton"
+                app:icon="@drawable/icons8_whatsapp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAlignment="gravity"/>
+
+        </com.google.android.material.button.MaterialButtonToggleGroup>
+
+    </RelativeLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

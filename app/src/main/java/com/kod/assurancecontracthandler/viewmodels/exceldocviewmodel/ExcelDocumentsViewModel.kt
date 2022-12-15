@@ -6,44 +6,62 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.kod.assurancecontracthandler.common.usecases.ErrorLevel
 import com.kod.assurancecontracthandler.common.utilities.ModelSchemaStructurer
-import com.kod.assurancecontracthandler.model.Contract
 import com.kod.assurancecontracthandler.model.ContractDbDto
-import com.kod.assurancecontracthandler.usecases.SheetCursorPosition
+import com.kod.assurancecontracthandler.common.usecases.SheetCursorPosition
+import com.kod.assurancecontracthandler.model.Contract
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.apache.poi.hssf.usermodel.HSSFCell
 import org.apache.poi.hssf.usermodel.HSSFDateUtil
+import org.apache.poi.ss.formula.functions.T
 import org.apache.poi.ss.usermodel.Cell
 import org.apache.poi.ss.usermodel.Row
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
-import java.io.File
 import java.io.FileInputStream
-import java.io.InputStream
+import java.io.IOException
 import java.util.*
+import kotlin.math.roundToInt
 
 class ExcelDocumentsViewModel(application: Application) : AndroidViewModel(application), ModelSchemaStructurer{
-    private val _listOfContracts =  MutableLiveData<kotlin.collections.List<ContractDbDto>>()
+    private val _listOfContracts =  MutableLiveData<List<ContractDbDto>?>()
     val listOfContracts = _listOfContracts
+
+    val isLoading: LiveData<Boolean>
+    get() = _hasStarted
+    private val _hasStarted = MutableLiveData<Boolean>()
+    val hasStarted: MutableLiveData<Boolean>
+    get() = _hasStarted
+    private val _success = MutableLiveData<Boolean?>()
+    val successful: MutableLiveData<Boolean?>
+    get() = _success
+    private var isSuccessfull: Boolean? = null
 
     private val _toastMessages = MutableLiveData<String>()
     val toastMessages: LiveData<String> = _toastMessages
 
-    fun readDocumentContent(inputStream: FileInputStream){
-        viewModelScope.launch(Dispatchers.IO) {
-            val workBook = XSSFWorkbook(inputStream)
-            val sheet = workBook.getSheetAt(0)
-            val allDocumentRows: MutableList<ContractDbDto> = mutableListOf()
-            var header = listOf<String>()
+    private val _progression = MutableLiveData<Int>()
+    val progression: LiveData<Int> = _progression
+
+    private var header = listOf<String>()
+    private fun readDocumentContent(inputStream: FileInputStream){
+        val workBook = XSSFWorkbook(inputStream)
+        val sheetIterator = workBook.iterator()
+        val allDocumentRows: MutableList<ContractDbDto> = mutableListOf()
+        isSuccessfull = null
+        setStates(hasStarted = true, isSuccess = isSuccessfull)
+        while (sheetIterator.hasNext()){
+            val sheet = sheetIterator.next()
             var startDate = Date()
             var endDate = Date()
-
+            val numbRows = sheet.physicalNumberOfRows
             val rowIterator: Iterator<Row> = sheet.iterator()
             while(rowIterator.hasNext()){
                 val row = rowIterator.next()
+                _progression.postValue((row.rowNum*100/numbRows))
                 val cellIterator = row.cellIterator()
                 val rowContentRead = mutableListOf<Any?>()
-                Log.e("ROW", "Row: ${row.rowNum}")
                 while(cellIterator.hasNext()){
                     val cell = cellIterator.next()
                     var cellValue = getCell(cell)
@@ -55,34 +73,81 @@ class ExcelDocumentsViewModel(application: Application) : AndroidViewModel(appli
                     }
                     rowContentRead.add(cellValue)
                 }
-                when(val sheetCursor = verifyRowScheme(rowContentRead, header)){
+                when(val sheetCursor = verifyRow { verifyRowScheme(rowContentRead, header) }){
                     is SheetCursorPosition.BeginningOfSheet -> {
-                        startDate = sheetCursor.startDate
-                        endDate = sheetCursor.endDate
+                        sheetCursor.startDate?.let {value-> startDate = value }
+                        sheetCursor.endDate?.let {value-> endDate = value }
                     }
                     is SheetCursorPosition.Footer -> {
-                        //TODO: Implement the case of a footer
+                        val contractDbDto = ContractDbDto(
+                            0, contract = sheetCursor.footer,
+                            sheetCreationDateStart = startDate, sheetCreationDateEnd = endDate)
+
+                        if (!contractDbDto.contract?.assure.isNullOrEmpty())
+                            allDocumentRows.add(contractDbDto)
                     }
                     is SheetCursorPosition.HeaderOfSheet -> {
                         header = sheetCursor.headers
+//                        Log.e("HEADER", header.toString())
                     }
                     is SheetCursorPosition.RowContent -> {
                         val contractDbDto = ContractDbDto(
-                            row.rowNum, contract = sheetCursor.content,
+                            0, contract = sheetCursor.content,
                             sheetCreationDateStart = startDate, sheetCreationDateEnd = endDate)
-                        Log.e("CONTRACT DAO", contractDbDto.toString())
-                        allDocumentRows.add(contractDbDto)
+//                        Log.e("CONTRACT DAO", contractDbDto.toString())
+                        if (contractDbDto.contract?.assure != null) {
+                            allDocumentRows.add(contractDbDto)
+                        }else{
+                            //TODO: Put an error level to say that it is has encountered an error ina sheetName while reading
+                        }
                     }
-                    is SheetCursorPosition.EmptyRow -> {
-                        _toastMessages.postValue(sheetCursor.error.toString())
-                        //TODO: Implement the part for SheetCursor.EmptyRow or show a toast message
+                    is SheetCursorPosition.EmptyRow -> Log.e("em", "ufutc")
+                    is SheetCursorPosition.Error -> {
+                        if(!sheetCursor.error.isNullOrEmpty())
+                            _toastMessages.postValue(sheetCursor.error.toString())
+                        if (sheetCursor.errorLevel != ErrorLevel.HIGH){
+                            isSuccessfull = true
+                            setStates(false, isSuccessfull)
+                            break
+                        }else break
                     }
                 }
             }
-            allDocumentRows.forEach {
-                it.id = 0
+        }
+        setStates(hasStarted = false, isSuccess = isSuccessfull)
+        _listOfContracts.postValue(allDocumentRows)
+    }
+
+    fun readDocument(inputStream: FileInputStream){
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                readDocumentContent(inputStream)
+            }catch (e: java.lang.Exception){
+                when(e){
+                    is IOException -> {
+                        isSuccessfull = false
+                        setStates(false, isSuccessfull)
+                        _toastMessages.postValue("Erreur de fichier")
+                    }
+                    else -> {
+                        isSuccessfull = false
+                        setStates(false, isSuccessfull)
+                        _toastMessages.postValue("Veuillez Réessayer")
+                        Log.e("BUG", e.stackTraceToString())
+                    }
+                }
             }
-            _listOfContracts.postValue(allDocumentRows)
+        }
+    }
+    private fun verifyRow(verifySchemeFunc: () -> SheetCursorPosition<T>): SheetCursorPosition<T> {
+        return try {
+            isSuccessfull = true
+            verifySchemeFunc.invoke()
+        }catch (e: java.lang.Exception){
+            Log.e("BUG", e.stackTraceToString())
+            isSuccessfull = false
+            setStates(hasStarted = false, isSuccess = isSuccessfull)
+            SheetCursorPosition.Error("Le Fichier n'a pas pu être complemtement ou entierement lu", ErrorLevel.MEDIUM)
         }
     }
 
@@ -91,9 +156,19 @@ class ExcelDocumentsViewModel(application: Application) : AndroidViewModel(appli
             Cell.CELL_TYPE_BOOLEAN -> cell.booleanCellValue
             Cell.CELL_TYPE_STRING -> cell.stringCellValue
             Cell.CELL_TYPE_NUMERIC -> cell.numericCellValue
-            Cell.CELL_TYPE_FORMULA -> cell.cellFormula
+            Cell.CELL_TYPE_FORMULA -> {
+                when(cell.cachedFormulaResultType){
+                    Cell.CELL_TYPE_NUMERIC -> cell.numericCellValue.roundToInt()
+                    else -> cell.richStringCellValue
+                }
+            }
             Cell.CELL_TYPE_ERROR -> cell.errorCellValue
             else -> null
         }
+    }
+
+    private fun setStates(hasStarted: Boolean, isSuccess: Boolean?){
+        _hasStarted.postValue(hasStarted)
+        _success.postValue(isSuccess)
     }
 }

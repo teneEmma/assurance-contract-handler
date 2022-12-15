@@ -22,4 +22,29 @@
     <style name="Theme.AssuranceContractHandler.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.AssuranceContractHandler.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="ToggleButton" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="iconPadding"> 0dp </item>
+        <item name="android:insetTop"> 0dp </item>
+        <item name="android:insetBottom"> 0dp </item>
+        <item name="android:paddingLeft"> 20dp </item>
+        <item name="android:paddingRight"> 0dp </item>
+        <item name="minWidth"> 30dp </item>
+        <item name="minHeight"> 30dp </item>
+    </style>
+
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="bottomSheetDialogTheme">@style/AppBottomSheetDialogTheme</item>
+    </style>
+
+    <style name="AppBottomSheetDialogTheme"
+        parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/AppModalStyle</item>
+    </style>
+
+    <style name="AppModalStyle"
+        parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/bottom_round_dialog</item>
+    </style>
+
 </resources>

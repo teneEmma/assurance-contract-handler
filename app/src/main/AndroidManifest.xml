@@ -30,5 +30,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".views.fragments.home.customerdetails.CustomerDetailsActivity"
+            android:label="Details Client"/>
     </application>
 </manifest>

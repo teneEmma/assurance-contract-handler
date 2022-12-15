@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginVertical="2dp"
@@ -14,9 +13,7 @@
         android:layout_marginBottom="5dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_toStartOf="@id/dates"
-        android:layout_alignParentLeft="true"
-        android:layout_toLeftOf="@id/dates">
+        android:layout_toStartOf="@id/dates">
 
         <TextView
             android:id="@+id/column_id"
@@ -32,10 +29,24 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:text="@string/column_assure"
-            android:textSize="18sp"
-            android:layout_marginLeft="20dp" />
+            android:textSize="18sp" />
 
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_total"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/grandTotal"
+        android:layout_centerHorizontal="true"
+        android:layout_toEndOf="@+id/nameNumber"
+        android:layout_alignBottom="@id/nameNumber"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="3dp"
+        android:textAlignment="textEnd"
+        android:textSize="16sp"
+        android:textStyle="italic"
+        android:visibility="gone" />
 
     <LinearLayout
         android:id="@+id/dates"

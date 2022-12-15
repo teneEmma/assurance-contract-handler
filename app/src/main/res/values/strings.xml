@@ -10,6 +10,10 @@
     <string name="upload">UPLOAD</string>
     <string name="cancel">ANNULER</string>
 
+
+    <!-- MANIFEST -->
+    <string name="client_detail_activity_title">Details Client</string>
+
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="importFile">Importer Un Fichier...</string>
@@ -22,7 +26,10 @@
     <string name="column_effet">2000/01/01</string>
     <string name="column_echeance">2000/01/01</string>
     <string name="column_id">01</string>
-    <string name="add_document">Add Document</string>
+    <string name="price_tag">XAF</string>
+    <string name="power_tag">CV-ESS</string>
+    <string name="add_document">Ajouter Un Document</string>
+    <string name="add_customer">Ajouter Un Client</string>
     <string name="base_de_donnees_vide">BASE DE DONNEES VIDE</string>
     <string name="base_de_donnee_vide">Base De Donnee Vide</string>
     <string name="filtrer_nom_de_l_apporteur">Filtrer Nom De L\'apporteur</string>
@@ -55,4 +62,25 @@
         <item>1</item>
         <item>30</item>
     </array>
+
+    <!-- FIRST FRAGMENT -->
+    <string name="file_select_not">AUCUN FICHIER SELECTIONES</string>
+    <string name="writing_file_permission">"WRITING PERMISSION"</string>
+    <string name="load_success">CHARGE AVEC SUCCESS</string>
+    <string name="save_success">BASE DE DONNEE MIS A JOUR</string>
+    <string name="reading_file_permission">READ PERMISSION</string>
+
+    <!-- CONTRACT LIST FRAGMENT -->
+    <string name="search_bar_query_hint">Faire une recherche…</string>
+    <string name="it_is_a_footer">Option non valide</string>
+    <string name="time_interval">Choisir L\'Interval</string>
+    <string name="filtering_progress">filtering progress</string>
+    <string name="list_contract_title">Contrats</string>
+    <string name="list_customers_title">Clients</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="customer_details">Details</string>
+    <string name="grandTotal">- XAF</string>
+    <string name="apporteur">APPORTEUR: APPORTEUR\'S NAME</string>
+    <string name="immatriculation_value">RR 000 XX</string>
 </resources>

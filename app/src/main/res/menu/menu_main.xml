@@ -7,7 +7,7 @@
         android:orderInCategory="103"
         android:icon="@drawable/ic_settings"
         android:title="@string/action_settings"
-        app:showAsAction="ifRoom|collapseActionView" />
+        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/action_search"
@@ -16,12 +16,5 @@
         android:icon="@drawable/ic_search"
         app:showAsAction="ifRoom|collapseActionView"
         app:actionViewClass="androidx.appcompat.widget.SearchView"/>
-
-    <item
-        android:id="@+id/action_filter"
-        android:orderInCategory="100"
-        android:icon="@drawable/ic_filter"
-        android:title="@string/action_filter"
-        app:showAsAction="ifRoom|collapseActionView"/>
 
 </menu>

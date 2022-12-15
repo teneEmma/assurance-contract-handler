@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".views.fragments.contractsvisualizer.ContractListFragment">
+    tools:context=".views.fragments.home.contractlist.ContractListFragment">
 
     <HorizontalScrollView
         android:id="@+id/horizontal_sv_search"
@@ -13,8 +13,7 @@
         android:scrollbars="none"
         android:background="?attr/colorPrimaryVariant"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true">
+        android:layout_alignParentTop="true">
 
         <com.google.android.material.chip.ChipGroup
             android:id="@+id/chipGroup_search"
@@ -44,7 +43,20 @@
             android:layout_height="match_parent"
             android:clickable="true"
             android:scrollbars="horizontal"
-            tools:listitem="@layout/rv_item" />
+            tools:listitem="@layout/rv_item"
+            android:focusable="true" />
+
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/progress_circular"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:indeterminateBehavior="cycle"
+            android:contentDescription="@string/filtering_progress"
+            app:showAnimationBehavior="inward"
+            app:minHideDelay="2000"
+            app:hideAnimationBehavior="outward"
+            />
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <ImageView
@@ -52,6 +64,7 @@
         android:layout_width="150dp"
         android:layout_height="200dp"
         android:src="@drawable/ic_add_circle"
+        android:clickable="true"
         android:tooltipText="Empty Databse"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
@@ -84,6 +97,24 @@
         android:src="@drawable/ic_upload_file"
         app:backgroundTint="?attr/colorPrimaryVariant"
         app:rippleColor="@color/white"
+        app:tint="@color/white" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/filterResults"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:contentDescription="@string/action_filter"
+        android:foregroundTintMode="src_over"
+        android:src="@drawable/ic_filter"
+        app:backgroundTint="?attr/colorPrimaryVariant"
+        app:rippleColor="@color/white"
+        android:visibility="gone"
         app:tint="@color/white" />
 
 </RelativeLayout>

@@ -2,7 +2,6 @@ package com.kod.assurancecontracthandler.views.fragments.selectfile
 
 import android.Manifest
 import android.app.Dialog
-import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -36,19 +35,17 @@ class FirstFragment : Fragment() {
     private lateinit var dbViewModel: DBViewModel
     private lateinit var listOfContracts: List<ContractDbDto>
     private var permissions : Map<String, Boolean>? = null
+    private var fileName: String? = null
     private val documentLauncher =
         registerForActivityResult(ActivityResultContracts.OpenDocument()){ uri->
             if (uri != null) {
                 val excelFile = context?.contentResolver?.openFileDescriptor(uri, "r")
                 val fileDescriptor = excelFile?.fileDescriptor
                 val inputStream = FileInputStream(fileDescriptor)
-                val fileName = uri.path?.substringAfter(":")
-                readDocument(inputStream)
-                if (fileName != null) {
-                    showViews(fileName)
-                }
+                fileName = uri.path?.substringAfter(":")
+                readDocument(inputStream) //TODO: Resolve the bugs here
             } else
-                shortSnack("Aucun Fichier Selectionés")
+                shortSnack(resources.getString(R.string.file_select_not))
         }
     private val requestPermissionLauncher: ActivityResultLauncher<Array<String>> =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()){ permissions->
@@ -66,9 +63,9 @@ class FirstFragment : Fragment() {
 
     private fun getPermissionString(mapVal: String): String{
         return if(mapVal.contains("WRITE"))
-            "WRITING PERMISSION"
+            resources.getString(R.string.writing_file_permission)
         else
-            "READ PERMISSION"
+            resources.getString(R.string.reading_file_permission)
     }
 
     override fun onCreateView(
@@ -88,17 +85,48 @@ class FirstFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         excelDocumentVM.listOfContracts.observe(viewLifecycleOwner){
-            listOfContracts = it
+            it?.let {list-> listOfContracts = list }
+        }
+
+        excelDocumentVM.toastMessages.observe(viewLifecycleOwner){
+            if (it != null)
+                shortSnack(it)
         }
 
         binding.btnCancelFile.setOnClickListener {
             backToVisualize()
         }
 
+        excelDocumentVM.successful.observe(viewLifecycleOwner){success->
+//            Log.e("isSuccessful", "isSuccessful---${excelDocumentVM.successful.value}")
+            if(success == true) {
+                shortSnack(resources.getString(R.string.load_success))
+                binding.btnSaveFile.visibility = View.VISIBLE
+            }
+            else
+                binding.btnSaveFile.visibility = View.GONE
+        }
+
+        excelDocumentVM.isLoading.observe(viewLifecycleOwner) {value->
+//            Log.e("isLoading", "isLoading---${excelDocumentVM.isLoading.value} hasStarted---${excelDocumentVM.hasStarted.value}")
+            if(value){
+                binding.fileLoadingPB.visibility = View.VISIBLE
+                setVisualEffects(false)
+            }else{
+                binding.fileLoadingPB.visibility = View.GONE
+                setVisualEffects(true)
+                binding.textviewSecond.text = fileName
+            }
+        }
+
+        excelDocumentVM.progression.observe(viewLifecycleOwner){
+                binding.fileLoadingPB.progress = it
+        }
+
+        //TODO: Solve the exception this thing sends back
         binding.btnSaveFile.setOnClickListener {
             addContracts(listOfContracts)
-            Log.e("LISTE ACTUALISEE", listOfContracts.toString())
-            toast("Document Sauvegardé Avec Success")
+            shortSnack(resources.getString(R.string.save_success))
             backToVisualize()
         }
 
@@ -128,11 +156,6 @@ class FirstFragment : Fragment() {
         documentLauncher.launch(arrayOf(MimeTypes.EXCEL_2007_SUP.value, MimeTypes.EXCEL_2007.value))
     }
 
-    private fun showViews(name: String){
-        setVisualEffects(true)
-        binding.textviewSecond.text = name
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
@@ -155,11 +178,11 @@ class FirstFragment : Fragment() {
     }
 
     private fun readDocument(inputStream: FileInputStream){
-            excelDocumentVM.readDocumentContent(inputStream)
+            excelDocumentVM.readDocument(inputStream)
     }
 
     private fun backToVisualize(){
-        findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
+        findNavController().navigate(R.id.action_FirstFragment_to_HomeFragment)
     }
 
     private fun setVisualEffects(isEnabled: Boolean){

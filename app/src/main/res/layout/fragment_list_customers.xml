@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".views.fragments.home.listcustomers.ListCustomersFragment">
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeToRefresh"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="2dp"
+        android:layout_marginHorizontal="5dp"
+        android:layout_below="@id/horizontal_sv_search"
+        android:layout_alignParentStart="true"
+        android:layout_above="@+id/customer_details">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_list_customers"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:listitem="@layout/rv_item_customer"
+            android:scrollbars="horizontal"
+            android:clickable="true"
+            android:focusable="true"/>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <ImageView
+        android:id="@+id/iv_empty_database"
+        android:layout_width="150dp"
+        android:layout_height="200dp"
+        android:src="@drawable/ic_add_circle"
+        android:clickable="true"
+        android:tooltipText="Empty Databse"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:contentDescription="@string/base_de_donnee_vide"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/tv_empty_database"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/base_de_donnees_vide"
+        android:textAlignment="center"
+        android:textColor="@color/design_default_color_error"
+        android:textStyle="bold"
+        android:layout_below="@id/iv_empty_database"
+        android:visibility="gone"/>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/customer_details"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:backgroundTint="?attr/colorPrimary">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_gravity="center_horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textColor="@color/white"
+                android:text="TOTAL:"/>
+
+            <TextView
+                android:id="@+id/total_customers"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="5dp"
+                android:textColor="@color/white"
+                android:text="0"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
+                android:textColor="@color/bright_green"
+                android:text="ACTIVE:"/>
+
+            <TextView
+                android:id="@+id/total_active"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="5dp"
+                android:text="0"
+                android:textColor="@color/bright_green"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
+                android:textColor="#FFD600"
+                android:text="Numéros:"/>
+
+            <TextView
+                android:id="@+id/total_has_numbers"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="5dp"
+                android:text="0"
+                android:textColor="#FFD600"
+                android:textStyle="bold"/>
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</RelativeLayout>

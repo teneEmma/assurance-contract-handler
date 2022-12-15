@@ -1,4 +1,4 @@
-package com.kod.assurancecontracthandler.views.fragments.contractsvisualizer
+package com.kod.assurancecontracthandler.views.fragments.home.contractlist
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -17,6 +17,8 @@ class ExpandableSliderAdapter(
     private val childrenTouched = mutableListOf<Int>()
     private var group1SliderValues = hashMapOf<Int, Pair<Int, Int>>()
     private var group2SliderValues = hashMapOf<Int, Pair<Int, Int>>()
+    private val priceUnit = context.resources.getString(R.string.price_tag)
+    private val powerUnit = context.resources.getString(R.string.power_tag)
 
     override fun getGroupCount(): Int =
         groupTitleList.size
@@ -70,6 +72,18 @@ class ExpandableSliderAdapter(
         }
 
         val expandedListTextView = myConvertView?.findViewById<TextView>(R.id.et_title_prix_slider)
+        val expandedListRangeSlider = myConvertView?.findViewById<RangeSlider>(R.id.prix_slider)
+        if (groupPosition == 0) {
+            expandedListRangeSlider?.valueFrom = 1000.0F
+            expandedListRangeSlider?.valueTo = 500000.0F
+            expandedListRangeSlider?.stepSize = 1000.0F
+            expandedListRangeSlider?.values = mutableListOf(1000.0F, 500000.0F)
+        }else{
+            expandedListRangeSlider?.valueFrom = 1.0F
+            expandedListRangeSlider?.valueTo = 30.0F
+            expandedListRangeSlider?.stepSize = 1.0F
+            expandedListRangeSlider?.values = mutableListOf(1.0F, 30.0F)
+        }
         expandedListTextView?.text = expandedListText
         return myConvertView!!
     }
@@ -94,12 +108,12 @@ class ExpandableSliderAdapter(
                 val maxStr: String
                 if(groupPosition == 0){
                     group1SliderValues.put(childPosition, Pair(minVal, maxVal))
-                    minStr = minVal.toString() + "XAF"
-                    maxStr = maxVal.toString() + "XAF"
+                    minStr = minVal.toString() + priceUnit
+                    maxStr = maxVal.toString() + priceUnit
                 }else{
                     group2SliderValues.put(childPosition, Pair(minVal, maxVal))
-                    minStr = minVal.toString() + "CV-ESS"
-                    maxStr = maxVal.toString() + "CV-ESS"
+                    minStr = minVal.toString() + powerUnit
+                    maxStr = maxVal.toString() + powerUnit
                 }
                 view.findViewById<TextView>(R.id.et_price_range_min).text = minStr
                 view.findViewById<TextView>(R.id.et_price_range_max).text = maxStr
