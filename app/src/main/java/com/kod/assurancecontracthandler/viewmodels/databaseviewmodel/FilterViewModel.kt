@@ -5,7 +5,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.kod.assurancecontracthandler.model.ContractDbDto
-import kotlin.math.max
 
 class FilterViewModel: ViewModel() {
     var searchChip: Int? = 1
@@ -18,10 +17,14 @@ class FilterViewModel: ViewModel() {
     var mark: String? = null
     var nPolice: String? = null
     var carteRose: String? = null
-    var prixSlidersValue:  HashMap<Int, Pair<Int, Int>>? = null
-    var puissanceSliderValue:  HashMap<Int, Pair<Int, Int>>? = null
+    private val  _listContracts = MutableLiveData<List<ContractDbDto>?>()
+    val listContracts: LiveData<List<ContractDbDto>?>
+    get() = _listContracts
     var minDate: Long? = null
     var maxDate: Long? = null
+    var group1SliderValues = hashMapOf<Int, Pair<Int, Int>>()
+    var group2SliderValues = hashMapOf<Int, Pair<Int, Int>>()
+    val childrenTouched = mutableListOf<Int>()
 
     private val _isSearching = MutableLiveData<Boolean>()
     val isSearching :LiveData<Boolean>
@@ -30,8 +33,9 @@ class FilterViewModel: ViewModel() {
     val success :LiveData<Boolean>
         get() = _success
     private fun checkField(field: String?) : Boolean = !field.isNullOrEmpty()
+    private fun checkField(field: Long?) : Boolean = field != null && field != 0L
 
-    fun filterFields(listContracts: List<ContractDbDto>): List<ContractDbDto>{
+    fun filterFields(listContracts: List<ContractDbDto>){
         _isSearching.value = true
         var filteredValues: List<ContractDbDto> = listContracts
         if(checkField(apporteur)) {
@@ -66,9 +70,42 @@ class FilterViewModel: ViewModel() {
             filteredValues = filteredValues.filter { this.nPolice?.let { value ->
                 it.contract?.numeroPolice?.uppercase()?.contains(value.uppercase()) } == true }
         }
+        if(checkField(minDate) && checkField(maxDate)) {
+            filteredValues = filteredValues.filter {
+                    this.minDate?.let { value ->
+                it.contract?.effet?.let {date-> date.time <= value}  } == true &&
+                    this.maxDate?.let { value ->
+                it.contract?.echeance?.let {date-> date.time  >= value}  } == true }
+
+        }
+
+        group1SliderValues.forEach { price->
+            when(price.key){
+                0-> filteredValues = filteredValues.filter { c -> (c.contract?.DTA?.let { it >= price.value.first && it <= price.value.second }) == true }
+                1-> filteredValues = filteredValues.filter {c-> c.contract?.PN?.let { it >= price.value.first && it <= price.value.second} == true }
+                2-> filteredValues = filteredValues.filter {c-> c.contract?.ACC?.let { it >= price.value.first && it <= price.value.second} == true }
+                3-> filteredValues = filteredValues.filter {c-> c.contract?.FC?.let { it >= price.value.first && it <= price.value.second} == true }
+                4-> filteredValues = filteredValues.filter {c-> c.contract?.TVA?.let { it >= price.value.first && it <= price.value.second} == true }
+                5-> filteredValues = filteredValues.filter {c-> c.contract?.CR?.let { it >= price.value.first && it <= price.value.second} == true }
+                6-> filteredValues = filteredValues.filter {c-> c.contract?.PTTC?.let { it >= price.value.first && it <= price.value.second} == true }
+                7-> filteredValues = filteredValues.filter {c-> c.contract?.ENCAIS?.let { it >= price.value.first && it <= price.value.second} == true }
+                8-> filteredValues = filteredValues.filter {c-> c.contract?.NET_A_REVERSER?.let { it >= price.value.first && it <= price.value.second} == true }
+                9-> filteredValues = filteredValues.filter {c-> c.contract?.COMM_APPORT?.let { it >= price.value.first && it <= price.value.second} == true }
+            }
+        }
+
+        if (group2SliderValues.containsKey(0)){
+            val price = this.group2SliderValues.getValue(0)
+            filteredValues = filteredValues.filter {c-> c.contract?.DTA?.let { price.first >= it && price.second <= it} == true }
+        }
+
+        filteredValues = filteredValues.filter { c -> c.contract?.numeroPolice.isNullOrEmpty().not() ||
+                    c.contract?.attestation.isNullOrEmpty().not()
+        }
         _success.value = filteredValues.isNotEmpty()
         _isSearching.value = false
-        return filteredValues
+
+        _listContracts.postValue(filteredValues)
     }
 
     fun clearData(){
@@ -82,8 +119,10 @@ class FilterViewModel: ViewModel() {
         nPolice = null
         minDate = null
         maxDate = null
-        searchChip = null
         filterChip = null
-        //TODO: Equally set all the slider values to zero
+        group1SliderValues.clear()
+        group2SliderValues.clear()
+        minDate = 0
+        maxDate = 0
     }
 }

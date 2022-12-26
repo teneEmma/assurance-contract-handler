@@ -1,7 +1,6 @@
 package com.kod.assurancecontracthandler.views.fragments.home.contractlist
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,9 +20,6 @@ class GridViewItemAdapter(val context: Context, private val titles: List<String>
             inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         if(p1 == null)
             itemView = inflater?.inflate(R.layout.grid_view_item, null)
-//
-//        if (p1 == null)
-//            itemView = LayoutInflater.from(context).inflate(R.layout.grid_view_item, null)
 
         itemView?.let {view-> bindViews(view, p0) }
         return itemView

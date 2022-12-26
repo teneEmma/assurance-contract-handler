@@ -25,9 +25,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:singleLine="true"
-                app:singleSelection="false">
-
-            </com.google.android.material.chip.ChipGroup>
+                app:singleSelection="false"/>
 
         </HorizontalScrollView>
 
@@ -41,6 +39,7 @@
             app:hintTextColor="@color/purple_500"
             android:hint="@string/filtrer_nom_de_l_apporteur"
             app:endIconMode="clear_text"
+            android:visibility="gone"
             app:endIconTint="@color/black">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -219,7 +218,6 @@
                 android:inputType="text"/>
 
         </com.google.android.material.textfield.TextInputLayout>
-
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/il_filtrerDate"

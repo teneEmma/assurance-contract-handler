@@ -8,6 +8,7 @@ import com.kod.assurancecontracthandler.model.database.ContractDatabase
 import com.kod.assurancecontracthandler.repository.ContractRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.util.Date
 
 class DBViewModel(application: Application): AndroidViewModel(application) {
 
@@ -17,49 +18,51 @@ class DBViewModel(application: Application): AndroidViewModel(application) {
         repository = ContractRepository(contractDAO)
     }
 
-    fun addContracts(contracts: List<ContractDbDto>){
-        viewModelScope.launch {
-            repository.addContracts(contracts)
+    private val _hasQueried = MutableLiveData<Boolean>()
+    val hasQueried: LiveData<Boolean>
+    get() = _hasQueried
+
+    fun executeFunWithAnimation(execute: suspend () -> Unit){
+        viewModelScope.launch(Dispatchers.IO) {
+            _hasQueried.postValue(false)
+            execute()
+            _hasQueried.postValue(true)
         }
     }
 
-    fun addContract(contract: ContractDbDto){
-        viewModelScope.launch {
-            repository.addContract(contract)
+    fun executeFunWithoutAnimation(execute: suspend () -> Unit){
+        viewModelScope.launch(Dispatchers.IO) {
+            execute()
         }
     }
+
+    suspend fun addContracts(contracts: List<ContractDbDto>) = repository.addContracts(contracts)
+
+    suspend fun addContract(contract: ContractDbDto) = repository.addContract(contract)
 
     private val _allContracts = MutableLiveData<List<ContractDbDto>?>()
     val allContracts: LiveData<List<ContractDbDto>?>? = _allContracts
 
-    fun fetchAllContracts() {
-        viewModelScope.launch(Dispatchers.IO) {
-            _allContracts.postValue(repository.readAllContracts())
-        }
-    }
+    fun setContracts(contracts: List<ContractDbDto>?) = _allContracts.postValue(contracts)
+    fun fetchAllContracts() = _allContracts.postValue(repository.readAllContracts())
 
-
-    fun searchClient(str: String, id: Int){
-        viewModelScope.launch(Dispatchers.IO) {
-            _allContracts.postValue(filterList(repository.searchForClient(generateQuery(str, id))))
-        }
-    }
+    fun searchClient(str: String, id: Int) = _allContracts.postValue(filterList(repository.searchForClient(generateQuery(str, id))))
 
     private fun generateQuery(str: String, id: Int): SimpleSQLiteQuery{
-        var query = "SELECT * FROM contract WHERE"
-        when(id){
-            1-> query += """ APPORTEUR LIKE "%$str%" """
-            2-> query += """ assure LIKE "%$str%" """
-            3-> query += """ attestation LIKE "%$str%" """
-            4-> query += """ carteRose LIKE "%$str%" """
-            5-> query += """ compagnie LIKE "%$str%" """
-            6-> query += """ immatriculation LIKE "%$str%" """
-            7-> query += """ mark LIKE "%$str%" """
-            8-> query += """ numeroPolice LIKE "%$str%""""
+        var initialQuery = "SELECT * FROM contract WHERE"
+        initialQuery += when(id){
+            1-> """ APPORTEUR LIKE "%$str%" """
+            2-> """ assure LIKE "%$str%" """
+            3-> """ attestation LIKE "%$str%" """
+            4-> """ carteRose LIKE "%$str%" """
+            5-> """ compagnie LIKE "%$str%" """
+            6-> """ immatriculation LIKE "%$str%" """
+            7-> """ mark LIKE "%$str%" """
+            8-> """ numeroPolice LIKE "%$str%""""
             else->return SimpleSQLiteQuery("")
         }
 
-        return SimpleSQLiteQuery( query)
+        return SimpleSQLiteQuery( initialQuery)
     }
 
     private fun filterList(list: List<ContractDbDto>?): List<ContractDbDto>?{

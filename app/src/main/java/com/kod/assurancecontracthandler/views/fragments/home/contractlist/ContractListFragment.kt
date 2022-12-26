@@ -19,9 +19,11 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.android.material.slider.RangeSlider
 import com.kod.assurancecontracthandler.R
 import com.kod.assurancecontracthandler.common.constants.ConstantsVariables
 import com.kod.assurancecontracthandler.databinding.ContractDeetailsBinding
+import com.kod.assurancecontracthandler.databinding.ExpandableSliderItemBinding
 import com.kod.assurancecontracthandler.databinding.FilterDialogBinding
 import com.kod.assurancecontracthandler.databinding.FragmentSecondBinding
 import com.kod.assurancecontracthandler.model.Contract
@@ -42,10 +44,13 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener, MenuIte
     private lateinit var filterViewModel: FilterViewModel
     private lateinit var filterBinding: FilterDialogBinding
     private lateinit var expandableAdapter: ExpandableSliderAdapter
-    lateinit var dialog: Dialog
-    private val actionSearchExpanded = MutableLiveData<Boolean>()
-    private var listContracts = MutableLiveData<List<ContractDbDto>?>()
+    private lateinit var dialog: Dialog
     private var  dialogTouchContract: BottomSheetDialog? =null
+    private var expandableSBinding: ExpandableSliderItemBinding? = null
+
+    companion object {
+        fun newInstance() = ContractListFragment()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,41 +64,53 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener, MenuIte
         binding = FragmentSecondBinding.inflate(inflater, container, false)
         dbViewModel = ViewModelProvider(this,
             DBViewModelFactory(requireActivity().application))[DBViewModel::class.java]
-        listContracts = dbViewModel.allContracts as MutableLiveData<List<ContractDbDto>?>
         filterViewModel = ViewModelProvider(this)[FilterViewModel::class.java]
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        listContracts.observe(viewLifecycleOwner){listContracts->
+        filterViewModel.listContracts.observe(viewLifecycleOwner){listContracts->
+//            if(listContracts.isNullOrEmpty()){
+//                if(filterViewModel.success.value == false)
+//                    toast("Aucun Résultat")
+//                binding.rvListContract.visibility = View.GONE
+//            }else{
+//                if(filterViewModel.success.value == true)
+//                    toast("${filterViewModel.listContracts.value?.size} éléments trouvés")
+//                binding.rvListContract.visibility = View.VISIBLE
+//                setRecyclerView(listContracts)
+//            }
+            dbViewModel.setContracts(listContracts)
+        }
+
+        dbViewModel.allContracts?.observe(viewLifecycleOwner){listContracts->
             if(listContracts.isNullOrEmpty()){
                 binding.ivEmptyDatabase.visibility = View.VISIBLE
                 binding.tvEmptyDatabase.visibility = View.VISIBLE
                 binding.rvListContract.visibility = View.GONE
             }else{
+                if(filterViewModel.success.value == true)
+                    toast("${listContracts.size} éléments trouvés")
                 binding.ivEmptyDatabase.visibility = View.GONE
                 binding.tvEmptyDatabase.visibility = View.GONE
                 binding.rvListContract.visibility = View.VISIBLE
-                setRecyclerView()
+                setRecyclerView(listContracts)
             }
         }
 
         filterViewModel.isSearching.observe(viewLifecycleOwner){isSearching->
-            if (isSearching)
-                binding.progressCircular.show()
-            else
-                binding.progressCircular.hide()
+            if (isSearching) binding.progressBar.show()
+            else binding.progressBar.hide()
         }
 
-        actionSearchExpanded.observe(viewLifecycleOwner){expanded->
-            if (expanded){
-                binding.filterResults.visibility = View.VISIBLE
-                binding.addExcelFile.visibility = View.GONE
-            }else{
-                binding.filterResults.visibility = View.GONE
-                binding.addExcelFile.visibility = View.VISIBLE
-            }
+        filterViewModel.success.observe(viewLifecycleOwner){isSuccessful->
+            if(!isSuccessful) binding.tvEmptyDatabase.text = "Aucun Résultat"
+        }
+
+        dbViewModel.hasQueried.observe(viewLifecycleOwner){
+            if (it) binding.progressBar.hide()
+            else binding.progressBar.show()
         }
 
         binding.addExcelFile.setOnClickListener {
@@ -115,147 +132,75 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener, MenuIte
         val menuItem = menu.findItem(R.id.action_search)
         val searchView = menuItem.actionView as SearchView
         searchView.queryHint = resources.getString(R.string.search_bar_query_hint)
-        searchView.isSubmitButtonEnabled = true
+        searchView.isSubmitButtonEnabled = false
         searchView.setOnQueryTextListener(this)
-        searchChipChecked()
+        searchView.setOnQueryTextFocusChangeListener { _, hasFocus ->
+            if (hasFocus){
+                binding.fabFilterResults.visibility = View.VISIBLE
+                binding.addExcelFile.visibility = View.GONE
+            }else{
+                binding.fabFilterResults.visibility = View.GONE
+                binding.addExcelFile.visibility = View.VISIBLE
+            }
+        }
+        searchChipsChecked()
     }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         item.setOnActionExpandListener(this)
         return true
     }
 
-    companion object {
-        fun newInstance() = ContractListFragment()
+    override fun onQueryTextSubmit(query: String?): Boolean {
+        if (query != null) {
+            searchForClient(query, filterViewModel.searchChip)
+        }
+        return true
+    }
+
+    override fun onQueryTextChange(newText: String?): Boolean {
+        if (newText != null) {
+            searchForClient(newText, filterViewModel.searchChip)
+        }
+        return true
+    }
+
+    override fun onMenuItemActionExpand(p0: MenuItem): Boolean {
+        when(p0.itemId){
+            R.id.action_search->{
+                binding.chipGroupSearch.invalidate()
+                filterFabClicked()
+                showChips(binding.chipGroupSearch, ConstantsVariables.allChips,
+                    com.google.android.material.R.style.Widget_MaterialComponents_Chip_Action)
+            }
+        }
+        return true
+    }
+
+    override fun onMenuItemActionCollapse(p0: MenuItem): Boolean {
+        when(p0.itemId){
+            R.id.action_search->{
+                deactivateAllChips()
+            }
+        }
+        return true
     }
 
     private fun filterFabClicked(){
-        binding.filterResults.setOnClickListener {
+        binding.fabFilterResults.setOnClickListener {
             filterBinding = FilterDialogBinding.inflate(layoutInflater)
             showDialog()
             filterViewModel.searchChip
-                ?.let{searchChip-> ConstantsVariables.allChips.filterIndexed { index, _ -> index+1 != searchChip } }?.let { listChips->
-                showChips(filterBinding.chipGroupFilter, listChips,
-                    com.google.android.material.R.style.Widget_MaterialComponents_Chip_Filter)
-            }
+                ?.let{searchChip->
+                    ConstantsVariables.allChips.filterIndexed { index, _ -> index+1 != searchChip } }?.let { listChips->
+                    showChips(filterBinding.chipGroupFilter, listChips,
+                        com.google.android.material.R.style.Widget_MaterialComponents_Chip_Filter)
+                }
             filterBinding.btnDatePicker.setOnClickListener {
                 showDatePickerDialog()
             }
             setExpandableListView()
             entriesListener()
-        }
-    }
-
-    private fun setExpandableListView(){
-        val groupTitleList = ConstantsVariables.expandableListsTitles
-        val childDataList: HashMap<String, List<String>> = hashMapOf()
-
-        groupTitleList.forEachIndexed { index, _ ->
-            childDataList[groupTitleList[index]] = ConstantsVariables.expandableChildListTitles[index]
-        }
-
-        expandableAdapter = ExpandableSliderAdapter(requireContext(),
-        groupTitleList, childDataList
-        )
-
-        filterBinding.expandableLvSliders.setAdapter(expandableAdapter)
-        filterBinding.expandableLvSliders.setOnChildClickListener { _, v, groupPosition, childPosition, _ ->
-            expandableAdapter.makeOthersVisible(groupPosition, childPosition, v)
-            true
-        }
-    }
-
-    private fun resetBtnListener(){
-        filterBinding.btnReset.setOnClickListener {
-            filterViewModel.clearData()
-            filterBinding.etFiltrerAttestation.text?.clear()
-            filterBinding.etFiltrerApporteur.text?.clear()
-            filterBinding.etFiltrerimmatriculation.text?.clear()
-            filterBinding.etFiltrerCarteRose.text?.clear()
-            filterBinding.etFiltrerCompagnie.text?.clear()
-            filterBinding.etFiltrerAssure.text?.clear()
-            filterBinding.etFiltrerMark.text?.clear()
-            filterBinding.etFiltrerPolice.text?.clear()
-            filterViewModel.prixSlidersValue?.clear()
-            filterViewModel.puissanceSliderValue?.clear()
-            filterBinding.chipGroupFilter.clearCheck()
-            filterBinding.expandableLvSliders.clearChoices()
-        }
-    }
-
-    private fun applyBtnListener(){
-        filterBinding.btnAppliquerFiltre.setOnClickListener {
-            Log.e("PRICE SLIDERS", expandableAdapter.getSliderValuesGrp1().toString())
-            filterViewModel.apporteur = filterBinding.etFiltrerApporteur.text.toString()
-            filterViewModel.immatriculation = filterBinding.etFiltrerimmatriculation.text.toString()
-            filterViewModel.attestation = filterBinding.etFiltrerAttestation.text.toString()
-            filterViewModel.carteRose = filterBinding.etFiltrerCarteRose.text.toString()
-            filterViewModel.compagnie = filterBinding.etFiltrerCompagnie.text.toString()
-            filterViewModel.assure = filterBinding.etFiltrerAssure.text.toString()
-            filterViewModel.mark = filterBinding.etFiltrerMark.text.toString()
-            filterViewModel.nPolice = filterBinding.etFiltrerPolice.text.toString()
-            filterViewModel.prixSlidersValue = expandableAdapter.getSliderValuesGrp1()
-            filterViewModel.puissanceSliderValue = expandableAdapter.getSliderValuesGrp2()
-            applyFilter()
-            dialog.cancel()
-        }
-    }
-
-    private fun entriesListener() {
-        val listTextViews= listOf(filterBinding.ilFiltrerAppoteur,
-            filterBinding.ilFiltrerAssure, filterBinding.ilFiltrerAttestation,
-            filterBinding.ilFiltrerCarteRose, filterBinding.ilFiltrerCompagnie,
-            filterBinding.ilFiltrerImmatriculation, filterBinding.ilFiltrerMark,
-            filterBinding.ilFiltrerPolice)
-        filterBinding.chipGroupFilter.setOnCheckedStateChangeListener { _, checkedIds ->
-            Log.e("CHECKED IDS", checkedIds.toString())
-            filterViewModel.filterChip = checkedIds
-            listTextViews.forEachIndexed { index, v ->
-                if (!checkedIds.contains(index) || checkedIds.contains(filterViewModel.searchChip?.minus(1))){
-                    v.visibility = View.GONE
-                }else{
-                    v.visibility = View.VISIBLE
-                }
-            }
-        }
-        resetBtnListener()
-        applyBtnListener()
-    }
-
-    private fun showDatePickerDialog(){
-        val dateRangePicker = MaterialDatePicker.Builder.dateRangePicker()
-            .setTitleText(resources.getString(R.string.time_interval))
-            .setSelection(
-                Pair(MaterialDatePicker.thisMonthInUtcMilliseconds(),
-                    MaterialDatePicker.todayInUtcMilliseconds())
-            ).build()
-
-        dateRangePicker.show(requireActivity().supportFragmentManager, ConstantsVariables.datePickerTag)
-        dateRangePicker.addOnPositiveButtonClickListener {dates->
-//            Log.e("DATE_RANGE_PICKER", dateRangePicker.headerText)
-//            Log.e("IT_RANGE_PICKER", "${ dates.first } && ${dates.second}")
-            filterViewModel.minDate = dates.first
-            filterViewModel.maxDate = dates.second
-        }
-    }
-
-    private fun setNewDialogParams(window: Window, width: Int, height: Int): WindowManager.LayoutParams{
-        val layoutParams = window.attributes
-        layoutParams.width = width
-        layoutParams.height = height
-        return layoutParams
-    }
-
-    private fun showChips(chipGroup: ChipGroup, listStr: List<String>, style: Int){
-        listStr.forEachIndexed { index, chipName ->
-            val chip = Chip(requireContext(), null, style)
-            chip.id = index+1
-            chip.isCheckable = true
-            if (index==0){
-                chip.isChecked = true
-            }
-            chip.text = chipName
-            chip.isClickable =true
-            chipGroup.addView(chip)
         }
     }
 
@@ -275,56 +220,222 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener, MenuIte
         dialog.window?.attributes = layoutParams
     }
 
+    private fun showChips(chipGroup: ChipGroup, listStr: List<String>, style: Int){
+        listStr.forEachIndexed { index, chipName ->
+            val chip = Chip(requireContext(), null, style).apply {
+                id = index+1
+                isCheckable = true
+                if (index==0){
+                    isChecked = true
+                    filterViewModel.searchChip = 1
+                }
+                text = chipName
+                isClickable =true
+            }
+            chipGroup.addView(chip)
+        }
+    }
+
+    private fun setNewDialogParams(window: Window, width: Int, height: Int): WindowManager.LayoutParams{
+        val layoutParams = window.attributes
+        layoutParams.width = width
+        layoutParams.height = height
+        return layoutParams
+    }
+
+    private fun setExpandableListView(){
+        val groupTitleList = ConstantsVariables.expandableListsTitles
+        val childDataList: HashMap<String, List<String>> = hashMapOf()
+
+        groupTitleList.forEachIndexed { index, _ ->
+            childDataList[groupTitleList[index]] = ConstantsVariables.expandableChildListTitles[index]
+        }
+
+        expandableAdapter = ExpandableSliderAdapter(requireContext(),
+            groupTitleList, childDataList
+        )
+
+        filterBinding.expandableLvSliders.setAdapter(expandableAdapter)
+        filterBinding.expandableLvSliders.setOnChildClickListener { _, v, groupPosition, childPosition, _ ->
+            makeOthersVisible(groupPosition, childPosition, v)
+            true
+        }
+    }
+
+    private fun showDatePickerDialog(){
+        val dateRangePicker = MaterialDatePicker.Builder.dateRangePicker()
+            .setTitleText(resources.getString(R.string.time_interval))
+            .setSelection( Pair(MaterialDatePicker.thisMonthInUtcMilliseconds(),
+                MaterialDatePicker.todayInUtcMilliseconds())).build()
+
+        dateRangePicker.show(requireActivity().supportFragmentManager, ConstantsVariables.datePickerTag)
+        dateRangePicker.addOnPositiveButtonClickListener {dates->
+            filterViewModel.minDate = dates.first
+            filterViewModel.maxDate = dates.second
+        }
+    }
+
+    private fun entriesListener() {
+        val listTextViews= listOf(filterBinding.ilFiltrerAppoteur,
+            filterBinding.ilFiltrerAssure, filterBinding.ilFiltrerAttestation,
+            filterBinding.ilFiltrerCarteRose, filterBinding.ilFiltrerCompagnie,
+            filterBinding.ilFiltrerImmatriculation, filterBinding.ilFiltrerMark,
+            filterBinding.ilFiltrerPolice).filterIndexed { index, _ ->
+            index+1 != filterViewModel.searchChip
+        }
+
+        if(filterBinding.chipGroupFilter.checkedChipIds.isNotEmpty()){
+            filterBinding.chipGroupFilter.checkedChipIds.let {checkedChips->
+                listTextViews[checkedChips[0]-1].visibility = View.VISIBLE }
+        }
+
+        filterBinding.chipGroupFilter.setOnCheckedStateChangeListener { _, checkedIds ->
+            filterViewModel.filterChip = checkedIds
+            listTextViews.forEachIndexed { index, v ->
+                if (!checkedIds.contains(index+1) || checkedIds.contains(filterViewModel.searchChip?.minus(1))){
+                    v.visibility = View.GONE
+                }else{
+                    v.visibility = View.VISIBLE
+                }
+            }
+        }
+        resetBtnListener()
+        applyBtnListener()
+    }
+
+    private fun deactivateAllChips(){
+        binding.chipGroupSearch.isActivated = false
+        binding.chipGroupSearch.clearCheck()
+        binding.chipGroupSearch.removeAllViews()
+    updateContractsList()
+    }
+
     private fun searchForClient(str: String, checkedChips: Int?){
-//        swipeToRefresh(str)
         if (checkedChips == null){
-            toast("La palette n'a pas été choisie")
+            toast("Aucune palette n'a été choisie")
             return
         }
-        checkedChips.let { dbViewModel.searchClient(str, it) }
+        checkedChips.let { dbViewModel.apply {
+            executeFunWithAnimation { searchClient(str, it) }
+        }}
     }
 
-    private fun toast(message: String){
-        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
-    }
+    private fun makeOthersVisible(groupPosition: Int, childPosition: Int, convertView: View?){
+        val view = expandableAdapter.getChildView(groupPosition, childPosition , false,  convertView, null)
+        filterViewModel.childrenTouched.add(childPosition)
+        expandableSBinding = ExpandableSliderItemBinding.bind(view)
 
-    private fun searchChipChecked(){
-        binding.chipGroupSearch.setOnCheckedStateChangeListener { _, checkedIds ->
-//            Log.e("checkedIds ", "$checkedIds ${ConstantsVariables.allChips}")
-            if (checkedIds.size > 0) {
-                filterViewModel.searchChip = checkedIds[0]
-                return@setOnCheckedStateChangeListener
+        expandableSBinding?.prixSlider?.apply {
+            visibility = View.VISIBLE
+            if (groupPosition == 1){
+                values = mutableListOf(1.0f, 30.0f)
+                valueFrom = 1.0f
+                valueTo = 30.0f
+                stepSize = 1.0f
+                expandableSBinding!!.etPriceRangeMin.text = resources.getText(R.string.puissance_min)
+                expandableSBinding!!.etPriceRangeMax.text = resources.getText(R.string.puissance_max)
             }
-            filterViewModel.searchChip = null
+
+            setOnFocusChangeListener { v, hasFocus ->
+                if (hasFocus.not())
+                    v.visibility = View.GONE
+            }
+
+            addOnSliderTouchListener(object : RangeSlider.OnSliderTouchListener{
+                override fun onStartTrackingTouch(slider: RangeSlider) {
+
+                }
+
+                override fun onStopTrackingTouch(slider: RangeSlider) {
+                    val minVal = slider.values[0].toInt()
+                    val maxVal = slider.values[1].toInt()
+                    val minStr: String
+                    val maxStr: String
+                    if(groupPosition == 0){
+                        filterViewModel.group1SliderValues[childPosition] =
+                            kotlin.Pair(minVal, maxVal)
+                        minStr = minVal.toString() + ConstantsVariables.priceUnit
+                        maxStr = maxVal.toString() + ConstantsVariables.priceUnit
+                    }else{
+                        filterViewModel.group2SliderValues[childPosition] =
+                            kotlin.Pair(minVal, maxVal)
+                        minStr = minVal.toString() + ConstantsVariables.powerUnit
+                        maxStr = maxVal.toString() + ConstantsVariables.powerUnit
+                    }
+                    expandableSBinding!!.etPriceRangeMin.text = minStr
+                    expandableSBinding!!.etPriceRangeMax.text = maxStr
+                }
+            })
+        }
+        expandableSBinding!!.llEtPriceRange.visibility = View.VISIBLE
+
+    }
+
+    private fun resetBtnListener(){
+        filterBinding.btnReset.setOnClickListener {
+            filterViewModel.clearData()
+            filterBinding.etFiltrerAttestation.text?.clear()
+            filterBinding.etFiltrerApporteur.text?.clear()
+            filterBinding.etFiltrerimmatriculation.text?.clear()
+            filterBinding.etFiltrerCarteRose.text?.clear()
+            filterBinding.etFiltrerCompagnie.text?.clear()
+            filterBinding.etFiltrerAssure.text?.clear()
+            filterBinding.etFiltrerMark.text?.clear()
+            filterBinding.etFiltrerPolice.text?.clear()
+            filterViewModel.group1SliderValues.clear()
+            filterViewModel.group2SliderValues.clear()
+            filterBinding.chipGroupFilter.clearCheck()
+            filterBinding.expandableLvSliders.clearChoices()
+            clearExpandable()
         }
     }
 
-    private fun updateContractsList(){
-        dbViewModel.fetchAllContracts()
+    private fun applyBtnListener(){
+        filterBinding.btnAppliquerFiltre.setOnClickListener {
+            filterViewModel.apporteur = filterBinding.etFiltrerApporteur.text.toString()
+            filterViewModel.immatriculation = filterBinding.etFiltrerimmatriculation.text.toString()
+            filterViewModel.attestation = filterBinding.etFiltrerAttestation.text.toString()
+            filterViewModel.carteRose = filterBinding.etFiltrerCarteRose.text.toString()
+            filterViewModel.compagnie = filterBinding.etFiltrerCompagnie.text.toString()
+            filterViewModel.assure = filterBinding.etFiltrerAssure.text.toString()
+            filterViewModel.mark = filterBinding.etFiltrerMark.text.toString()
+            filterViewModel.nPolice = filterBinding.etFiltrerPolice.text.toString()
+
+            applyFilter()
+            resetBtnListener()
+            dialog.cancel()
+        }
+    }
+
+    private fun clearExpandable() {
+        expandableSBinding?.prixSlider?.invalidate()
+        expandableAdapter.notifyDataSetInvalidated()
+    }
+
+    private fun searchChipsChecked(){
+        binding.chipGroupSearch.setOnCheckedStateChangeListener { _, checkedIds ->
+            checkedIds.getOrNull(0)?.let { filterViewModel.searchChip = it }
+        }
     }
 
     private fun swipeToRefreshCollapsed(){
         binding.swipeToRefresh.setOnRefreshListener {
-            updateContractsList()
+            dbViewModel.apply {
+                executeFunWithoutAnimation { fetchAllContracts() }
+            }
             binding.swipeToRefresh.isRefreshing = false
         }
     }
 
-//    private fun swipeToRefresh(str: String){
-//        binding.swipeToRefresh.setOnRefreshListener {
-//            searchForClient(str, filterViewModel.searchChip)
-//            binding.swipeToRefresh.isRefreshing = false
-//        }
-//    }
-
-    private fun setRecyclerView(){
-        val rvAdapter = listContracts.value?.filter {contractDbDto ->
+    private fun setRecyclerView(listContract: List<ContractDbDto>){
+        val rvAdapter = listContract.filter {contractDbDto ->
             contractDbDto.contract?.assure != "SOMME"
-        }?.let { ContractListAdapter(listContracts = it, clickFunction = { contractDbDto ->
+        }.let { ContractListAdapter(listContracts = it, clickFunction = { contractDbDto ->
             itemLongClick(contractDbDto)
         }, touchFunction = {
             touchListener()
         })}
+
         binding.rvListContract.adapter = rvAdapter
         binding.rvListContract.layoutManager =LinearLayoutManager(context)
         binding.rvListContract.setHasFixedSize(true)
@@ -407,54 +518,22 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener, MenuIte
             carTitles, carValues)
 
     }
+
     private fun addExcelFile(){
-        findNavController().navigate(R.id.action_HomeFragment_to_FirstFragment)
-    }
-
-    override fun onQueryTextSubmit(query: String?): Boolean {
-        if (query != null) {
-            searchForClient(query, filterViewModel.searchChip)
-        }
-        return true
-    }
-
-    override fun onQueryTextChange(newText: String?): Boolean {
-        if (newText != null) {
-            searchForClient(newText, filterViewModel.searchChip)
-        }
-        return true
-    }
-
-    override fun onMenuItemActionExpand(p0: MenuItem): Boolean {
-        when(p0.itemId){
-            R.id.action_search->{
-                actionSearchExpanded.value = true
-                filterFabClicked()
-                showChips(binding.chipGroupSearch, ConstantsVariables.allChips,
-                com.google.android.material.R.style.Widget_MaterialComponents_Chip_Action)
-            }
-        }
-        return true
+        findNavController().navigate(R.id.action_HomeFragment_to_SelectFileFragment)
     }
 
     private fun applyFilter(){
-        listContracts.value =  dbViewModel.allContracts?.value?.let { filterViewModel.filterFields(it) }
+        dbViewModel.allContracts?.value?.let { filterViewModel.filterFields(it) }
     }
 
-    override fun onMenuItemActionCollapse(p0: MenuItem): Boolean {
-        when(p0.itemId){
-            R.id.action_search->{
-                actionSearchExpanded.value = false
-                deactivateAllChips()
-            }
+    private fun updateContractsList(){
+        dbViewModel.apply {
+            executeFunWithAnimation { fetchAllContracts() }
         }
-        return true
     }
 
-    private fun deactivateAllChips(){
-        binding.chipGroupSearch.isActivated = false
-        binding.chipGroupSearch.clearCheck()
-        binding.chipGroupSearch.removeAllViews()
+    private fun toast(message: String){
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
-
 }

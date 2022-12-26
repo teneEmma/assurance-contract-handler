@@ -18,6 +18,8 @@ import org.apache.poi.hssf.usermodel.HSSFDateUtil
 import org.apache.poi.ss.formula.functions.T
 import org.apache.poi.ss.usermodel.Cell
 import org.apache.poi.ss.usermodel.Row
+import org.apache.poi.ss.usermodel.WorkbookFactory
+import org.apache.poi.xssf.usermodel.XSSFCell
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import java.io.FileInputStream
 import java.io.IOException
@@ -88,13 +90,11 @@ class ExcelDocumentsViewModel(application: Application) : AndroidViewModel(appli
                     }
                     is SheetCursorPosition.HeaderOfSheet -> {
                         header = sheetCursor.headers
-//                        Log.e("HEADER", header.toString())
                     }
                     is SheetCursorPosition.RowContent -> {
                         val contractDbDto = ContractDbDto(
                             0, contract = sheetCursor.content,
                             sheetCreationDateStart = startDate, sheetCreationDateEnd = endDate)
-//                        Log.e("CONTRACT DAO", contractDbDto.toString())
                         if (contractDbDto.contract?.assure != null) {
                             allDocumentRows.add(contractDbDto)
                         }else{

@@ -67,7 +67,7 @@ class TimeConverters {
         if (splitStr[2].length != 4){
             splitStr[2] = "20" + splitStr[2]
         }
-        var dateString: String = "${splitStr[0]}-${splitStr[1]}-${splitStr[2]}"
+        val dateString: String = "${splitStr[0]}-${splitStr[1]}-${splitStr[2]}"
         val localDate = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).parse(dateString)
         return Date(localDate.time)
     }

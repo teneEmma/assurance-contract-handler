@@ -92,7 +92,7 @@ class ContractListAdapter(private val listContracts: List<ContractDbDto>, privat
             clickFunction(currentHabit)
         }
 
-        holder.itemView.setOnTouchListener { view, motionEvent ->
+        holder.itemView.setOnTouchListener { _, motionEvent ->
             if (motionEvent.action == MotionEvent.ACTION_UP)
                 touchFunction()
             false

@@ -25,33 +25,31 @@ import com.kod.assurancecontracthandler.viewmodels.databaseviewmodel.DBViewModel
 import com.kod.assurancecontracthandler.viewmodels.databaseviewmodel.DBViewModelFactory
 import com.kod.assurancecontracthandler.viewmodels.exceldocviewmodel.ExcelDocumentsViewModel
 import com.kod.assurancecontracthandler.viewmodels.exceldocviewmodel.ExcelDocumentsViewModelFactory
+import kotlinx.coroutines.*
 import java.io.FileInputStream
-
-class FirstFragment : Fragment() {
+//TODO: Add request rationale for android 10 and below
+class SelectFileFragment : Fragment() {
 
     private var _binding: FragmentFirstBinding? = null
     private val binding get() = _binding!!
     private lateinit var excelDocumentVM: ExcelDocumentsViewModel
     private lateinit var dbViewModel: DBViewModel
     private lateinit var listOfContracts: List<ContractDbDto>
-    private var permissions : Map<String, Boolean>? = null
     private var fileName: String? = null
     private val documentLauncher =
         registerForActivityResult(ActivityResultContracts.OpenDocument()){ uri->
             if (uri != null) {
-                val excelFile = context?.contentResolver?.openFileDescriptor(uri, "r")
+                val excelFile = requireContext().contentResolver?.openFileDescriptor(uri, "r")
                 val fileDescriptor = excelFile?.fileDescriptor
                 val inputStream = FileInputStream(fileDescriptor)
                 fileName = uri.path?.substringAfter(":")
-                readDocument(inputStream) //TODO: Resolve the bugs here
+                readDocument(inputStream)
             } else
                 shortSnack(resources.getString(R.string.file_select_not))
         }
     private val requestPermissionLauncher: ActivityResultLauncher<Array<String>> =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()){ permissions->
-            this.permissions = permissions
             permissions.entries.forEach {
-                Log.e("isGranted", "${it.key} -- ${it.value}")
                 if (!it.value){
                     longSnack("${getPermissionString(it.key.substringAfter("permission."))} Needed")
                     showPermissionDialog()
@@ -98,7 +96,6 @@ class FirstFragment : Fragment() {
         }
 
         excelDocumentVM.successful.observe(viewLifecycleOwner){success->
-//            Log.e("isSuccessful", "isSuccessful---${excelDocumentVM.successful.value}")
             if(success == true) {
                 shortSnack(resources.getString(R.string.load_success))
                 binding.btnSaveFile.visibility = View.VISIBLE
@@ -108,7 +105,6 @@ class FirstFragment : Fragment() {
         }
 
         excelDocumentVM.isLoading.observe(viewLifecycleOwner) {value->
-//            Log.e("isLoading", "isLoading---${excelDocumentVM.isLoading.value} hasStarted---${excelDocumentVM.hasStarted.value}")
             if(value){
                 binding.fileLoadingPB.visibility = View.VISIBLE
                 setVisualEffects(false)
@@ -173,8 +169,8 @@ class FirstFragment : Fragment() {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 
-    private fun addContracts(contracts: List<ContractDbDto>){
-        dbViewModel.addContracts(contracts)
+    private fun addContracts(contracts: List<ContractDbDto>) = dbViewModel.apply {
+        executeFunWithAnimation { addContracts(contracts) }
     }
 
     private fun readDocument(inputStream: FileInputStream){
@@ -182,7 +178,8 @@ class FirstFragment : Fragment() {
     }
 
     private fun backToVisualize(){
-        findNavController().navigate(R.id.action_FirstFragment_to_HomeFragment)
+        findNavController().navigate(R.id.action_SelectFileFragment_to_HomeFragment)
+        findNavController().popBackStack(R.id.SelectFileFragment, true)
     }
 
     private fun setVisualEffects(isEnabled: Boolean){
