@@ -8,7 +8,6 @@ import com.kod.assurancecontracthandler.model.database.ContractDatabase
 import com.kod.assurancecontracthandler.repository.ContractRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.util.Date
 
 class DBViewModel(application: Application): AndroidViewModel(application) {
 
@@ -45,6 +44,15 @@ class DBViewModel(application: Application): AndroidViewModel(application) {
 
     fun setContracts(contracts: List<ContractDbDto>?) = _allContracts.postValue(contracts)
     fun fetchAllContracts() = _allContracts.postValue(repository.readAllContracts())
+
+    private val _listContracts = MutableLiveData<List<ContractDbDto>>()
+    val listContracts: LiveData<List<ContractDbDto>>
+    get() = _listContracts
+    suspend fun fetchCustomerContracts(customerName: String) =
+        _listContracts.postValue(repository.fetchCustomerContract(customerName))
+
+    suspend fun updateCustomer(oldName: String, customerName: String, phoneNumber: String) =
+        repository.updateCustomer(oldName = oldName, customerName, phoneNumber)
 
     fun searchClient(str: String, id: Int) = _allContracts.postValue(filterList(repository.searchForClient(generateQuery(str, id))))
 

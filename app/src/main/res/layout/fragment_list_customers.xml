@@ -11,8 +11,8 @@
         android:layout_height="wrap_content"
         android:layout_marginVertical="2dp"
         android:layout_marginHorizontal="5dp"
-        android:layout_below="@id/horizontal_sv_search"
         android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
         android:layout_above="@+id/customer_details">
 
         <androidx.recyclerview.widget.RecyclerView

@@ -23,14 +23,12 @@
 
     <style name="Theme.AssuranceContractHandler.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-    <style name="ToggleButton" parent="Widget.MaterialComponents.Button.OutlinedButton">
+    <style name="text_profile">
         <item name="iconPadding"> 0dp </item>
-        <item name="android:insetTop"> 0dp </item>
-        <item name="android:insetBottom"> 0dp </item>
-        <item name="android:paddingLeft"> 20dp </item>
-        <item name="android:paddingRight"> 0dp </item>
-        <item name="minWidth"> 30dp </item>
-        <item name="minHeight"> 30dp </item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:gravity">center_horizontal|center_vertical</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">50sp</item>
     </style>
 
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
@@ -45,6 +43,23 @@
     <style name="AppModalStyle"
         parent="Widget.Design.BottomSheet.Modal">
         <item name="android:background">@drawable/bottom_round_dialog</item>
+    </style>
+
+    <style name="btn_negative_style" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="background">@drawable/btn_round</item>
+        <item name="android:foreground">?attr/selectableItemBackground</item>
+        <item name="android:clickable">true</item>
+        <item name="android:layout_margin">10dp</item>
+        <item name="android:textColor">@color/red</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="btn_positive_style" parent="Widget.MaterialComponents.Button">
+        <item name="background">@drawable/btn_round</item>
+        <item name="android:foreground">?attr/selectableItemBackground</item>
+        <item name="android:clickable">true</item>
+        <item name="android:layout_margin">10dp</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
 </resources>

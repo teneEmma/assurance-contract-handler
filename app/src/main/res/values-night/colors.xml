@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>
     <color name="purple_700">#FF6200EE</color>
@@ -10,10 +11,11 @@
     <color name="red">#FF0000</color>
     <color name="bright_green">#08FF00</color>
     <color name="thick_green">#00733B</color>
-    <color name="gradient_no_dark">#DDD9D9</color>
+    <color name="gradient_no_dark">#FAF0F0</color>
     <color name="divider_color">?attr/colorPrimary</color>
-    <color name="edit_color">#20A809</color>
-    <color name="edit_drawables">?attr/colorPrimary</color>
-    <color name="dialog_background">#FFFFFF</color>
-    <color name="transparent_elevated">@color/material_on_surface_stroke</color>
+    <color name="edit_color">#3252FF</color>
+    <color name="edit_drawables">@color/white</color>
+    <color name="dialog_background">#252424</color>
+    <color name="transparent_elevated">@color/material_dynamic_secondary40</color>
+
 </resources>

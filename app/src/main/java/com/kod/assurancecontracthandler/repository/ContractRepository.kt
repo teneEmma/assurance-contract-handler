@@ -12,6 +12,10 @@ class ContractRepository(private val contractDao: ContractDAO) {
 
     suspend fun updateContract(contract: ContractDbDto) = contractDao.updateContract(contract)
 
+    suspend fun fetchCustomerContract(customerName: String): List<ContractDbDto> = contractDao.fetchCustomerContract(customerName)
+
+    suspend fun updateCustomer(oldName: String, customerName: String, phoneNumber: String) =  contractDao.updateContract(oldName = oldName, customerName = customerName, phoneNumber = phoneNumber)
+
     fun readAllContracts() = contractDao.readDatabase()
 
     fun searchForClient(query: SimpleSQLiteQuery) = contractDao.searchForAClient(query)

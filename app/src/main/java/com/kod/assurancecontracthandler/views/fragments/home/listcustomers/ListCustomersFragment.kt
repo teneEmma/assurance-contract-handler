@@ -2,6 +2,7 @@ package com.kod.assurancecontracthandler.views.fragments.home.listcustomers
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -13,7 +14,7 @@ import com.kod.assurancecontracthandler.databinding.FragmentListCustomersBinding
 import com.kod.assurancecontracthandler.model.Customer
 import com.kod.assurancecontracthandler.viewmodels.customerviewmodel.CustomerViewModel
 import com.kod.assurancecontracthandler.viewmodels.customerviewmodel.CustomerViewModelFactory
-import com.kod.assurancecontracthandler.views.fragments.home.customerdetails.CustomerDetailsActivity
+import com.kod.assurancecontracthandler.views.customerdetails.CustomerDetailsActivity
 
 class ListCustomersFragment : Fragment() {
 
@@ -25,17 +26,23 @@ class ListCustomersFragment : Fragment() {
         override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentListCustomersBinding.inflate(inflater, container, false)
         customerViewModel = ViewModelProvider(this,
             CustomerViewModelFactory(requireActivity().application))[CustomerViewModel::class.java]
         return binding.root
     }
 
+    override fun onResume() {
+        super.onResume()
+        updateAllData()
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         updateAllData()
         swipeToRefresh()
 
+        Log.e("ON View Created", "ONVIEWCREATED")
         customerViewModel.customerList.observe(viewLifecycleOwner){list->
             if (list.isNotEmpty()) {
                 listCustomers = list

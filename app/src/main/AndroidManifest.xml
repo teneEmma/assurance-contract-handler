@@ -32,7 +32,8 @@
         </activity>
 
         <activity
-            android:name=".views.fragments.home.customerdetails.CustomerDetailsActivity"
-            android:label="Details Client"/>
+            android:name=".views.customerdetails.CustomerDetailsActivity"
+            android:label="Details Client"
+            android:theme="@style/Theme.AssuranceContractHandler.NoActionBar"/>
     </application>
 </manifest>

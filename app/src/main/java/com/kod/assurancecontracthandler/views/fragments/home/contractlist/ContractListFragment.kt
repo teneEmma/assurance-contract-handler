@@ -32,7 +32,7 @@ import com.kod.assurancecontracthandler.model.Customer
 import com.kod.assurancecontracthandler.viewmodels.databaseviewmodel.DBViewModel
 import com.kod.assurancecontracthandler.viewmodels.databaseviewmodel.DBViewModelFactory
 import com.kod.assurancecontracthandler.viewmodels.databaseviewmodel.FilterViewModel
-import com.kod.assurancecontracthandler.views.fragments.home.customerdetails.CustomerDetailsActivity
+import com.kod.assurancecontracthandler.views.customerdetails.CustomerDetailsActivity
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -68,6 +68,10 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener, MenuIte
         return binding.root
     }
 
+    override fun onResume() {
+        super.onResume()
+        updateContractsList()
+    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         filterViewModel.listContracts.observe(viewLifecycleOwner){listContracts->
@@ -471,6 +475,7 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener, MenuIte
             intent.putExtra(ConstantsVariables.customerKey, customer)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
             startActivity(intent)
+            dialogTouchContract?.dismiss()
         }
     }
 

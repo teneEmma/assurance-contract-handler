@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Assurance Contract Handler</string>
     <string name="action_settings">Settings</string>
     <string name="action_search">Search</string>
@@ -9,6 +9,7 @@
     <string name="save">SAUVEGARDER</string>
     <string name="upload">UPLOAD</string>
     <string name="cancel">ANNULER</string>
+    <string name="modify">MODIFIER</string>
 
 
     <!-- MANIFEST -->
@@ -42,6 +43,8 @@
     <string name="carte_rose">Carte Rose</string>
     <string name="prix">PRIX</string>
     <string name="puissance">PUISSANCE</string>
+    <string name="phone_number">650123456</string>
+    <string name="contract_number" tools:ignore="TypographyDashes">000–A–1234567-12345678</string>
     <string name="prix_min">2000XAF</string>
     <string name="prix_max">500000XAF</string>
     <string name="puissance_min">01CV-ESS</string>
@@ -83,4 +86,26 @@
     <string name="grandTotal">- XAF</string>
     <string name="apporteur">APPORTEUR: APPORTEUR\'S NAME</string>
     <string name="immatriculation_value">RR 000 XX</string>
+    <string name="user_initials">\?</string>
+    <string name="customer_name">NOMS Prenoms</string>
+    <string name="contact_him">Contactez le</string>
+    <string name="ongoing_contracts">Contrats</string>
+    <string name="customer_contracts">List Des Contract En Cours</string>
+    <string name="make_a_call">Passer un appel</string>
+    <string name="use_whatsapp">utiliser whatsapp</string>
+    <string name="write_an_sms">ecrire un sms</string>
+
+    <!-- CUSTOMER DETAILS -->
+    <string name="no_contact_text">Aucun Numéro Dans La Base De Donné</string>
+    <string name="contract_state">L\'état du Contract</string>
+    <string name="contract_state_active">Ce Contract Est Active</string>
+    <string name="contract_state_inactive">Ce Contract A Expiré</string>
+    <string name="modify_customer">modifier Le Client</string>
+    <string name="modified_success">modifié avec success</string>
+    <string name="invalid_customer_name">Ne doit pas être vide</string>
+    <string name="invalid_phone_number">Numéro incorrect</string>
+    <string name="number_incorrect">Numéro incorrect</string>
+    <string name="new_number">Nouveau Numéro</string>
+    <string name="new_name">Nouveau Nom</string>
+
 </resources>
