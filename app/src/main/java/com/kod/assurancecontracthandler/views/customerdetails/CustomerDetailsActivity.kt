@@ -1,12 +1,21 @@
 package com.kod.assurancecontracthandler.views.customerdetails
 
+import android.app.AlertDialog
 import android.app.Dialog
+import android.content.Context
+import android.content.Intent
+import android.content.SharedPreferences
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.util.Log
 import android.view.View
 import android.view.WindowManager
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doOnTextChanged
@@ -22,6 +31,7 @@ import com.kod.assurancecontracthandler.databinding.ContractDeetailsBinding
 import com.kod.assurancecontracthandler.databinding.EditCustomerBinding
 import com.kod.assurancecontracthandler.model.Contract
 import com.kod.assurancecontracthandler.model.Customer
+import com.kod.assurancecontracthandler.repository.DataStoreRepository
 import com.kod.assurancecontracthandler.viewmodels.databaseviewmodel.DBViewModel
 import com.kod.assurancecontracthandler.views.fragments.home.contractlist.GridViewItemAdapter
 import java.text.SimpleDateFormat
@@ -32,7 +42,10 @@ class CustomerDetailsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCustomerDetailsBinding
     private var customer =  MutableLiveData<Customer?>()
     private lateinit var viewModel: DBViewModel
-
+    private lateinit var dataStore: DataStoreRepository
+    private val sharedPreferences: SharedPreferences by lazy {
+        getSharedPreferences(ConstantsVariables.sharedPreferenceMsg, Context.MODE_PRIVATE)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,6 +53,7 @@ class CustomerDetailsActivity : AppCompatActivity() {
         setContentView(binding.root)
         viewModel = ViewModelProvider(this)[DBViewModel::class.java]
 
+        dataStore = DataStoreRepository(sharedPreferences)
         viewModel.listContracts.observe(this){listContracts->
             val recyclerView = CustomerContractsAdapter(listContracts, itemClicked = {contract ->
                 itemLongClick(contract)
@@ -209,9 +223,9 @@ class CustomerDetailsActivity : AppCompatActivity() {
         }else{
             customer.value?.phoneNumber?.let { val recyclerView = CustomerContactAdapter(listOf(it)){action, phoneNumber ->
                 when(action){
-                    ContactAction.CALL.action -> toast("calling $phoneNumber")
-                    ContactAction.SMS.action -> toast("sending an SMS to $phoneNumber")
-                    ContactAction.WHATSAPP_TEXT.action -> toast("opening whatsapp for $phoneNumber")
+                    ContactAction.CALL.action -> makePhoneCall()
+                    ContactAction.SMS.action -> showMessageLayout {msg-> sendSMS(msg) }
+                    ContactAction.WHATSAPP_TEXT.action -> showMessageLayout{msg-> sendWhatsappMsg(msg) }
                 }
 
             }
@@ -221,6 +235,59 @@ class CustomerDetailsActivity : AppCompatActivity() {
             }
         }
 
+    }
+    private fun isWhatsappInstalled(): Boolean {
+        return try {
+            @Suppress("DEPRECATION")
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+                packageManager.getPackageInfo(ConstantsVariables.whatsappPackage, PackageManager.PackageInfoFlags.of(0))
+            else
+                packageManager.getPackageInfo(ConstantsVariables.whatsappPackage, PackageManager.GET_ACTIVITIES)
+            true
+        }catch (e: java.lang.Exception){
+            toast(resources.getString(R.string.whatsapp_not_installed))
+            false
+        }
+    }
+
+    private fun showMessageLayout(function: (String) -> Unit){
+        binding.apply {
+            llEnterMessage.visibility = View.VISIBLE
+            etMessageToSend.doOnTextChanged { text, _, _, _ ->
+                if(text?.length!! > 0) binding.btnSendMessage.isEnabled = true
+            }
+            btnCancelMessage.setOnClickListener {
+                etMessageToSend.text?.clear()
+                llEnterMessage.visibility = View.GONE
+            }
+            btnSendMessage.setOnClickListener{
+                function.invoke(etMessageToSend.text.toString())
+                etMessageToSend.text?.clear()
+            }
+        }
+    }
+
+    private fun sendWhatsappMsg(msg: String) {
+        if (isWhatsappInstalled().not()) return
+        val whatsappURI = Uri.parse(ConstantsVariables.whatsappURIPrefix+ConstantsVariables
+            .phoneIndex+customer.value?.phoneNumber+"&text="+
+                msg)
+        val intent = Intent(Intent.ACTION_VIEW, whatsappURI)
+        startActivity(intent)
+    }
+
+    private fun sendSMS(msg: String) {
+        val smsURI = Uri.parse(ConstantsVariables.smsURIPrefix+customer.value?.phoneNumber)
+        val intent = Intent(Intent.ACTION_VIEW, smsURI)
+        intent.putExtra(Intent.EXTRA_TEXT, msg)
+        startActivity(intent)
+    }
+
+    private fun makePhoneCall() {
+        val callURI = Uri.parse(ConstantsVariables.calURIPrefix+ConstantsVariables.phoneIndex+
+                customer.value?.phoneNumber)
+        val intent = Intent(Intent.ACTION_VIEW, callURI)
+        startActivity(intent)
     }
 
     private fun setNameInitials():String {

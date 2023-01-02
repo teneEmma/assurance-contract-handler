@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".views.customerdetails.CustomerDetailsActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
     <TextView
         android:id="@+id/iv_customer_profile"
@@ -53,19 +58,91 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/tv_contact_customer_text"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="5dp"
-        android:layout_marginBottom="5dp"
+        android:layout_margin="5dp"
         android:background="@drawable/elevated_zone"
         android:paddingHorizontal="10dp"
         tools:listitem="@layout/contact_list_item" />
+
+    <LinearLayout
+        android:id="@+id/ll_enter_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:focusable="true"
+        android:layout_margin="5dp"
+        android:orientation="vertical"
+        android:layout_below="@id/recycler_contact">
+
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/divider_contact_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            app:dividerInsetStart="10dp"
+            app:dividerInsetEnd="10dp"/>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/il_message_to_send"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            app:counterEnabled="true"
+            app:counterMaxLength="500"
+            app:hintEnabled="true"
+            android:hint="@string/enter_message"
+            android:background="@drawable/elevated_zone"
+            android:padding="5dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_message_to_send"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:inputType="textCapSentences|textMultiLine"
+                android:textStyle="italic"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="5dp"
+            android:gravity="end">
+
+            <Button
+                android:id="@+id/btn_cancel_message"
+                style="@style/btn_negative_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/cancel"
+                android:textAlignment="center" />
+
+            <Button
+                android:id="@+id/btn_send_message"
+                style="@style/btn_positive_style"
+                android:enabled="false"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/send"
+                android:textAlignment="center"/>
+
+        </LinearLayout>
+
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/divider_message_list_contract"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:dividerInsetStart="5dp"
+            app:dividerInsetEnd="5dp" />
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/tv_contract_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/recycler_contact"
+        android:layout_below="@id/ll_enter_message"
         android:layout_alignParentStart="true"
         android:text="@string/ongoing_contracts"
         android:layout_margin="10dp"/>
@@ -81,3 +158,5 @@
         tools:listitem="@layout/contract_list_item"/>
 
     </RelativeLayout>
+
+    </androidx.core.widget.NestedScrollView>

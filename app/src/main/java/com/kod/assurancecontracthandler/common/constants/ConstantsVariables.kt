@@ -1,7 +1,5 @@
 package com.kod.assurancecontracthandler.common.constants
 
-import com.kod.assurancecontracthandler.R
-
 object ConstantsVariables {
 
     val priceUnit = "XAF"
@@ -30,6 +28,11 @@ object ConstantsVariables {
     val expandableListsTitles = listOf("FILTRER LES PRIX", "FILTRER LA PUISSANCE")
     val expandableChildListTitles = listOf(listOf("DTA", "PN", "ACC", "FC", "TVA", "CR", "PTTC", "ENCAIS", "REVER", "SOLDE"),
         listOf("PUISSANCE"))
-    val filterChipNames = listOf("Apporteur", "Immatriculation", "Attestation", "Carte Rose",
-        "Compagnie", "Assure", "Mark", "N° Police")
+    const val textType = "text/plain"
+    const val whatsappPackage = "com.whatsapp"
+    const val whatsappURIPrefix = "https://api.whatsapp.com/send?phone="
+    const val smsURIPrefix = "smsto:"
+    const val calURIPrefix = "tel:"
+    const val phoneIndex = "+237"
+    const val sharedPreferenceMsg = "ASSURANCE_PREDEFINED_MSG"
 }

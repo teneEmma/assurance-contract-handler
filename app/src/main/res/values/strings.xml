@@ -107,5 +107,8 @@
     <string name="number_incorrect">Numéro incorrect</string>
     <string name="new_number">Nouveau Numéro</string>
     <string name="new_name">Nouveau Nom</string>
+    <string name="whatsapp_not_installed">Whatsapp n\'est pas Installé</string>
+    <string name="enter_message">Entrer le message</string>
+    <string name="send">ENVOYER</string>
 
 </resources>
