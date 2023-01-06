@@ -35,4 +35,16 @@ object ConstantsVariables {
     const val calURIPrefix = "tel:"
     const val phoneIndex = "+237"
     const val sharedPreferenceMsg = "ASSURANCE_PREDEFINED_MSG"
+
+    const val expiryChannelID_str = "ASSURANCE_CONTRACT_CHANNEL_ID"
+    const val expiryChannelID_int = 1234
+    const val EXPIRY_NOTIFICATION_TITLE = "Expiration De Contrat"
+    const val CHECKING_EXPIRY_CONTRACTS_WORKNAME = "CHECKING_EXPIRY_CONTRACTS"
+    const val INTENT_LIST_WORKER = "ListOfExpiryContracts"
+    const val INTENT_WORKER_EFFET = "ListOfExpiryContracts"
+    const val INTENT_WORKER_ECHEANCE = "ListOfExpiryContracts"
+    const val INTENT_WORKER_ASSURE = "ListOfExpiryContracts"
+    const val INTENT_WORKER_ATTESTION = "ListOfExpiryContracts"
+    const val INTENT_WORKER_ = "ListOfExpiryContracts"
+
 }

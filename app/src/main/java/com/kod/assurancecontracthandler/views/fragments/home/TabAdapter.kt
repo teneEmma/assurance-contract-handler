@@ -8,8 +8,8 @@ import com.kod.assurancecontracthandler.views.fragments.home.listcustomers.ListC
 class TabAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
     override fun getItemCount(): Int = 2
 
-    override fun createFragment(position: Int): Fragment
-    = when(position){
+    override fun createFragment(position: Int): Fragment =
+        when(position){
         1-> ListCustomersFragment.newInstance()
         else -> ContractListFragment.newInstance()
     }

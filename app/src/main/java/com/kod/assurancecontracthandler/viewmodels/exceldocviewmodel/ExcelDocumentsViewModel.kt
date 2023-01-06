@@ -133,7 +133,7 @@ class ExcelDocumentsViewModel(application: Application) : AndroidViewModel(appli
                         isSuccessfull = false
                         setStates(false, isSuccessfull)
                         _toastMessages.postValue("Veuillez Réessayer")
-                        Log.e("BUG", e.stackTraceToString())
+                        e.stackTraceToString()
                     }
                 }
             }
@@ -144,7 +144,7 @@ class ExcelDocumentsViewModel(application: Application) : AndroidViewModel(appli
             isSuccessfull = true
             verifySchemeFunc.invoke()
         }catch (e: java.lang.Exception){
-            Log.e("BUG", e.stackTraceToString())
+            e.stackTraceToString()
             isSuccessfull = false
             setStates(hasStarted = false, isSuccess = isSuccessfull)
             SheetCursorPosition.Error("Le Fichier n'a pas pu être complemtement ou entierement lu", ErrorLevel.MEDIUM)

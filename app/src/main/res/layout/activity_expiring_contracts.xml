@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="5dp"
+    tools:context=".views.expiringactivity.ExpiringContractsActivity">
+
+    <TextView
+        android:id="@+id/contract_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/edit_text_round"
+        android:text="@string/liste_title"
+        style="@style/text_heading" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_sliders_worker"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/contract_title"
+        android:scrollbars="none"
+        android:paddingHorizontal="10dp"
+        android:layout_marginVertical="20dp"
+        android:indicatorEnd="?android:attr/expandableListPreferredItemPaddingLeft"
+        android:divider="@color/bright_green"
+        tools:itemCount="5"
+        tools:listitem="@layout/worker_data_group_item"
+        android:background="@drawable/elevated_zone"/>
+
+</RelativeLayout>

@@ -17,7 +17,7 @@
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
-    <string name="importFile">Importer Un Fichier...</string>
+    <string name="importFile">Importer Un Fichier…</string>
     <string name="contrat_file_name">fiche_des_contrats.xls</string>
     <string name="file_description">excel file</string>
     <string name="success_select">selected successfully</string>
@@ -80,6 +80,7 @@
     <string name="filtering_progress">filtering progress</string>
     <string name="list_contract_title">Contrats</string>
     <string name="list_customers_title">Clients</string>
+    <string name="no_result">Aucun Résultat</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="customer_details">Details</string>
@@ -110,5 +111,21 @@
     <string name="whatsapp_not_installed">Whatsapp n\'est pas Installé</string>
     <string name="enter_message">Entrer le message</string>
     <string name="send">ENVOYER</string>
+
+    <!-- WORK MANAGER -->
+    <string name="expiry_channel">EXPIRATION DES CONTRATS</string>
+    <string name="see">VOIR</string>
+    <string name="expiry_channel_description">Les Notifications Concernant l\'èxpiration
+        futur d\'un contrat</string>
+    <string name="notification_message">Certains Contrats Vont Expirer. Venez Jeter Un Coup D\'oeil</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+    <string name="some_text">Le contrat de Mr XXX expire le XX/XX/XXXX. Appelez ou écrivez lui un message pour le rappeler de le renouveler</string>
+    <string name="liste_title">LISTE DES CONTRATS QUI EXPIRERONS BIENTÔT</string>
+    <string name="price_xaf">1000000 XAF</string>
+    <string name="carte_rose_title">CARTE ROSE:</string>
+    <string name="attestation_title">ATTESTATION:</string>
+    <string name="echeance_title">echeance:</string>
+    <string name="effet_title">effet:</string>
 
 </resources>

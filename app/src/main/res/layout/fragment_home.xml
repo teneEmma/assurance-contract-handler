@@ -3,17 +3,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app1="http://schemas.android.com/apk/res-auto"
     tools:context=".views.fragments.home.HomeFragment">
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:backgroundTint="@color/purple_500"
+        app1:tabIndicatorColor="@color/white"
+        app1:tabTextColor="@color/white"
         style="@style/Widget.MaterialComponents.TabLayout.Colored"
-        app:tabMode="fixed"
-        app:tabIndicatorHeight="4dp"
-        app:tabIndicatorAnimationMode="elastic"/>
+        app1:tabMode="fixed"
+        app1:tabIndicatorHeight="4dp"
+        app1:tabIndicatorAnimationMode="elastic"/>
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPager2"

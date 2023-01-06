@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemClickListener
+import androidx.core.view.children
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.tabs.TabLayoutMediator
 import com.kod.assurancecontracthandler.R
 import com.kod.assurancecontracthandler.databinding.FragmentHomeBinding
@@ -29,6 +31,7 @@ class HomeFragment : Fragment() {
 
     private fun setupViewPager(){
         binding.viewPager2.adapter = TabAdapter(this)
+        binding.viewPager2.isUserInputEnabled = false
         TabLayoutMediator(binding.tabLayout, binding.viewPager2
         ) { tab, position ->
             when(position){

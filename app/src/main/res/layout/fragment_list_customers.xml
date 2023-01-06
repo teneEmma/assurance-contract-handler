@@ -55,7 +55,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
-        android:backgroundTint="?attr/colorPrimary">
+        android:backgroundTint="@color/purple_500">
 
         <LinearLayout
             android:layout_width="wrap_content"

@@ -12,9 +12,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
+        android:layout_marginHorizontal="10dp"
         android:padding="10dp"
         app:endIconDrawable="@drawable/ic_folder"
         app:endIconTint="@color/purple_500"
+        app:endIconMode="custom"
+        app:endIconCheckable="true"
+        android:background="@drawable/edit_text_round"
         app:hintEnabled="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -24,7 +28,6 @@
             android:id="@+id/actv_import_file"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/round"
             android:hint="@string/importFile"
             android:inputType="none" />
 

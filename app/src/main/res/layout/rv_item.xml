@@ -55,9 +55,7 @@
         android:layout_marginStart="8dp"
         android:orientation="vertical"
         android:layout_alignParentEnd="true"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="8dp"
-        android:layout_alignParentRight="true">
+        android:layout_centerVertical="true">
 
         <TextView
             android:id="@+id/title_effet"
@@ -65,7 +63,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:textSize="11sp"
-            android:text="effet:"
+            android:text="@string/effet_title"
             android:textColor="#036800"/>
 
         <TextView
@@ -83,7 +81,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="10dp"
             android:textSize="11sp"
-            android:text="echeance:"
+            android:text="@string/echeance_title"
             android:textColor="#780000"/>
 
         <TextView
@@ -102,8 +100,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="52dp"
         android:orientation="horizontal"
-        android:layout_below="@id/nameNumber"
-        android:layout_marginLeft="52dp">
+        android:layout_below="@id/nameNumber">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -117,7 +114,7 @@
                 android:layout_gravity="center"
                 android:textColor="#1228A5"
                 android:textSize="11sp"
-                android:text="ATTESTATION: "/>
+                android:text="@string/attestation_title"/>
 
             <TextView
                 android:id="@+id/column_attestion"
@@ -132,8 +129,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="25dp"
-            android:orientation="vertical"
-            android:layout_marginLeft="25dp">
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/title_carteRose"
@@ -142,7 +138,7 @@
                 android:layout_gravity="center_horizontal"
                 android:textColor="#1228A5"
                 android:textSize="11sp"
-                android:text="CARTE ROSE: " />
+                android:text="@string/carte_rose_title" />
 
             <TextView
                 android:id="@+id/column_carteRose"

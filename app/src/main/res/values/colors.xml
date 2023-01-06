@@ -16,4 +16,6 @@
     <color name="edit_drawables">?attr/colorPrimary</color>
     <color name="dialog_background">#FFFFFF</color>
     <color name="transparent_elevated">@color/material_on_surface_stroke</color>
+    <color name="select_date_ic_tint">@android:color/black</color>
+
 </resources>

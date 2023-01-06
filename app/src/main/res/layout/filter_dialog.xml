@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:padding="5dp"
     android:layout_margin="4dp"
     android:background="@drawable/dialog_round">
@@ -28,6 +29,32 @@
                 app:singleSelection="false"/>
 
         </HorizontalScrollView>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/il_filtrerDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:clickable="false"
+            android:focusable="false"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+            app:hintEnabled="true"
+            app:hintTextColor="@color/purple_500"
+            android:hint="@string/select_date"
+            app:endIconMode="clear_text"
+            app:endIconTint="@color/black">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/btn_date_picker"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="false"
+                android:clickable="false"
+                android:drawableEnd="@drawable/ic_calendar"
+                android:layout_marginTop="5dp"
+                android:inputType="date"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/il_filtrerAppoteur"
@@ -212,38 +239,9 @@
                 android:id="@+id/et_filtrerCarteRose"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="edit"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:inputType="text"/>
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/il_filtrerDate"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="5dp"
-            android:clickable="false"
-            android:focusable="false"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            app:hintEnabled="true"
-            app:hintTextColor="@color/purple_500"
-            android:hint="@string/select_date"
-            app:endIconMode="clear_text"
-            app:endIconTint="@color/black">
-
-            <EditText
-                android:id="@+id/btn_date_picker"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:focusable="false"
-                android:clickable="false"
-                android:drawableEnd="@drawable/ic_calendar"
-                android:drawableTint="?attr/colorPrimaryVariant"
-                android:layout_marginTop="5dp"
-                android:backgroundTint="@color/white"
-                android:autofillHints="Date" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -255,6 +253,7 @@
             android:nestedScrollingEnabled="true"
             android:isScrollContainer="false"
             android:dividerHeight="1dp"
+            tools:listitem="@layout/main_group_sliders"
             android:divider="@android:color/darker_gray" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -264,7 +263,7 @@
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnReset"
-                style="@style/Widget.AppCompat.Button.Borderless"
+                style="@style/btn_negative_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
@@ -275,7 +274,7 @@
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:textAlignment="center"
-                android:drawableLeft="@drawable/outline_cancel_24"
+                android:drawableStart="@drawable/outline_cancel_24"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -285,11 +284,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:background="@drawable/btn_round"
+                style="@style/btn_positive_style"
                 android:text="@string/appliquer"
                 android:textSize="18sp"
                 android:drawableStart="@drawable/baseline_filter_list_24"
-                app:backgroundTint="@color/design_default_color_primary"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/btnReset"

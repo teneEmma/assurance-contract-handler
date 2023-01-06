@@ -18,7 +18,7 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.kod.assurancecontracthandler.R
 import com.kod.assurancecontracthandler.common.model.MimeTypes
-import com.kod.assurancecontracthandler.databinding.FragmentFirstBinding
+import com.kod.assurancecontracthandler.databinding.FragmentSelectFileBinding
 import com.kod.assurancecontracthandler.databinding.PermissionDialogBinding
 import com.kod.assurancecontracthandler.model.ContractDbDto
 import com.kod.assurancecontracthandler.viewmodels.databaseviewmodel.DBViewModel
@@ -30,7 +30,7 @@ import java.io.FileInputStream
 //TODO: Add request rationale for android 10 and below
 class SelectFileFragment : Fragment() {
 
-    private var _binding: FragmentFirstBinding? = null
+    private var _binding: FragmentSelectFileBinding? = null
     private val binding get() = _binding!!
     private lateinit var excelDocumentVM: ExcelDocumentsViewModel
     private lateinit var dbViewModel: DBViewModel
@@ -75,7 +75,7 @@ class SelectFileFragment : Fragment() {
         )[ExcelDocumentsViewModel::class.java]
         dbViewModel = ViewModelProvider(this,
             DBViewModelFactory(requireActivity().application))[DBViewModel::class.java]
-        _binding = FragmentFirstBinding.inflate(inflater, container, false)
+        _binding = FragmentSelectFileBinding.inflate(inflater, container, false)
         return binding.root
     }
 

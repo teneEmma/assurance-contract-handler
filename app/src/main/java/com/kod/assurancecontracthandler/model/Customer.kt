@@ -1,11 +1,55 @@
 package com.kod.assurancecontracthandler.model
 
+import android.os.Parcel
 import android.os.Parcelable
 import androidx.room.ColumnInfo
+import androidx.room.Ignore
+import kotlinx.parcelize.Parceler
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Customer(
     @ColumnInfo(name = "assure") var customerName: String?,
     @ColumnInfo(name = "telephone") var phoneNumber: String?
-) : Parcelable
+) : Parcelable{
+    @Ignore var carteRose: String? = null
+    @Ignore var attestation: String? = null
+    @Ignore var numeroPolice: String? = null
+    @Ignore var effet: Long? = null
+    @Ignore var echeance: Long?= null
+
+    companion object : Parceler<Customer> {
+        override fun Customer.write(parcel: Parcel, flags: Int) {
+            parcel.writeString(customerName)
+            parcel.writeString(phoneNumber)
+            parcel.writeString(carteRose)
+            parcel.writeString(attestation)
+            parcel.writeString(numeroPolice)
+            effet?.let { parcel.writeLong(it) }
+            echeance?.let { parcel.writeLong(it) }
+        }
+
+        override fun create(parcel: Parcel): Customer {
+            val name = parcel.readString()
+            val phoneNumber = parcel.readString()
+            val carteRose = parcel.readString()
+            val attestation = parcel.readString()
+            val numeroPolice = parcel.readString()
+            val effet = parcel.readLong()
+            val echeance = parcel.readLong()
+
+            val customer = Customer(name, phoneNumber)
+            customer.carteRose = carteRose
+            customer.attestation = attestation
+            customer.numeroPolice = numeroPolice
+            customer.effet = effet
+            customer.echeance = echeance
+            return customer
+        }
+
+        override fun newArray(size: Int): Array<Customer> {
+            val custo = Customer("TESTE NAME", phoneNumber = "133456")
+            return arrayOf(custo)
+        }
+    }
+}

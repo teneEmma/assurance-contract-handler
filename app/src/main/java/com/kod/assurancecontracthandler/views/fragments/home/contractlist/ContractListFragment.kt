@@ -2,16 +2,15 @@ package com.kod.assurancecontracthandler.views.fragments.home.contractlist
 
 import android.app.Dialog
 import android.content.Intent
+import android.content.res.Resources.Theme
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.core.util.Pair
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -25,7 +24,7 @@ import com.kod.assurancecontracthandler.common.constants.ConstantsVariables
 import com.kod.assurancecontracthandler.databinding.ContractDeetailsBinding
 import com.kod.assurancecontracthandler.databinding.ExpandableSliderItemBinding
 import com.kod.assurancecontracthandler.databinding.FilterDialogBinding
-import com.kod.assurancecontracthandler.databinding.FragmentSecondBinding
+import com.kod.assurancecontracthandler.databinding.FragmentListContractsBinding
 import com.kod.assurancecontracthandler.model.Contract
 import com.kod.assurancecontracthandler.model.ContractDbDto
 import com.kod.assurancecontracthandler.model.Customer
@@ -39,8 +38,8 @@ import java.util.*
 
 class ContractListFragment : Fragment(), SearchView.OnQueryTextListener, MenuItem.OnActionExpandListener{
 
-    private lateinit var binding: FragmentSecondBinding
-    private lateinit var dbViewModel: DBViewModel
+    private lateinit var binding: FragmentListContractsBinding
+    lateinit var dbViewModel: DBViewModel
     private lateinit var filterViewModel: FilterViewModel
     private lateinit var filterBinding: FilterDialogBinding
     private lateinit var expandableAdapter: ExpandableSliderAdapter
@@ -61,7 +60,7 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener, MenuIte
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentSecondBinding.inflate(inflater, container, false)
+        binding = FragmentListContractsBinding.inflate(inflater, container, false)
         dbViewModel = ViewModelProvider(this,
             DBViewModelFactory(requireActivity().application))[DBViewModel::class.java]
         filterViewModel = ViewModelProvider(this)[FilterViewModel::class.java]
@@ -109,7 +108,7 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener, MenuIte
         }
 
         filterViewModel.success.observe(viewLifecycleOwner){isSuccessful->
-            if(!isSuccessful) binding.tvEmptyDatabase.text = "Aucun Résultat"
+            if(!isSuccessful) binding.tvEmptyDatabase.text = getString(R.string.no_result)
         }
 
         dbViewModel.hasQueried.observe(viewLifecycleOwner){
@@ -451,7 +450,7 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener, MenuIte
 
     private fun itemLongClick(contractDbDto: ContractDbDto) {
         val contractItemBinding = ContractDeetailsBinding.inflate(layoutInflater)
-        dialogTouchContract = BottomSheetDialog(requireContext(), R.style.AppBottomSheetDialogTheme).apply {
+        dialogTouchContract = BottomSheetDialog(requireContext()).apply {
             window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             setContentView(contractItemBinding.root)
         }

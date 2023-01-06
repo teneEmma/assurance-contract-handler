@@ -16,6 +16,7 @@
     <color name="edit_color">#3252FF</color>
     <color name="edit_drawables">@color/white</color>
     <color name="dialog_background">#252424</color>
-    <color name="transparent_elevated">@color/material_dynamic_secondary40</color>
+    <color name="transparent_elevated">@color/material_on_surface_stroke</color>
+    <color name="select_date_ic_tint">@color/white</color>
 
 </resources>

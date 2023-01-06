@@ -1,7 +1,10 @@
 package com.kod.assurancecontracthandler.model
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 import java.util.Date
 
+@Parcelize
 data class Contract(
     var index: Int,
     var attestation: String? ="",
@@ -33,4 +36,4 @@ data class Contract(
     var COMM_LIMBE: Int? = null,
     var COMM_APPORT: Int? = null,
     var APPORTEUR: String? = null
-)
+): Parcelable

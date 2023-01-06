@@ -1,5 +1,6 @@
 package com.kod.assurancecontracthandler.views.fragments.home.contractlist
 
+import android.annotation.SuppressLint
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -45,11 +46,10 @@ class ContractListAdapter(private val listContracts: List<ContractDbDto>, privat
 
         private fun setBackgroundColor(id: Int, isFooter: Boolean){
             if(id%2 == 0 && !isFooter) {
-                itemView.setBackgroundColor(Color.parseColor("#FFC5C5C5"))
                 showView(false)
             }
             else if(id%2 == 1 && !isFooter) {
-                itemView.setBackgroundColor(Color.WHITE)
+                itemView.setBackgroundColor(Color.DKGRAY)
                 showView(false)
             }
             else {
@@ -79,6 +79,7 @@ class ContractListAdapter(private val listContracts: List<ContractDbDto>, privat
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContractViewHolder
             = ContractViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.rv_item, parent,false))
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onBindViewHolder(holder: ContractViewHolder, position: Int) {
         val currentHabit = listContracts[position]
 

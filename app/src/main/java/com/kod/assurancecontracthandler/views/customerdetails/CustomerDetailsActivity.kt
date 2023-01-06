@@ -1,6 +1,5 @@
 package com.kod.assurancecontracthandler.views.customerdetails
 
-import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
@@ -11,11 +10,8 @@ import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
-import android.util.Log
 import android.view.View
 import android.view.WindowManager
-import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doOnTextChanged
@@ -78,12 +74,13 @@ class CustomerDetailsActivity : AppCompatActivity() {
         }
 
         customer.value = retrieveCustomer()
-
+//        setupNotification()
     }
 
     private fun toast(message: String){
         Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
     }
+
 
     private fun showModificationDialog(){
         val editCustomerBinding = EditCustomerBinding.inflate(layoutInflater)
@@ -155,7 +152,7 @@ class CustomerDetailsActivity : AppCompatActivity() {
 
     private fun itemLongClick(contract: Contract) {
         val contractItemBinding = ContractDeetailsBinding.inflate(layoutInflater)
-        val dialogTouchContract = BottomSheetDialog(this, R.style.AppBottomSheetDialogTheme).apply {
+        val dialogTouchContract = BottomSheetDialog(this).apply {
             window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             setContentView(contractItemBinding.root)
         }
@@ -291,9 +288,14 @@ class CustomerDetailsActivity : AppCompatActivity() {
     }
 
     private fun setNameInitials():String {
-        val initialsList = if(customer.value?.customerName?.isNotEmpty() == true){
-            customer.value?.customerName?.split(" ")?.onEach { it.first() }
-        }else{
+        val initialsList = try {
+            if(customer.value?.customerName?.isNotEmpty() == true){
+                customer.value?.customerName?.split(" ")?.onEach { it.first() }
+            }else{
+                listOf("???")
+            }
+        }catch (e: java.lang.Exception){
+            e.printStackTrace()
             listOf("???")
         }
 
@@ -310,7 +312,7 @@ class CustomerDetailsActivity : AppCompatActivity() {
     }
 
     private fun retrieveCustomer(): Customer?{
-        return if (Build.VERSION.SDK_INT >= 33)
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
             intent.getParcelableExtra("customer", Customer::class.java)
         else
             intent.getParcelableExtra("customer") as? Customer
