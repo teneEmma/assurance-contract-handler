@@ -28,20 +28,21 @@ class ExpirationWorker(val context: Context, workerParams: WorkerParameters): Co
     }
 
     private suspend fun checkExpiringContracts(){
-        val listContracts = arrayListOf<Customer>()
-        val today = LocalDateTime.now().toEpochSecond(ZoneOffset.UTC)
+        val listCustomers = arrayListOf<Customer>()
+        val today = LocalDateTime.now().toEpochSecond(ZoneOffset.UTC)*1000
+        val maxDate = LocalDateTime.now().plusMonths(1).toEpochSecond(ZoneOffset.UTC)*1000
         withContext(Dispatchers.IO){
             dbViewModel.apply {
-                val result = fetchExpiringContractsIn(today, 7*3)
+                val result = fetchExpiringContractsIn(today, maxDate)
                 result.forEach {
                     it.contract?.let { it1 ->
-                        listContracts.add(setCustomer(it1))
+                        listCustomers.add(setCustomer(it1))
                     }
                 }
             }
 
-            if (listContracts.isEmpty().not()){
-                setupNotification(listContracts)
+            if (listCustomers.isEmpty().not()){
+                setupNotification(listCustomers)
             }
         }
     }

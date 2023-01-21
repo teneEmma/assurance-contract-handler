@@ -64,13 +64,4 @@
 
     </LinearLayout>
 
-    <com.google.android.material.divider.MaterialDivider
-        android:id="@+id/divider_contact_message"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/ll_contract_clicked"
-        android:layout_marginBottom="10dp"
-        app:dividerInsetStart="10dp"
-        app:dividerInsetEnd="10dp"/>
-
 </RelativeLayout>

@@ -37,6 +37,6 @@ class AppApplication: Application() {
         val workRequest = PeriodicWorkRequestBuilder<ExpirationWorker>(1, TimeUnit.DAYS)
             .setConstraints(constraints)
             .build()
-        workManager.enqueueUniquePeriodicWork(CHECKING_EXPIRY_CONTRACTS_WORKNAME, ExistingPeriodicWorkPolicy.REPLACE, workRequest)
+        workManager.enqueueUniquePeriodicWork(CHECKING_EXPIRY_CONTRACTS_WORKNAME, ExistingPeriodicWorkPolicy.KEEP, workRequest)
     }
 }

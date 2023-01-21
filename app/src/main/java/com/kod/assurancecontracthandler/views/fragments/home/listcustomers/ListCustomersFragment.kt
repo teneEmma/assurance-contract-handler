@@ -27,8 +27,7 @@ class ListCustomersFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentListCustomersBinding.inflate(inflater, container, false)
-        customerViewModel = ViewModelProvider(this,
-            CustomerViewModelFactory(requireActivity().application))[CustomerViewModel::class.java]
+        customerViewModel = ViewModelProvider(this, CustomerViewModelFactory(requireActivity().application))[CustomerViewModel::class.java]
             setRecyclerView()
         return binding.root
     }

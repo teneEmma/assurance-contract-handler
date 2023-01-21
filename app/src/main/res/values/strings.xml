@@ -121,7 +121,7 @@
     <string name="next">Next</string>
     <string name="previous">Previous</string>
     <string name="some_text">Le contrat de Mr XXX expire le XX/XX/XXXX. Appelez ou écrivez lui un message pour le rappeler de le renouveler</string>
-    <string name="liste_title">LISTE DES CONTRATS QUI EXPIRERONS BIENTÔT</string>
+    <string name="liste_title">LES CONTRATS QUI VONT EXPIRER</string>
     <string name="price_xaf">1000000 XAF</string>
     <string name="carte_rose_title">CARTE ROSE:</string>
     <string name="attestation_title">ATTESTATION:</string>

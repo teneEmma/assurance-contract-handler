@@ -87,11 +87,8 @@ class DBViewModel(application: Application): AndroidViewModel(application) {
         return list
     }
 
-    fun fetchExpiringContractsIn(today: Long, time: Int): List<ContractDbDto> {
-        val maxTime = 24*time
-        val minTime = maxTime - 23
-        val todayDate = today*1000
-        return repository.getExpiringContractsIn(todayDate, minTime, maxTime)
+    fun fetchExpiringContractsIn(today: Long, expDate: Long): List<ContractDbDto> {
+        return repository.getExpiringContractsIn(today, expDate)
     }
 
 }
