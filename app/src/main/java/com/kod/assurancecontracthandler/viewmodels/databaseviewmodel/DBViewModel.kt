@@ -7,6 +7,7 @@ import com.kod.assurancecontracthandler.model.ContractDbDto
 import com.kod.assurancecontracthandler.model.database.ContractDatabase
 import com.kod.assurancecontracthandler.repository.ContractRepository
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 class DBViewModel(application: Application): AndroidViewModel(application) {
@@ -21,6 +22,8 @@ class DBViewModel(application: Application): AndroidViewModel(application) {
     val hasQueried: LiveData<Boolean>
     get() = _hasQueried
 
+//    var _myTestFlow =  MutableSharedFlow<List<String>?>(null)
+//    var myTestFlow: StateFlow<List<String>?> = _myTestFlow.asStateFlow()
     fun executeFunWithAnimation(execute: suspend () -> Unit){
         viewModelScope.launch(Dispatchers.IO) {
             _hasQueried.postValue(false)
@@ -39,11 +42,11 @@ class DBViewModel(application: Application): AndroidViewModel(application) {
 
     suspend fun addContract(contract: ContractDbDto) = repository.addContract(contract)
 
-    private val _allContracts = MutableLiveData<List<ContractDbDto>?>()
-    val allContracts: LiveData<List<ContractDbDto>?>? = _allContracts
+    private val _allContracts = MutableSharedFlow<List<ContractDbDto>?>()
+    val allContracts: SharedFlow<List<ContractDbDto>?> = _allContracts
 
-    fun setContracts(contracts: List<ContractDbDto>?) = _allContracts.postValue(contracts)
-    fun fetchAllContracts() = _allContracts.postValue(repository.readAllContracts())
+    suspend fun setContracts(contracts: List<ContractDbDto>?) = _allContracts.emit(contracts)
+    suspend fun fetchAllContracts() = _allContracts.emit(repository.readAllContracts())
 
     private val _listContracts = MutableLiveData<List<ContractDbDto>>()
     val listContracts: LiveData<List<ContractDbDto>>
@@ -54,7 +57,7 @@ class DBViewModel(application: Application): AndroidViewModel(application) {
     suspend fun updateCustomer(oldName: String, customerName: String, phoneNumber: String) =
         repository.updateCustomer(oldName = oldName, customerName, phoneNumber)
 
-    fun searchClient(str: String, id: Int) = _allContracts.postValue(filterList(repository.searchForClient(generateQuery(str, id))))
+    suspend fun searchClient(str: String, id: Int) = _allContracts.emit(filterList(repository.searchForClient(generateQuery(str, id))))
 
     private fun generateQuery(str: String, id: Int): SimpleSQLiteQuery{
         var initialQuery = "SELECT * FROM contract WHERE"

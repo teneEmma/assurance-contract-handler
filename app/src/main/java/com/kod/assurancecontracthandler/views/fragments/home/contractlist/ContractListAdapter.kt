@@ -1,21 +1,24 @@
 package com.kod.assurancecontracthandler.views.fragments.home.contractlist
 
 import android.annotation.SuppressLint
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.kod.assurancecontrac.ContractsCallback
 import com.kod.assurancecontracthandler.R
 import com.kod.assurancecontracthandler.model.ContractDbDto
 import java.text.SimpleDateFormat
 import java.util.*
 
-class ContractListAdapter(private val listContracts: List<ContractDbDto>, private val clickFunction: (ContractDbDto) -> Unit, private val touchFunction: ()-> Unit): RecyclerView.Adapter<ContractListAdapter.ContractViewHolder>() {
+class ContractListAdapter(private val clickFunction: (ContractDbDto) -> Unit,
+                          private val touchFunction: ()-> Unit):
+    RecyclerView.Adapter<ContractListAdapter.ContractViewHolder>() {
+    private var contractList: List<ContractDbDto> = emptyList()
 
     class ContractViewHolder(view: View): RecyclerView.ViewHolder(view){
         val id: TextView = itemView.findViewById(R.id.column_id)
@@ -71,14 +74,28 @@ class ContractListAdapter(private val listContracts: List<ContractDbDto>, privat
             total.visibility = footerVisibility
         }
     }
-    override fun getItemCount(): Int = listContracts.size
+    override fun getItemCount(): Int = contractList.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContractViewHolder
             = ContractViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.rv_item, parent,false))
 
+    fun setContractList(contractList: List<ContractDbDto>){
+        if (this.contractList.isEmpty()){
+            this.contractList = contractList
+            notifyDataSetChanged()
+//            notifyItemRangeChanged(0, contractList.size)
+        }else{
+            val diffCallback = ContractsCallback(this.contractList, contractList)
+            val diffContracts = DiffUtil.calculateDiff(diffCallback)
+
+            this.contractList = contractList
+            diffContracts.dispatchUpdatesTo(this)
+        }
+    }
+
     @SuppressLint("ClickableViewAccessibility")
     override fun onBindViewHolder(holder: ContractViewHolder, position: Int) {
-        val currentHabit = listContracts[position]
+        val currentHabit = contractList[position]
 
         holder.bindItems(currentHabit)
         holder.itemView.setOnLongClickListener{

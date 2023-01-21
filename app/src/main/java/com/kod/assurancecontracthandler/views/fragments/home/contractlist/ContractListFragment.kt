@@ -11,7 +11,10 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.util.Pair
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.asLiveData
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.chip.Chip
@@ -31,6 +34,9 @@ import com.kod.assurancecontracthandler.viewmodels.databaseviewmodel.DBViewModel
 import com.kod.assurancecontracthandler.viewmodels.databaseviewmodel.DBViewModelFactory
 import com.kod.assurancecontracthandler.viewmodels.databaseviewmodel.FilterViewModel
 import com.kod.assurancecontracthandler.views.customerdetails.CustomerDetailsActivity
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -42,6 +48,7 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener, MenuIte
     private lateinit var filterViewModel: FilterViewModel
     private lateinit var filterBinding: FilterDialogBinding
     private lateinit var expandableAdapter: ExpandableSliderAdapter
+    private var rvAdapter: ContractListAdapter? = null
     private lateinit var dialog: Dialog
     private var  dialogTouchContract: BottomSheetDialog? =null
     private var expandableSBinding: ExpandableSliderItemBinding? = null
@@ -63,31 +70,45 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener, MenuIte
         dbViewModel = ViewModelProvider(this,
             DBViewModelFactory(requireActivity().application))[DBViewModel::class.java]
         filterViewModel = ViewModelProvider(this)[FilterViewModel::class.java]
+        setRecyclerView()
         return binding.root
+    }
+
+    override fun onDestroyView() {
+        rvAdapter = null
+        super.onDestroyView()
     }
 
     override fun onResume() {
         super.onResume()
         updateContractsList()
     }
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         filterViewModel.listContracts.observe(viewLifecycleOwner){listContracts->
-            dbViewModel.setContracts(listContracts)
+            lifecycleScope.launch(Dispatchers.IO) {
+                dbViewModel.setContracts(listContracts)
+            }
         }
 
-        dbViewModel.allContracts?.observe(viewLifecycleOwner){listContracts->
-            if(listContracts.isNullOrEmpty()){
-                binding.ivEmptyDatabase.visibility = View.VISIBLE
-                binding.tvEmptyDatabase.visibility = View.VISIBLE
-                binding.rvListContract.visibility = View.GONE
-            }else{
-                if(filterViewModel.success.value == true)
-                    toast("${listContracts.size} éléments trouvés")
-                binding.ivEmptyDatabase.visibility = View.GONE
-                binding.tvEmptyDatabase.visibility = View.GONE
-                binding.rvListContract.visibility = View.VISIBLE
-                setRecyclerView(listContracts)
+        lifecycleScope.launchWhenStarted {
+            dbViewModel.allContracts.collectLatest {listContracts->
+                if(listContracts.isNullOrEmpty()){
+                    binding.ivEmptyDatabase.visibility = View.VISIBLE
+                    binding.tvEmptyDatabase.visibility = View.VISIBLE
+                    binding.rvListContract.visibility = View.GONE
+                }else{
+                    if(filterViewModel.success.value == true)
+                        toast("${listContracts.size} éléments trouvés")
+                    binding.ivEmptyDatabase.visibility = View.GONE
+                    binding.tvEmptyDatabase.visibility = View.GONE
+                    binding.rvListContract.visibility = View.VISIBLE
+                    listContracts.filter {contractDbDto ->
+                        contractDbDto.contract?.assure != "SOMME"
+                    }.let {listContract->
+                        rvAdapter?.setContractList(listContract)
+                    }
+                }
             }
         }
 
@@ -114,7 +135,7 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener, MenuIte
         }
 
         updateContractsList()
-        swipeToRefreshCollapsed()
+        swipeToRefreshAfterChipCollapse()
     }
 
     @Deprecated("Deprecated in ")
@@ -299,7 +320,7 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener, MenuIte
         binding.chipGroupSearch.isActivated = false
         binding.chipGroupSearch.clearCheck()
         binding.chipGroupSearch.removeAllViews()
-    updateContractsList()
+        updateContractsList()
     }
 
     private fun searchForClient(str: String, checkedChips: Int?){
@@ -410,7 +431,7 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener, MenuIte
         }
     }
 
-    private fun swipeToRefreshCollapsed(){
+    private fun swipeToRefreshAfterChipCollapse(){
         binding.swipeToRefresh.setOnRefreshListener {
             dbViewModel.apply {
                 executeFunWithoutAnimation { fetchAllContracts() }
@@ -419,16 +440,15 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener, MenuIte
         }
     }
 
-    private fun setRecyclerView(listContract: List<ContractDbDto>){
-        val rvAdapter = listContract.filter {contractDbDto ->
-            contractDbDto.contract?.assure != "SOMME"
-        }.let { ContractListAdapter(listContracts = it, clickFunction = { contractDbDto ->
+    private fun setRecyclerView(){
+        rvAdapter = ContractListAdapter(clickFunction = { contractDbDto ->
             itemLongClick(contractDbDto)
         }, touchFunction = {
             touchListener()
-        })}
-
+        })
         binding.rvListContract.adapter = rvAdapter
+        binding.rvListContract.addItemDecoration(DividerItemDecoration(requireContext(),
+            DividerItemDecoration.VERTICAL))
         binding.rvListContract.layoutManager =LinearLayoutManager(context)
         binding.rvListContract.setHasFixedSize(true)
     }
@@ -517,7 +537,7 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener, MenuIte
     }
 
     private fun applyFilter(){
-        dbViewModel.allContracts?.value?.let { filterViewModel.filterFields(it) }
+        dbViewModel.allContracts.asLiveData().value?.let { filterViewModel.filterFields(it) }
     }
 
     private fun updateContractsList(){
