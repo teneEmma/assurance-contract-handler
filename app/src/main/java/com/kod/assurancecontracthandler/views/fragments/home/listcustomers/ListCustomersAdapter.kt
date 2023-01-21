@@ -4,14 +4,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.kod.assurancecontracthandler.R
+import com.kod.assurancecontracthandler.common.utilities.CustomerCallback
 import com.kod.assurancecontracthandler.model.Customer
+import org.apache.xmlbeans.impl.tool.Diff
 
-class ListCustomersAdapter(private val customers: List<Customer>, private val listener: (Customer)-> Unit) : RecyclerView.Adapter<ListCustomersAdapter.MyViewHolder>() {
+class ListCustomersAdapter(private val listener: (Customer)-> Unit) :
+    RecyclerView.Adapter<ListCustomersAdapter.MyViewHolder>() {
+
+    var listCustomers: List<Customer> = emptyList()
 
     class MyViewHolder(view: View): RecyclerView.ViewHolder(view){
-        private val customerName: TextView = view.findViewById(R.id.tv_customer_name)
+        private val customerName: TextView = view.findViewById(R.id.tv_item_customer_customer_name)
 
         fun bindItems(customer: Customer, ){
             itemView.setBackgroundColor(itemView.context.getColor(R.color.dialog_background))
@@ -19,14 +25,25 @@ class ListCustomersAdapter(private val customers: List<Customer>, private val li
         }
     }
 
+    fun setCustomerList(newCustomerList: List<Customer>){
+        if (listCustomers.isEmpty()){
+            listCustomers = newCustomerList
+            notifyDataSetChanged()
+        }else{
+            val diffCallback = CustomerCallback(listCustomers, newCustomerList)
+            val diffOfCustomers = DiffUtil.calculateDiff(diffCallback, true)
+            listCustomers = newCustomerList
+            diffOfCustomers.dispatchUpdatesTo(this)
+        }
+    }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder =
         MyViewHolder(LayoutInflater.from(parent.context)
             .inflate(R.layout.rv_item_customer, parent, false))
 
-    override fun getItemCount(): Int = customers.size
+    override fun getItemCount(): Int = listCustomers.size
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        val currentCustomer = customers[position]
+        val currentCustomer = listCustomers[position]
         holder.bindItems(currentCustomer)
         holder.itemView.setOnClickListener { listener(currentCustomer) }
     }

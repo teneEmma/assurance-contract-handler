@@ -2,12 +2,12 @@ package com.kod.assurancecontracthandler.views.fragments.home.listcustomers
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kod.assurancecontracthandler.common.constants.ConstantsVariables
 import com.kod.assurancecontracthandler.databinding.FragmentListCustomersBinding
@@ -21,7 +21,6 @@ class ListCustomersFragment : Fragment() {
     private lateinit var binding: FragmentListCustomersBinding
     private lateinit var rvAdapter: ListCustomersAdapter
     private lateinit var customerViewModel: CustomerViewModel
-    private var listCustomers: List<Customer>? = listOf()
 
         override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,6 +29,7 @@ class ListCustomersFragment : Fragment() {
         binding = FragmentListCustomersBinding.inflate(inflater, container, false)
         customerViewModel = ViewModelProvider(this,
             CustomerViewModelFactory(requireActivity().application))[CustomerViewModel::class.java]
+            setRecyclerView()
         return binding.root
     }
 
@@ -42,14 +42,12 @@ class ListCustomersFragment : Fragment() {
         updateAllData()
         swipeToRefresh()
 
-        Log.e("ON View Created", "ONVIEWCREATED")
         customerViewModel.customerList.observe(viewLifecycleOwner){list->
             if (list.isNotEmpty()) {
-                listCustomers = list
                 binding.ivEmptyDatabase.visibility = View.GONE
                 binding.tvEmptyDatabase.visibility = View.GONE
                 binding.rvListCustomers.visibility = View.VISIBLE
-                setRecyclerView()
+                rvAdapter.setCustomerList(list)
             }else{
                 binding.ivEmptyDatabase.visibility = View.VISIBLE
                 binding.tvEmptyDatabase.visibility = View.VISIBLE
@@ -75,11 +73,13 @@ class ListCustomersFragment : Fragment() {
     }
 
     private fun setRecyclerView(){
-        listCustomers?.let { ListCustomersAdapter(it) {customer->
-            showCustomerDetails(customer) } }?.let { it2->
+        ListCustomersAdapter() {customer->
+            showCustomerDetails(customer) }?.let { it2->
             rvAdapter = it2
         }
         binding.rvListCustomers.adapter = rvAdapter
+        binding.rvListCustomers.addItemDecoration(DividerItemDecoration(requireContext(),
+            DividerItemDecoration.VERTICAL))
         binding.rvListCustomers.layoutManager = LinearLayoutManager(context)
         binding.rvListCustomers.setHasFixedSize(true)
     }
