@@ -17,5 +17,11 @@
     <color name="dialog_background">#FFFFFF</color>
     <color name="transparent_elevated">@color/material_on_surface_stroke</color>
     <color name="select_date_ic_tint">@android:color/black</color>
+    <color name="footer_color">#FFBE9DED</color>
+    <color name="echeance_header">#780000</color>
+    <color name="echeance_value">@color/red</color>
+    <color name="effet_header">#036800</color>
+    <color name="effet_value">@color/bright_green</color>
+    <color name="contract_item_header">#1228A5</color>
 
 </resources>

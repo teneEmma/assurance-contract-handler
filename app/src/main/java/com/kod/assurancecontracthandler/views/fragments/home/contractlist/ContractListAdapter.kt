@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.kod.assurancecontracthandler.R
 import com.kod.assurancecontracthandler.model.ContractDbDto
@@ -17,7 +18,7 @@ import java.util.*
 class ContractListAdapter(private val listContracts: List<ContractDbDto>, private val clickFunction: (ContractDbDto) -> Unit, private val touchFunction: ()-> Unit): RecyclerView.Adapter<ContractListAdapter.ContractViewHolder>() {
 
     class ContractViewHolder(view: View): RecyclerView.ViewHolder(view){
-        val id: TextView = view.findViewById(R.id.column_id)
+        val id: TextView = itemView.findViewById(R.id.column_id)
         private val assurerName: TextView = itemView.findViewById(R.id.column_assure)
         private val dateContracted: TextView = itemView.findViewById(R.id.column_effet)
         private val expiryDate: TextView = itemView.findViewById(R.id.column_echeance)
@@ -41,19 +42,15 @@ class ContractListAdapter(private val listContracts: List<ContractDbDto>, privat
             attestation.text = contract.contract.attestation.toString()
             carteGrise.text = contract.contract.carteRose.toString()
             total.text = grandTotal
-            setBackgroundColor(Integer.parseInt(id.text.toString()), isFooter)
+            setBackgroundColor(isFooter)
         }
 
-        private fun setBackgroundColor(id: Int, isFooter: Boolean){
-            if(id%2 == 0 && !isFooter) {
+        private fun setBackgroundColor(isFooter: Boolean){
+            if(!isFooter) {
+                itemView.setBackgroundColor(itemView.context.getColor(R.color.dialog_background))
                 showView(false)
-            }
-            else if(id%2 == 1 && !isFooter) {
-                itemView.setBackgroundColor(Color.DKGRAY)
-                showView(false)
-            }
-            else {
-                itemView.setBackgroundColor(Color.parseColor("#FFBE9DED"))
+            } else {
+                itemView.setBackgroundColor(itemView.context.getColor(R.color.footer_color))
                 showView(true)
             }
         }

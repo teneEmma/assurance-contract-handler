@@ -14,6 +14,7 @@ class ListCustomersAdapter(private val customers: List<Customer>, private val li
         private val customerName: TextView = view.findViewById(R.id.tv_customer_name)
 
         fun bindItems(customer: Customer, ){
+            itemView.setBackgroundColor(itemView.context.getColor(R.color.dialog_background))
             customerName.text = customer.customerName
         }
     }

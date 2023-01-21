@@ -2,7 +2,6 @@ package com.kod.assurancecontracthandler.views.fragments.home.contractlist
 
 import android.app.Dialog
 import android.content.Intent
-import android.content.res.Resources.Theme
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -74,16 +73,6 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener, MenuIte
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         filterViewModel.listContracts.observe(viewLifecycleOwner){listContracts->
-//            if(listContracts.isNullOrEmpty()){
-//                if(filterViewModel.success.value == false)
-//                    toast("Aucun Résultat")
-//                binding.rvListContract.visibility = View.GONE
-//            }else{
-//                if(filterViewModel.success.value == true)
-//                    toast("${filterViewModel.listContracts.value?.size} éléments trouvés")
-//                binding.rvListContract.visibility = View.VISIBLE
-//                setRecyclerView(listContracts)
-//            }
             dbViewModel.setContracts(listContracts)
         }
 

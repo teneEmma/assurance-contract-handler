@@ -64,7 +64,7 @@
             android:layout_gravity="center_horizontal"
             android:textSize="11sp"
             android:text="@string/effet_title"
-            android:textColor="#036800"/>
+            android:textColor="@color/bright_green"/>
 
         <TextView
             android:id="@+id/column_effet"
@@ -82,7 +82,7 @@
             android:layout_marginTop="10dp"
             android:textSize="11sp"
             android:text="@string/echeance_title"
-            android:textColor="#780000"/>
+            android:textColor="@color/echeance_header"/>
 
         <TextView
             android:id="@+id/column_echeance"
@@ -112,7 +112,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:textColor="#1228A5"
+                android:textColor="@color/contract_item_header"
                 android:textSize="11sp"
                 android:text="@string/attestation_title"/>
 
@@ -136,7 +136,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:textColor="#1228A5"
+                android:textColor="@color/contract_item_header"
                 android:textSize="11sp"
                 android:text="@string/carte_rose_title" />
 

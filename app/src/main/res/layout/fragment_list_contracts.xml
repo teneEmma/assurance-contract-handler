@@ -91,7 +91,8 @@
         android:src="@drawable/ic_upload_file"
         app:backgroundTint="?attr/colorPrimaryVariant"
         app:rippleColor="@color/white"
-        app:tint="@color/white" />
+        app:tint="@color/white"
+        tools:ignore="RelativeOverlap" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_filterResults"

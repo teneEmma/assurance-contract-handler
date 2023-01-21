@@ -18,5 +18,11 @@
     <color name="dialog_background">#252424</color>
     <color name="transparent_elevated">@color/material_on_surface_stroke</color>
     <color name="select_date_ic_tint">@color/white</color>
+    <color name="footer_color">#FFBE9DED</color>
+    <color name="echeance_header">@color/red</color>
+    <color name="echeance_value">@color/red</color>
+    <color name="effet_header">@color/bright_green</color>
+    <color name="effet_value">@color/bright_green</color>
+    <color name="contract_item_header">@color/footer_color</color>
 
 </resources>
