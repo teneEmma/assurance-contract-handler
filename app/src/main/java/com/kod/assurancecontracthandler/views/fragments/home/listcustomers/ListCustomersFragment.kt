@@ -73,8 +73,8 @@ class ListCustomersFragment : Fragment() {
     }
 
     private fun setRecyclerView(){
-        ListCustomersAdapter() {customer->
-            showCustomerDetails(customer) }?.let { it2->
+        ListCustomersAdapter { customer->
+            showCustomerDetails(customer) }.let { it2->
             rvAdapter = it2
         }
         binding.rvListCustomers.adapter = rvAdapter
