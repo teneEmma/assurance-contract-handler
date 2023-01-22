@@ -5,7 +5,6 @@ import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,7 +24,6 @@ import com.kod.assurancecontracthandler.viewmodels.databaseviewmodel.DBViewModel
 import com.kod.assurancecontracthandler.viewmodels.databaseviewmodel.DBViewModelFactory
 import com.kod.assurancecontracthandler.viewmodels.exceldocviewmodel.ExcelDocumentsViewModel
 import com.kod.assurancecontracthandler.viewmodels.exceldocviewmodel.ExcelDocumentsViewModelFactory
-import kotlinx.coroutines.*
 import java.io.FileInputStream
 //TODO: Add request rationale for android 10 and below
 class SelectFileFragment : Fragment() {
@@ -119,7 +117,6 @@ class SelectFileFragment : Fragment() {
                 binding.fileLoadingPB.progress = it
         }
 
-        //TODO: Solve the exception this thing sends back
         binding.btnSaveFile.setOnClickListener {
             addContracts(listOfContracts)
             shortSnack(resources.getString(R.string.save_success))

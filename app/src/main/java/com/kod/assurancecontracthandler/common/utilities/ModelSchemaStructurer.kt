@@ -1,6 +1,5 @@
 package com.kod.assurancecontracthandler.common.utilities
 
-import android.util.Log
 import com.kod.assurancecontracthandler.common.constants.ConstantsVariables
 import com.kod.assurancecontracthandler.model.Contract
 import com.kod.assurancecontracthandler.common.usecases.SheetCursorPosition
@@ -10,7 +9,6 @@ import java.util.*
 interface ModelSchemaStructurer {
 
     fun verifyRowScheme(row: List<Any?>, header: List<String>): SheetCursorPosition<T> {
-//        Log.e("ROW CONTENT", row.toString())
         if(row.isEmpty())
             return SheetCursorPosition.EmptyRow()
 
@@ -78,9 +76,7 @@ interface ModelSchemaStructurer {
     }
 
     private fun setContractObj(parameter: List<Any?>, header: MutableList<String>): SheetCursorPosition<T> {
-//        val headers = ConstantsVariables.headerNames
         val result = Contract(0)
-//        val iterator = headers.iterator()
 
         doubleToInt(parameter.getOrNull(header.indexOf("N°")).toString())?.let { result.index = it }
         result.attestation = parameter.getOrNull(header.indexOf("ATTESTATION")).toString()
@@ -112,101 +108,6 @@ interface ModelSchemaStructurer {
         result.COMM_LIMBE = doubleToInt(parameter.getOrNull(header.indexOf("COMM LIMBE")))
         result.COMM_APPORT = doubleToInt(parameter.getOrNull(header.indexOf("COMM APPORT")))
         result.APPORTEUR = parameter.getOrNull(header.indexOf("APPORTEUR")).toString()
-
-//        while (iterator.hasNext()){
-//            val curString = iterator.next()
-//            if(header.getOrNull(0) == curString) {
-//                doubleToInt(parameter.getOrNull(0))?.also { result.index = it }
-//            }
-//            if(header.getOrNull(1) == curString) {
-//                (parameter.getOrNull(1) as? String)?.let { result.attestation = it }
-//            }
-//            if(header.getOrNull(2) == curString) {
-//                doubleToInt(parameter.getOrNull(2))?.toString()?.let { result.carteRose = it }
-//            }
-//            if(header.getOrNull(3) == curString) {
-//                (parameter.getOrNull(3).toString() as? String)?.let { result.numeroPolice = it }
-//            }
-//            if(header.getOrNull(4) == curString) {
-//                (parameter.getOrNull(4) as? String)?.let { result.compagnie = it }
-//            }
-//            if(header.getOrNull(5) == curString) {
-//                phoneNumbValidation(parameter.getOrNull(5))?.let { result.telephone = it }
-//            }
-//            if(header.getOrNull(6) == curString) {
-//                (parameter.getOrNull(6) as? String).let { result.assure = it }
-//            }
-//            if(header.getOrNull(7) == curString) {
-//                (parameter.getOrNull(7) as? Date)?.let { result.effet = it }
-//            }
-//            if(header.getOrNull(8) == curString) {
-//                (parameter.getOrNull(8) as? Date)?.let { result.echeance = it }
-//            }
-//            if(header.getOrNull(9) == curString) {
-//                (parameter.getOrNull(9) as? String)?.let { result.puissanceVehicule = it }
-//            }
-//            if(header.getOrNull(10) == curString) {
-//                (parameter.getOrNull(10) as? String)?.let { result.mark = it }
-//            }
-//            if(header.getOrNull(11) == curString) {
-//                (parameter.getOrNull(11) as? String)?.let { result.immatriculation = it }
-//            }
-//            if(header.getOrNull(12) == curString) {
-//                doubleToInt(parameter.getOrNull(12))?.let { result.categorie = it }
-//            }
-//            if(header.getOrNull(13) == curString) {
-//                (parameter.getOrNull(13) as? String)?.let { result.zone = it }
-//            }
-//            if(header.getOrNull(14) == curString) {
-//                doubleToInt(parameter.getOrNull(14))?.let { result.duree = it }
-//            }
-//            if(header.getOrNull(15) == curString) {
-//                doubleToInt(parameter.getOrNull(15))?.let { result.DTA = it }
-//            }
-//            if(header.getOrNull(16) == curString) {
-//                doubleToInt(parameter.getOrNull(16))?.let { result.PN = it }
-//            }
-//            if(header.getOrNull(17) == curString) {
-//                doubleToInt(parameter.getOrNull(17))?.let { result.ACC = it }
-//            }
-//            if(header.getOrNull(18) == curString) {
-//                doubleToInt(parameter.getOrNull(18))?.let { result.FC = it }
-//            }
-//            if(header.getOrNull(19) == curString) {
-//                doubleToInt(parameter.getOrNull(19))?.let { result.TVA = it }
-//            }
-//            if(header.getOrNull(20) == curString) {
-//                doubleToInt(parameter.getOrNull(20))?.let { result.CR = it }
-//            }
-//            if(header.getOrNull(21) == curString) {
-//                doubleToInt(parameter.getOrNull(21))?.let { result.PTTC = it }
-//            }
-//            if(header.getOrNull(22) == curString) {
-//                doubleToInt(parameter.getOrNull(22))?.let { result.COM_PN = it }
-//            }
-//            if(header.getOrNull(23) == curString) {
-//                doubleToInt(parameter.getOrNull(23))?.let { result.COM_ACC = it }
-//            }
-//            if(header.getOrNull(24) == curString) {
-//                doubleToInt(parameter.getOrNull(24))?.let { result.TOTAL_COM = it }
-//            }
-//            if(header.getOrNull(25) == curString) {
-//                doubleToInt(parameter.getOrNull(25))?.let { result.NET_A_REVERSER = it }
-//            }
-//            if(header.getOrNull(26) == curString) {
-//                doubleToInt(parameter.getOrNull(26))?.let { result.ENCAIS = it}
-//            }
-//            if(header.getOrNull(27) == curString) {
-//                doubleToInt(parameter.getOrNull(27))?.let { result.COMM_LIMBE = it }
-//            }
-//            if(header.getOrNull(28) == curString) {
-//                doubleToInt(parameter.getOrNull(28))?.let { result.COMM_APPORT = it }
-//            }
-//            if(header.getOrNull(29) == curString) {
-//                (parameter.getOrNull(29) as? String)?.let { result.APPORTEUR = it }
-//            }
-//        }
-
         return  SheetCursorPosition.RowContent(result)
     }
 
@@ -227,6 +128,9 @@ interface ModelSchemaStructurer {
             if(strContainer?.contains(".*[.E].*".toRegex()) == true){
                 if (strContainer.contains('E')){
                     strContainer = strContainer.split("E")[0]
+                    for(n in strContainer.length until 9){
+                        strContainer += '0'
+                    }
                 }
                 val splitString = strContainer.split('.')
                 val value = if(splitString[1] == "0") splitString[0] else splitString[0] + splitString[1]

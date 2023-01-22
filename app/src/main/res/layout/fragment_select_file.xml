@@ -24,7 +24,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <AutoCompleteTextView
+        <com.google.android.material.textfield.MaterialAutoCompleteTextView
             android:id="@+id/actv_import_file"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -95,7 +95,8 @@
             android:drawableLeft="@drawable/ic_save"
             android:drawableTint="@color/white"
             android:enabled="false"
-            android:text="@string/save" />
+            android:text="@string/save"
+            tools:ignore="RtlHardcoded" />
 
     </LinearLayout>
 
