@@ -6,11 +6,20 @@
     android:layout_height="match_parent"
     tools:context=".views.fragments.home.contractlist.ContractListFragment">
 
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/searchView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_margin="5dp"
+        android:inputType="text"
+        android:background="@drawable/elevated_zone"/>
+
     <HorizontalScrollView
         android:id="@+id/horizontal_sv_search"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+        android:layout_below="@id/searchView"
         android:scrollbars="none">
 
         <com.google.android.material.chip.ChipGroup

@@ -33,6 +33,6 @@ sealed interface ContractDAO{
     @RawQuery
     fun searchForAClient(query: SimpleSQLiteQuery): List<ContractDbDto>
 
-    @Query("SELECT * FROM contract WHERE echeance<:maxTime AND echeance>:today ORDER BY echeance")
+    @Query("SELECT * FROM contract WHERE echeance BETWEEN  :today AND :maxTime  ORDER BY echeance")
     fun getExpiringContractsIn(today: Long,  maxTime: Long): List<ContractDbDto>
 }

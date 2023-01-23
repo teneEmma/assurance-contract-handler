@@ -42,11 +42,11 @@ class DBViewModel(application: Application): AndroidViewModel(application) {
 
     suspend fun addContract(contract: ContractDbDto) = repository.addContract(contract)
 
-    private val _allContracts = MutableSharedFlow<List<ContractDbDto>?>()
-    val allContracts: SharedFlow<List<ContractDbDto>?> = _allContracts
+    private val _allContracts = MutableLiveData<List<ContractDbDto>?>()
+    val allContracts: LiveData<List<ContractDbDto>?> = _allContracts
 
-    suspend fun setContracts(contracts: List<ContractDbDto>?) = _allContracts.emit(contracts)
-    suspend fun fetchAllContracts() = _allContracts.emit(repository.readAllContracts())
+    suspend fun setContracts(contracts: List<ContractDbDto>?) = _allContracts.postValue(contracts)
+    suspend fun fetchAllContracts() = _allContracts.postValue(repository.readAllContracts())
 
     private val _listContracts = MutableLiveData<List<ContractDbDto>>()
     val listContracts: LiveData<List<ContractDbDto>>
@@ -57,7 +57,7 @@ class DBViewModel(application: Application): AndroidViewModel(application) {
     suspend fun updateCustomer(oldName: String, customerName: String, phoneNumber: String) =
         repository.updateCustomer(oldName = oldName, customerName, phoneNumber)
 
-    suspend fun searchClient(str: String, id: Int) = _allContracts.emit(filterList(repository.searchForClient(generateQuery(str, id))))
+    suspend fun searchClient(str: String, id: Int) = _allContracts.postValue(filterList(repository.searchForClient(generateQuery(str, id))))
 
     private fun generateQuery(str: String, id: Int): SimpleSQLiteQuery{
         var initialQuery = "SELECT * FROM contract WHERE"

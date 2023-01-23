@@ -7,12 +7,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemClickListener
+import android.widget.Toolbar
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.children
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.tabs.TabLayoutMediator
 import com.kod.assurancecontracthandler.R
 import com.kod.assurancecontracthandler.databinding.FragmentHomeBinding
 import com.kod.assurancecontracthandler.model.Customer
+import com.kod.assurancecontracthandler.views.mainactivity.MainActivity
 
 class HomeFragment : Fragment() {
 

@@ -25,6 +25,7 @@ class FilterViewModel: ViewModel() {
     var group1SliderValues = hashMapOf<Int, Pair<Int, Int>>()
     var group2SliderValues = hashMapOf<Int, Pair<Int, Int>>()
     val childrenTouched = mutableListOf<Int>()
+    var searchText: String = ""
 
     private val _isSearching = MutableLiveData<Boolean>()
     val isSearching :LiveData<Boolean>
@@ -70,13 +71,11 @@ class FilterViewModel: ViewModel() {
             filteredValues = filteredValues.filter { this.nPolice?.let { value ->
                 it.contract?.numeroPolice?.uppercase()?.contains(value.uppercase()) } == true }
         }
-        if(checkField(minDate) && checkField(maxDate)) {
+        if(checkField(this.minDate) && checkField(this.maxDate)) {
             filteredValues = filteredValues.filter {
-                    this.minDate?.let { value ->
-                it.contract?.effet?.let {date-> date.time <= value}  } == true &&
-                    this.maxDate?.let { value ->
-                it.contract?.echeance?.let {date-> date.time  >= value}  } == true }
-
+                it.contract?.echeance?.let {date-> date.time >= this.minDate!!}  == true &&
+                it.contract.echeance?.let {date-> date.time  <= this.maxDate!!} == true
+            }
         }
 
         group1SliderValues.forEach { price->

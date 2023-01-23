@@ -48,11 +48,11 @@ class ExcelDocumentsViewModel(application: Application) : AndroidViewModel(appli
 
     private var header = listOf<String>()
     private fun readDocumentContent(inputStream: FileInputStream){
+        _progression.postValue(0)
         val workBook = XSSFWorkbook(inputStream)
         val sheetIterator = workBook.iterator()
         val allDocumentRows: MutableList<ContractDbDto> = mutableListOf()
         isSuccessfull = null
-        setStates(hasStarted = true, isSuccess = isSuccessfull)
         while (sheetIterator.hasNext()){
             val sheet = sheetIterator.next()
             var startDate = Date()
@@ -121,6 +121,7 @@ class ExcelDocumentsViewModel(application: Application) : AndroidViewModel(appli
     fun readDocument(inputStream: FileInputStream){
         viewModelScope.launch(Dispatchers.IO) {
             try {
+                setStates(hasStarted = true, isSuccess = isSuccessfull)
                 readDocumentContent(inputStream)
             }catch (e: java.lang.Exception){
                 when(e){

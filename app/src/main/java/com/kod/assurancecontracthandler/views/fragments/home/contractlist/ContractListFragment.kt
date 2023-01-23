@@ -6,12 +6,13 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.*
+import android.widget.ImageView
 import android.widget.Toast
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.SearchView
 import androidx.core.util.Pair
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.asLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -35,13 +36,12 @@ import com.kod.assurancecontracthandler.viewmodels.databaseviewmodel.DBViewModel
 import com.kod.assurancecontracthandler.viewmodels.databaseviewmodel.FilterViewModel
 import com.kod.assurancecontracthandler.views.customerdetails.CustomerDetailsActivity
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
 
-class ContractListFragment : Fragment(), SearchView.OnQueryTextListener, MenuItem.OnActionExpandListener{
+class ContractListFragment : Fragment(), SearchView.OnQueryTextListener{
 
     private lateinit var binding: FragmentListContractsBinding
     lateinit var dbViewModel: DBViewModel
@@ -71,6 +71,7 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener, MenuIte
             DBViewModelFactory(requireActivity().application))[DBViewModel::class.java]
         filterViewModel = ViewModelProvider(this)[FilterViewModel::class.java]
         setRecyclerView()
+        setupSearchView()
         return binding.root
     }
 
@@ -81,7 +82,7 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener, MenuIte
 
     override fun onResume() {
         super.onResume()
-        updateContractsList()
+        if (binding.chipGroupSearch.isActivated.not()) updateContractsList()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -92,7 +93,7 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener, MenuIte
         }
 
         lifecycleScope.launchWhenStarted {
-            dbViewModel.allContracts.collectLatest {listContracts->
+            dbViewModel.allContracts.observe(viewLifecycleOwner) {listContracts->
                 if(listContracts.isNullOrEmpty()){
                     binding.ivEmptyDatabase.visibility = View.VISIBLE
                     binding.tvEmptyDatabase.visibility = View.VISIBLE
@@ -138,35 +139,40 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener, MenuIte
         swipeToRefreshAfterChipCollapse()
     }
 
-    @Deprecated("Deprecated in ")
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_main, menu)
-
-        val menuItem = menu.findItem(R.id.action_search)
-        val searchView = menuItem.actionView as SearchView
-        searchView.queryHint = resources.getString(R.string.search_bar_query_hint)
-        searchView.isSubmitButtonEnabled = false
-        searchView.setOnQueryTextListener(this)
-        searchView.setOnQueryTextFocusChangeListener { _, hasFocus ->
+    fun setupSearchView(){
+        binding.searchView.queryHint = resources.getString(R.string.search_bar_query_hint)
+        binding.searchView.isSubmitButtonEnabled = false
+        binding.searchView.background = AppCompatResources.getDrawable(requireContext(), R.drawable.elevated_zone)
+        binding.searchView.setIconifiedByDefault(false)
+        binding.searchView.setOnQueryTextListener(this)
+        binding.searchView.setOnQueryTextFocusChangeListener { _, hasFocus ->
             if (hasFocus){
                 binding.fabFilterResults.visibility = View.VISIBLE
                 binding.addExcelFile.visibility = View.GONE
+                binding.chipGroupSearch.isEnabled = false
+                if (binding.chipGroupSearch.isActivated.not()){
+                    filterFabClicked()
+                    showChips(
+                        binding.chipGroupSearch, ConstantsVariables.allChips,
+                        com.google.android.material.R.style.Widget_MaterialComponents_Chip_Action
+                    )
+                }
             }else{
                 binding.fabFilterResults.visibility = View.GONE
                 binding.addExcelFile.visibility = View.VISIBLE
             }
         }
-        searchChipsChecked()
-    }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        item.setOnActionExpandListener(this)
-        return true
+        binding.searchView.findViewById<ImageView>(com.google.android.material.R.id.search_close_btn).setOnClickListener {
+            deactivateAllChips()
+        }
+        searchChipsChecked()
     }
 
     override fun onQueryTextSubmit(query: String?): Boolean {
         if (query != null) {
             searchForClient(query, filterViewModel.searchChip)
+            filterViewModel.searchText = query
         }
         return true
     }
@@ -174,27 +180,7 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener, MenuIte
     override fun onQueryTextChange(newText: String?): Boolean {
         if (newText != null) {
             searchForClient(newText, filterViewModel.searchChip)
-        }
-        return true
-    }
-
-    override fun onMenuItemActionExpand(p0: MenuItem): Boolean {
-        when(p0.itemId){
-            R.id.action_search->{
-                binding.chipGroupSearch.invalidate()
-                filterFabClicked()
-                showChips(binding.chipGroupSearch, ConstantsVariables.allChips,
-                    com.google.android.material.R.style.Widget_MaterialComponents_Chip_Action)
-            }
-        }
-        return true
-    }
-
-    override fun onMenuItemActionCollapse(p0: MenuItem): Boolean {
-        when(p0.itemId){
-            R.id.action_search->{
-                deactivateAllChips()
-            }
+            filterViewModel.searchText = newText
         }
         return true
     }
@@ -233,18 +219,19 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener, MenuIte
         dialog.window?.attributes = layoutParams
     }
 
-    private fun showChips(chipGroup: ChipGroup, listStr: List<String>, style: Int){
+    private fun showChips(chipGroup: ChipGroup, listStr: List<String>, style: Int, isSearch: Boolean =false){
         listStr.forEachIndexed { index, chipName ->
             val chip = Chip(requireContext(), null, style).apply {
                 id = index+1
                 isCheckable = true
                 if (index==0){
                     isChecked = true
-                    filterViewModel.searchChip = 1
+                    if (isSearch) filterViewModel.searchChip = 1
                 }
                 text = chipName
                 isClickable =true
             }
+            chipGroup.isActivated = true
             chipGroup.addView(chip)
         }
     }
@@ -305,11 +292,8 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener, MenuIte
         filterBinding.chipGroupFilter.setOnCheckedStateChangeListener { _, checkedIds ->
             filterViewModel.filterChip = checkedIds
             listTextViews.forEachIndexed { index, v ->
-                if (!checkedIds.contains(index+1) || checkedIds.contains(filterViewModel.searchChip?.minus(1))){
-                    v.visibility = View.GONE
-                }else{
-                    v.visibility = View.VISIBLE
-                }
+                if (!checkedIds.contains(index+1)) v.visibility = View.GONE
+                else v.visibility = View.VISIBLE
             }
         }
         resetBtnListener()
@@ -405,14 +389,14 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener, MenuIte
 
     private fun applyBtnListener(){
         filterBinding.btnAppliquerFiltre.setOnClickListener {
-            filterViewModel.apporteur = filterBinding.etFiltrerApporteur.text.toString()
-            filterViewModel.immatriculation = filterBinding.etFiltrerimmatriculation.text.toString()
-            filterViewModel.attestation = filterBinding.etFiltrerAttestation.text.toString()
-            filterViewModel.carteRose = filterBinding.etFiltrerCarteRose.text.toString()
-            filterViewModel.compagnie = filterBinding.etFiltrerCompagnie.text.toString()
-            filterViewModel.assure = filterBinding.etFiltrerAssure.text.toString()
-            filterViewModel.mark = filterBinding.etFiltrerMark.text.toString()
-            filterViewModel.nPolice = filterBinding.etFiltrerPolice.text.toString()
+            filterViewModel.apporteur = filterBinding.etFiltrerApporteur.text.toString().trim()
+            filterViewModel.immatriculation = filterBinding.etFiltrerimmatriculation.text.toString().trim()
+            filterViewModel.attestation = filterBinding.etFiltrerAttestation.text.toString().trim()
+            filterViewModel.carteRose = filterBinding.etFiltrerCarteRose.text.toString().trim()
+            filterViewModel.compagnie = filterBinding.etFiltrerCompagnie.text.toString().trim()
+            filterViewModel.assure = filterBinding.etFiltrerAssure.text.toString().trim()
+            filterViewModel.mark = filterBinding.etFiltrerMark.text.toString().trim()
+            filterViewModel.nPolice = filterBinding.etFiltrerPolice.text.toString().trim()
 
             applyFilter()
             resetBtnListener()
@@ -428,14 +412,18 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener, MenuIte
     private fun searchChipsChecked(){
         binding.chipGroupSearch.setOnCheckedStateChangeListener { _, checkedIds ->
             checkedIds.getOrNull(0)?.let { filterViewModel.searchChip = it }
+            if (filterViewModel.searchText.isNotEmpty())
+                this.onQueryTextSubmit(filterViewModel.searchText)
         }
     }
 
     private fun swipeToRefreshAfterChipCollapse(){
         binding.swipeToRefresh.setOnRefreshListener {
-            dbViewModel.apply {
-                executeFunWithoutAnimation { fetchAllContracts() }
-            }
+            if (binding.chipGroupSearch.isActivated.not()){
+                dbViewModel.apply {
+                    executeFunWithoutAnimation { fetchAllContracts() }
+                }
+            }else this.onQueryTextSubmit(filterViewModel.searchText)
             binding.swipeToRefresh.isRefreshing = false
         }
     }
@@ -537,7 +525,7 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener, MenuIte
     }
 
     private fun applyFilter(){
-        dbViewModel.allContracts.asLiveData().value?.let { filterViewModel.filterFields(it) }
+        dbViewModel.allContracts.value?.let { filterViewModel.filterFields(it) }
     }
 
     private fun updateContractsList(){
