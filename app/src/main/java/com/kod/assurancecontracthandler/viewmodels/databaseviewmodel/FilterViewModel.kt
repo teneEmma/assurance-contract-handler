@@ -1,6 +1,5 @@
 package com.kod.assurancecontracthandler.viewmodels.databaseviewmodel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -95,13 +94,15 @@ class FilterViewModel: ViewModel() {
 
         if (group2SliderValues.containsKey(0)){
             val price = this.group2SliderValues.getValue(0)
-            filteredValues = filteredValues.filter {c-> c.contract?.DTA?.let { price.first >= it && price.second <= it} == true }
+            filteredValues = filteredValues.filter {c->
+                c.contract?.puissanceVehicule?.split("CV-")?.get(0)?.toIntOrNull()?.
+                let { price.first <= it && price.second >= it} == true }
         }
 
         filteredValues = filteredValues.filter { c -> c.contract?.numeroPolice.isNullOrEmpty().not() ||
                     c.contract?.attestation.isNullOrEmpty().not()
         }
-        _success.value = filteredValues.isNotEmpty()
+        _success.postValue(filteredValues.isNotEmpty())
         _isSearching.value = false
 
         _listContracts.postValue(filteredValues)

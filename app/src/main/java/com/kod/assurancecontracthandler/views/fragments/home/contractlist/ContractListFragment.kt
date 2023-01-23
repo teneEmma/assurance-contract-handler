@@ -7,6 +7,7 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.*
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.SearchView
@@ -35,8 +36,6 @@ import com.kod.assurancecontracthandler.viewmodels.databaseviewmodel.DBViewModel
 import com.kod.assurancecontracthandler.viewmodels.databaseviewmodel.DBViewModelFactory
 import com.kod.assurancecontracthandler.viewmodels.databaseviewmodel.FilterViewModel
 import com.kod.assurancecontracthandler.views.customerdetails.CustomerDetailsActivity
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -87,9 +86,7 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener{
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         filterViewModel.listContracts.observe(viewLifecycleOwner){listContracts->
-            lifecycleScope.launch(Dispatchers.IO) {
-                dbViewModel.setContracts(listContracts)
-            }
+            dbViewModel.setContracts(listContracts)
         }
 
         lifecycleScope.launchWhenStarted {
@@ -139,7 +136,7 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener{
         swipeToRefreshAfterChipCollapse()
     }
 
-    fun setupSearchView(){
+    private fun setupSearchView(){
         binding.searchView.queryHint = resources.getString(R.string.search_bar_query_hint)
         binding.searchView.isSubmitButtonEnabled = false
         binding.searchView.background = AppCompatResources.getDrawable(requireContext(), R.drawable.elevated_zone)
@@ -163,8 +160,12 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener{
             }
         }
 
-        binding.searchView.findViewById<ImageView>(com.google.android.material.R.id.search_close_btn).setOnClickListener {
-            deactivateAllChips()
+        binding.searchView.findViewById<ImageView>(com.google.android.material.R.id.search_close_btn).apply {
+            setOnClickListener {
+                binding.searchView.
+                findViewById<TextView>(com.google.android.material.R.id.search_src_text).text = ""
+                deactivateAllChips()
+            }
         }
         searchChipsChecked()
     }
@@ -296,7 +297,9 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener{
                 else v.visibility = View.VISIBLE
             }
         }
-        resetBtnListener()
+        filterBinding.btnReset.setOnClickListener{
+            resetAllFilterData()
+        }
         applyBtnListener()
     }
 
@@ -368,23 +371,21 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener{
 
     }
 
-    private fun resetBtnListener(){
-        filterBinding.btnReset.setOnClickListener {
-            filterViewModel.clearData()
-            filterBinding.etFiltrerAttestation.text?.clear()
-            filterBinding.etFiltrerApporteur.text?.clear()
-            filterBinding.etFiltrerimmatriculation.text?.clear()
-            filterBinding.etFiltrerCarteRose.text?.clear()
-            filterBinding.etFiltrerCompagnie.text?.clear()
-            filterBinding.etFiltrerAssure.text?.clear()
-            filterBinding.etFiltrerMark.text?.clear()
-            filterBinding.etFiltrerPolice.text?.clear()
-            filterViewModel.group1SliderValues.clear()
-            filterViewModel.group2SliderValues.clear()
-            filterBinding.chipGroupFilter.clearCheck()
-            filterBinding.expandableLvSliders.clearChoices()
-            clearExpandable()
-        }
+    private fun resetAllFilterData(){
+        filterViewModel.clearData()
+        filterBinding.etFiltrerAttestation.text?.clear()
+        filterBinding.etFiltrerApporteur.text?.clear()
+        filterBinding.etFiltrerimmatriculation.text?.clear()
+        filterBinding.etFiltrerCarteRose.text?.clear()
+        filterBinding.etFiltrerCompagnie.text?.clear()
+        filterBinding.etFiltrerAssure.text?.clear()
+        filterBinding.etFiltrerMark.text?.clear()
+        filterBinding.etFiltrerPolice.text?.clear()
+        filterViewModel.group1SliderValues.clear()
+        filterViewModel.group2SliderValues.clear()
+        filterBinding.chipGroupFilter.clearCheck()
+        filterBinding.expandableLvSliders.clearChoices()
+        clearExpandable()
     }
 
     private fun applyBtnListener(){
@@ -399,7 +400,7 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener{
             filterViewModel.nPolice = filterBinding.etFiltrerPolice.text.toString().trim()
 
             applyFilter()
-            resetBtnListener()
+            resetAllFilterData()
             dialog.cancel()
         }
     }

@@ -45,7 +45,12 @@ class DBViewModel(application: Application): AndroidViewModel(application) {
     private val _allContracts = MutableLiveData<List<ContractDbDto>?>()
     val allContracts: LiveData<List<ContractDbDto>?> = _allContracts
 
-    suspend fun setContracts(contracts: List<ContractDbDto>?) = _allContracts.postValue(contracts)
+    fun setContracts(contracts: List<ContractDbDto>?) {
+        contracts?.forEachIndexed { index, contractDbDto ->
+            contractDbDto.id = index+1
+        }
+        _allContracts.postValue(contracts)
+    }
     suspend fun fetchAllContracts() = _allContracts.postValue(repository.readAllContracts())
 
     private val _listContracts = MutableLiveData<List<ContractDbDto>>()
