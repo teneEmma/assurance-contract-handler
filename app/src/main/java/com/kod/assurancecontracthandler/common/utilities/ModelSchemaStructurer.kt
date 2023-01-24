@@ -1,5 +1,6 @@
 package com.kod.assurancecontracthandler.common.utilities
 
+import android.util.Log
 import com.kod.assurancecontracthandler.common.constants.ConstantsVariables
 import com.kod.assurancecontracthandler.model.Contract
 import com.kod.assurancecontracthandler.common.usecases.SheetCursorPosition

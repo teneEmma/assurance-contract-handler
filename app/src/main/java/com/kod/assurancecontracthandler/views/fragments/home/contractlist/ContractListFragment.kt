@@ -61,6 +61,10 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener{
         setHasOptionsMenu(true)
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_main, menu)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -83,6 +87,7 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener{
         super.onResume()
         if (binding.chipGroupSearch.isActivated.not()) updateContractsList()
     }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         filterViewModel.listContracts.observe(viewLifecycleOwner){listContracts->

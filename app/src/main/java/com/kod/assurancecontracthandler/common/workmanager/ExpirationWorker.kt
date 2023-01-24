@@ -4,6 +4,7 @@ import android.app.Application
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.work.CoroutineWorker
@@ -13,6 +14,7 @@ import com.kod.assurancecontracthandler.common.constants.ConstantsVariables
 import com.kod.assurancecontracthandler.common.constants.ConstantsVariables.INTENT_LIST_WORKER
 import com.kod.assurancecontracthandler.model.Contract
 import com.kod.assurancecontracthandler.model.Customer
+import com.kod.assurancecontracthandler.common.utilities.DataStoreRepository
 import com.kod.assurancecontracthandler.viewmodels.databaseviewmodel.DBViewModel
 import com.kod.assurancecontracthandler.views.expiringactivity.ExpiringContractsActivity
 import kotlinx.coroutines.Dispatchers
@@ -20,7 +22,7 @@ import kotlinx.coroutines.withContext
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 
-class ExpirationWorker(val context: Context, workerParams: WorkerParameters): CoroutineWorker(context, workerParams) {
+open class ExpirationWorker(val context: Context, workerParams: WorkerParameters): CoroutineWorker(context, workerParams) {
     private var dbViewModel: DBViewModel = DBViewModel(context.applicationContext as Application)
     override suspend fun doWork(): Result {
         checkExpiringContracts()
@@ -47,7 +49,7 @@ class ExpirationWorker(val context: Context, workerParams: WorkerParameters): Co
         }
     }
 
-    private fun setupNotification(listContracts: List<Customer>){
+    open fun setupNotification(listContracts: List<Customer>){
 
         val intent = Intent(context, ExpiringContractsActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -60,7 +62,7 @@ class ExpirationWorker(val context: Context, workerParams: WorkerParameters): Co
         val builder = NotificationCompat.Builder(context, ConstantsVariables.expiryChannelID_str)
             .setSmallIcon(R.mipmap.ic_launcher_round)
             .setContentTitle(ConstantsVariables.EXPIRY_NOTIFICATION_TITLE)
-            .setContentText(context.getString(R.string.notification_message))
+            .setContentText(context.getString(R.string.expiration_notification_message))
             .setStyle(NotificationCompat.BigTextStyle())
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setContentIntent(pendingIntent)

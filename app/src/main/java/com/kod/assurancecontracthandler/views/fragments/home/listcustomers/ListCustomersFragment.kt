@@ -7,6 +7,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.SearchView
@@ -41,15 +43,25 @@ class ListCustomersFragment : Fragment(), SearchView.OnQueryTextListener {
 
     private fun setupSearchView(){
         binding.searchViewClient.queryHint = resources.getString(R.string.search_bar_query_hint)
-        binding.searchViewClient.isSubmitButtonEnabled = true
+        binding.searchViewClient.isSubmitButtonEnabled = false
         binding.searchViewClient.background = AppCompatResources.getDrawable(requireContext(), R.drawable.elevated_zone)
         binding.searchViewClient.setIconifiedByDefault(false)
         binding.searchViewClient.setOnQueryTextListener(this)
+        binding.searchViewClient.setOnQueryTextFocusChangeListener { _, hasFocus ->
+            if(hasFocus) binding.searchViewClient.isActivated = true
+        }
+        binding.searchViewClient.findViewById<ImageView>(com.google.android.material.R.id.search_close_btn).apply {
+            setOnClickListener {
+                binding.searchViewClient.
+                findViewById<TextView>(com.google.android.material.R.id.search_src_text).text = ""
+                binding.searchViewClient.isActivated = false
+            }
+        }
     }
 
     override fun onResume() {
         super.onResume()
-        updateAllData()
+        if(binding.searchViewClient.isActivated.not()) updateAllData()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -69,22 +81,22 @@ class ListCustomersFragment : Fragment(), SearchView.OnQueryTextListener {
             }
         }
 
-        val tvString = arrayListOf<String>("","","")
+        var tvString = ""
         customerViewModel.numbCustomers.observe(viewLifecycleOwner){value->
-            tvString[0] = "<font color=#FFFFFF>TOTAL: $value\t</font> "
-            binding.totalCustomers.text = Html.fromHtml(tvString.sort().toString(),
+            tvString = "<font color=#FFFFFF>TOTAL: $value</font> "
+            binding.totalCustomers.text = Html.fromHtml(tvString,
                 Html.FROM_HTML_OPTION_USE_CSS_COLORS)
         }
 
         customerViewModel.numbCustomersWithPhones.observe(viewLifecycleOwner){value->
-            tvString[1] = "<font color=#FED300>Numéros: $value\t</font> "
-            binding.totalCustomers.text = Html.fromHtml(tvString.toString(),
+            tvString = "<font color=#FED300>Numéros: $value</font> "
+            binding.totalHasNumbers.text = Html.fromHtml(tvString,
                 Html.FROM_HTML_OPTION_USE_CSS_COLORS)
         }
 
         customerViewModel.activeContracts.observe(viewLifecycleOwner){value->
-            tvString[2] = "<font color=#08FE00>ACTIVE: $value </font> "
-            binding.totalCustomers.text = Html.fromHtml(tvString.toString(),
+            tvString = "<font color=#08FE00>ACTIVE: $value </font> "
+            binding.totalActive.text = Html.fromHtml(tvString,
                 Html.FROM_HTML_OPTION_USE_CSS_COLORS)
         }
 

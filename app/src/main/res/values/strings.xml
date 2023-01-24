@@ -115,10 +115,14 @@
 
     <!-- WORK MANAGER -->
     <string name="expiry_channel">EXPIRATION DES CONTRATS</string>
+    <string name="first_time_channel">BIENVENUE</string>
     <string name="see">VOIR</string>
     <string name="expiry_channel_description">Les Notifications Concernant l\'èxpiration
         futur d\'un contrat</string>
-    <string name="notification_message">Certains Contrats Vont Expirer. Venez Jeter Un Coup D\'oeil</string>
+    <string name="first_time_channel_description">Notification De Bienvenue</string>
+    <string name="expiration_notification_message">Certains Contrats Vont Expirer. Venez Jeter Un Coup D\'oeil</string>
+    <string name="welcome_notification_message">😃 De La Part De Toute L\'équipe D\'ORION. Nous
+        Vous Souhaitons Une Bonne Expérience</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
     <string name="some_text">Le contrat de Mr XXX expire le XX/XX/XXXX. Appelez ou écrivez lui un message pour le rappeler de le renouveler</string>

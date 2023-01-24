@@ -29,7 +29,7 @@ object ConstantsVariables {
     val expandableChildListTitles = listOf(listOf("DTA", "PN", "ACC", "FC", "TVA", "CR", "PTTC", "ENCAIS", "REVER", "SOLDE"),
         listOf("PUISSANCE"))
     const val textType = "text/plain"
-    const val whatsappPackage = "com.whatsapp"
+    val whatsappPackages = listOf("com.whatsapp", "com.gbwhatsapp", "com.whatsapp.w4b")
     const val whatsappURIPrefix = "https://api.whatsapp.com/send?phone="
     const val smsURIPrefix = "smsto:"
     const val calURIPrefix = "tel:"
@@ -37,14 +37,14 @@ object ConstantsVariables {
     const val sharedPreferenceMsg = "ASSURANCE_PREDEFINED_MSG"
 
     const val expiryChannelID_str = "ASSURANCE_CONTRACT_CHANNEL_ID"
+    const val FIRST_USAGE_CHANNEL_ID_STRING = "FIRST_USAGE_CHANNEL_ID"
     const val expiryChannelID_int = 1234
+    const val firstTimeChannelID_int = 4321
     const val EXPIRY_NOTIFICATION_TITLE = "Expiration De Contrat"
+    const val WELCOME_NOTIFICATION_TITLE = "🤍BIENVENUE💜"
     const val CHECKING_EXPIRY_CONTRACTS_WORKNAME = "CHECKING_EXPIRY_CONTRACTS"
+    const val WELCOME_WORKNAME = "SHOWING_WELCOME_MESSAGE"
     const val INTENT_LIST_WORKER = "ListOfExpiryContracts"
-    const val INTENT_WORKER_EFFET = "ListOfExpiryContracts"
-    const val INTENT_WORKER_ECHEANCE = "ListOfExpiryContracts"
-    const val INTENT_WORKER_ASSURE = "ListOfExpiryContracts"
-    const val INTENT_WORKER_ATTESTION = "ListOfExpiryContracts"
-    const val INTENT_WORKER_ = "ListOfExpiryContracts"
+    const val APP_USAGE_STATE = "App_usage_state"
 
 }

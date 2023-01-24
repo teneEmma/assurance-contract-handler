@@ -27,9 +27,10 @@ import com.kod.assurancecontracthandler.databinding.ContractDeetailsBinding
 import com.kod.assurancecontracthandler.databinding.EditCustomerBinding
 import com.kod.assurancecontracthandler.model.Contract
 import com.kod.assurancecontracthandler.model.Customer
-import com.kod.assurancecontracthandler.repository.DataStoreRepository
+import com.kod.assurancecontracthandler.common.utilities.DataStoreRepository
 import com.kod.assurancecontracthandler.viewmodels.databaseviewmodel.DBViewModel
 import com.kod.assurancecontracthandler.views.fragments.home.contractlist.GridViewItemAdapter
+import java.net.URLEncoder
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -233,16 +234,14 @@ class CustomerDetailsActivity : AppCompatActivity() {
         }
 
     }
-    private fun isWhatsappInstalled(): Boolean {
+    private fun isWhatsappInstalled(packageName: String): Boolean {
         return try {
-            @Suppress("DEPRECATION")
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
-                packageManager.getPackageInfo(ConstantsVariables.whatsappPackage, PackageManager.PackageInfoFlags.of(0))
+                packageManager.getPackageInfo(packageName, PackageManager.PackageInfoFlags.of(0))
             else
-                packageManager.getPackageInfo(ConstantsVariables.whatsappPackage, PackageManager.GET_ACTIVITIES)
+                packageManager.getPackageInfo(packageName, PackageManager.GET_ACTIVITIES)
             true
-        }catch (e: java.lang.Exception){
-            toast(resources.getString(R.string.whatsapp_not_installed))
+        }catch (e: PackageManager.NameNotFoundException){
             false
         }
     }
@@ -265,12 +264,19 @@ class CustomerDetailsActivity : AppCompatActivity() {
     }
 
     private fun sendWhatsappMsg(msg: String) {
-        if (isWhatsappInstalled().not()) return
-        val whatsappURI = Uri.parse(ConstantsVariables.whatsappURIPrefix+ConstantsVariables
-            .phoneIndex+customer.value?.phoneNumber+"&text="+
-                msg)
-        val intent = Intent(Intent.ACTION_VIEW, whatsappURI)
-        startActivity(intent)
+        for (packageName in ConstantsVariables.whatsappPackages){
+            if (isWhatsappInstalled(packageName)) {
+                val whatsappURI = Uri.parse(
+                    "whatsapp://send?phone=" +
+                            "${ConstantsVariables.phoneIndex}${customer.value?.phoneNumber}" +
+                            "&text=${URLEncoder.encode(msg, "UTF-8")}"
+                )
+                val intent = Intent(Intent.ACTION_VIEW, whatsappURI)
+                startActivity(intent)
+                return
+            }
+        }
+        toast(resources.getString(R.string.whatsapp_not_installed))
     }
 
     private fun sendSMS(msg: String) {

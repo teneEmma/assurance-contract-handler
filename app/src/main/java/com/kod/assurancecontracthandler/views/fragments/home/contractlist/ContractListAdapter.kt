@@ -83,7 +83,6 @@ class ContractListAdapter(private val clickFunction: (ContractDbDto) -> Unit,
         if (this.contractList.isEmpty()){
             this.contractList = contractList
             notifyDataSetChanged()
-//            notifyItemRangeChanged(0, contractList.size)
         }else{
             val diffCallback = ContractsCallback(this.contractList, contractList)
             val diffContracts = DiffUtil.calculateDiff(diffCallback)
