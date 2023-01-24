@@ -31,6 +31,12 @@ class CustomerViewModel(application: Application): ViewModel() {
         }
     }
 
+    fun fetchCustomers(name: String){
+        viewModelScope.launch(Dispatchers.IO) {
+            _customerList.postValue(repository.getAllCustomers("%$name%"))
+        }
+    }
+
     private val _numbCustomers = MutableLiveData<Int>()
     val numbCustomers: LiveData<Int>
         get() = _numbCustomers

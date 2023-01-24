@@ -112,6 +112,7 @@
     <string name="enter_message">Entrer le message</string>
     <string name="send">ENVOYER</string>
 
+
     <!-- WORK MANAGER -->
     <string name="expiry_channel">EXPIRATION DES CONTRATS</string>
     <string name="see">VOIR</string>
@@ -127,5 +128,6 @@
     <string name="attestation_title">ATTESTATION:</string>
     <string name="echeance_title">echeance:</string>
     <string name="effet_title">effet:</string>
+    <string name="customer_details_cardview" translatable="false">Represent les clients ACTIFS, ayant des NUMEROS et le TOTAL des Clients</string>
 
 </resources>

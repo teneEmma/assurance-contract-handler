@@ -8,7 +8,9 @@ import org.apache.poi.ss.formula.functions.Today
 @Dao
 interface CustomerDAO {
 
-    @Query("SELECT DISTINCT assure,telephone  FROM contract  WHERE assure IS NOT NULL ORDER BY assure")
+    @Query("SELECT DISTINCT assure,telephone  FROM (SELECT * from contract WHERE assure " +
+            "NOT IN(\"DTA\", \"SOMME\", \"TOTAL\", \"PRIME A REVERSER\"))  " +
+            "WHERE assure IS NOT NULL ORDER BY assure")
     fun getAllCustomers(): List<Customer>
 
     @Query("SELECT count(DISTINCT assure) from contract WHERE assure is not NULL")
@@ -22,4 +24,9 @@ interface CustomerDAO {
 
     @Query("SELECT count(assure) from contract Where assure is not NULL AND echeance < :today")
     fun getValidContracts(today: Long): Int
+
+    @Query("SELECT DISTINCT assure,telephone  FROM (SELECT * from contract WHERE assure " +
+            "NOT IN(\"DTA\", \"SOMME\", \"TOTAL\", \"PRIME A REVERSER\"))  WHERE assure LIKE :name " +
+            "ORDER BY assure")
+    fun getAllCustomers(name: String): List<Customer>
 }

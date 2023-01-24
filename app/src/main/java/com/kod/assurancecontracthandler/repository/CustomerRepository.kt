@@ -13,4 +13,6 @@ class CustomerRepository(private val customerDAO: CustomerDAO) {
     fun numberCustomersWithTelephone() = customerDAO.getNumberOfCustomersWithPhones()
 
     fun getActiveContracts(today: Long) = customerDAO.getValidContracts(today)
+
+    fun getAllCustomers(name: String) = customerDAO.getAllCustomers(name)
 }
