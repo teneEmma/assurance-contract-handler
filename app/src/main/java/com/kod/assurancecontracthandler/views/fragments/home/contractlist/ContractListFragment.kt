@@ -36,7 +36,13 @@ import com.kod.assurancecontracthandler.viewmodels.databaseviewmodel.DBViewModel
 import com.kod.assurancecontracthandler.viewmodels.databaseviewmodel.DBViewModelFactory
 import com.kod.assurancecontracthandler.viewmodels.databaseviewmodel.FilterViewModel
 import com.kod.assurancecontracthandler.views.customerdetails.CustomerDetailsActivity
+import com.kod.assurancecontracthandler.views.expiringactivity.ExpiringContractsActivity
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.ZoneOffset
 import java.util.*
 
 
@@ -190,6 +196,40 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener{
             filterViewModel.searchText = newText
         }
         return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if(item.itemId == R.id.action_exp_contracts){
+            val listCustomers = arrayListOf<Customer>()
+            val today = LocalDateTime.now().toEpochSecond(ZoneOffset.UTC)*1000
+            val maxDate = LocalDateTime.now().plusMonths(1).toEpochSecond(ZoneOffset.UTC)*1000
+            lifecycleScope.launch(Dispatchers.IO) {
+                dbViewModel.apply {
+                    val result = fetchExpiringContractsIn(today, maxDate)
+                    result.forEach {
+                        it.contract?.let { it1 ->
+                            listCustomers.add(setCustomer(it1))
+                        }
+                    }
+                }
+                val intent = Intent(activity, ExpiringContractsActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS
+                intent.putParcelableArrayListExtra(ConstantsVariables.INTENT_LIST_WORKER, listCustomers)
+                startActivity(intent)
+            }
+        }
+        return true
+    }
+
+    private fun setCustomer(contract: Contract): Customer{
+        val customer = Customer(contract.assure, contract.telephone.toString())
+        customer.attestation = contract.attestation
+        customer.carteRose = contract.carteRose
+        customer.effet = contract.effet?.time
+        customer.echeance = contract.echeance?.time
+        customer.numeroPolice = contract.numeroPolice
+        customer.mark = contract.mark
+        return customer
     }
 
     private fun filterFabClicked(){

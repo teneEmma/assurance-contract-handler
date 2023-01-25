@@ -49,11 +49,11 @@ open class ExpirationWorker(val context: Context, workerParams: WorkerParameters
         }
     }
 
-    open fun setupNotification(listContracts: List<Customer>){
+    open fun setupNotification(listContracts: ArrayList<Customer>){
 
         val intent = Intent(context, ExpiringContractsActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            putParcelableArrayListExtra(INTENT_LIST_WORKER, listContracts as ArrayList<Customer>)
+            putParcelableArrayListExtra(INTENT_LIST_WORKER, listContracts)
         }
 
         val pendingIntent: PendingIntent = PendingIntent.getActivity(context, 0,

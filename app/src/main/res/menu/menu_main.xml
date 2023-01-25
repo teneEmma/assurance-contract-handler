@@ -9,4 +9,11 @@
         android:title="@string/action_settings"
         app:showAsAction="ifRoom" />
 
+    <item
+        android:id="@+id/action_exp_contracts"
+        android:orderInCategory="100"
+        android:icon="@drawable/ic_eye"
+        android:title="@string/action_exp_contracts"
+        app:showAsAction="always" />
+
 </menu>
