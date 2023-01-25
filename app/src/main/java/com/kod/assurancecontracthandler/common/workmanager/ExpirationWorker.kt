@@ -83,7 +83,7 @@ open class ExpirationWorker(val context: Context, workerParams: WorkerParameters
         customer.effet = contract.effet?.time
         customer.echeance = contract.echeance?.time
         customer.numeroPolice = contract.numeroPolice
-
+        customer.mark = contract.mark
         return customer
     }
 }

@@ -73,8 +73,6 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener{
         dbViewModel = ViewModelProvider(this,
             DBViewModelFactory(requireActivity().application))[DBViewModel::class.java]
         filterViewModel = ViewModelProvider(this)[FilterViewModel::class.java]
-        setRecyclerView()
-        setupSearchView()
         return binding.root
     }
 
@@ -90,6 +88,9 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener{
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        setRecyclerView()
+        setupSearchView()
+
         filterViewModel.listContracts.observe(viewLifecycleOwner){listContracts->
             dbViewModel.setContracts(listContracts)
         }
@@ -473,6 +474,8 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener{
                 return@setOnClickListener
             }
             val customer = Customer(c?.assure, c?.telephone.toString())
+            customer.echeance = c?.echeance?.time
+            customer.mark = c?.mark
             val intent = Intent(activity, CustomerDetailsActivity::class.java)
             intent.putExtra(ConstantsVariables.customerKey, customer)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK

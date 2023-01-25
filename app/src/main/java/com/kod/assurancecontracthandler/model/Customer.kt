@@ -15,6 +15,7 @@ data class Customer(
     @Ignore var carteRose: String? = null
     @Ignore var attestation: String? = null
     @Ignore var numeroPolice: String? = null
+    @Ignore var mark: String? = null
     @Ignore var effet: Long? = null
     @Ignore var echeance: Long?= null
 
@@ -25,6 +26,7 @@ data class Customer(
             parcel.writeString(carteRose)
             parcel.writeString(attestation)
             parcel.writeString(numeroPolice)
+            parcel.writeString(mark)
             effet?.let { parcel.writeLong(it) }
             echeance?.let { parcel.writeLong(it) }
         }
@@ -35,13 +37,16 @@ data class Customer(
             val carteRose = parcel.readString()
             val attestation = parcel.readString()
             val numeroPolice = parcel.readString()
-            val effet = parcel.readLong()
+            val mark = parcel.readString()
             val echeance = parcel.readLong()
+            val effet = parcel.readLong()
+
 
             val customer = Customer(name, phoneNumber)
             customer.carteRose = carteRose
             customer.attestation = attestation
             customer.numeroPolice = numeroPolice
+            customer.mark = mark
             customer.effet = effet
             customer.echeance = echeance
             return customer

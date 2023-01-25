@@ -46,6 +46,14 @@ class CustomerViewModel(application: Application): ViewModel() {
         }
     }
 
+    suspend fun sortWithNumbers(){
+        viewModelScope.launch(Dispatchers.IO) {
+            _customerList.postValue(_customerList.value?.sortedByDescending {
+                it.phoneNumber
+            })
+        }
+    }
+
     suspend fun getAllPhoneNumbers(name: String): List<Long?>{
         return withContext(Dispatchers.IO) {
             repository.getCustomerPhoneNumbers(name)

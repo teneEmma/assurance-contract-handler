@@ -115,7 +115,7 @@
         android:layout_marginBottom="10dp"
         android:contentDescription="@string/action_filter"
         android:foregroundTintMode="src_over"
-        android:src="@drawable/ic_filter"
+        android:src="@drawable/baseline_filter_list_24"
         app:backgroundTint="?attr/colorPrimaryVariant"
         app:rippleColor="@color/white"
         android:visibility="gone"

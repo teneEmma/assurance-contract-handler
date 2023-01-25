@@ -3,14 +3,16 @@ package com.kod.assurancecontracthandler.Dao
 import androidx.room.Dao
 import androidx.room.Query
 import com.kod.assurancecontracthandler.model.Customer
-import org.apache.poi.ss.formula.functions.Today
 
 @Dao
 interface CustomerDAO {
 
-    @Query("SELECT DISTINCT assure,telephone  FROM (SELECT * from contract WHERE assure " +
-            "NOT IN(\"DTA\", \"SOMME\", \"TOTAL\", \"PRIME A REVERSER\"))  " +
-            "WHERE assure IS NOT NULL ORDER BY assure")
+    @Query("SELECT DISTINCT assure,telephone\n" +
+            "FROM (SELECT * from contract \n" +
+            "WHERE assure\n" +
+            "NOT IN('DTA', 'SOMME', 'TOTAL', 'PRIME A REVERSER'))\n" +
+            "WHERE assure IS NOT NULL\n" +
+            "ORDER BY assure")
     fun getAllCustomers(): List<Customer>
 
     @Query("SELECT count(DISTINCT assure) from contract WHERE assure is not NULL")
@@ -23,7 +25,7 @@ interface CustomerDAO {
     fun getNumberOfCustomersWithPhones(): Int
 
     @Query("SELECT count(assure) from contract Where assure is not NULL AND echeance < :today")
-    fun getValidContracts(today: Long): Int
+    fun getActiveContracts(today: Long): Int
 
     @Query("SELECT DISTINCT assure,telephone  FROM (SELECT * from contract WHERE assure " +
             "NOT IN(\"DTA\", \"SOMME\", \"TOTAL\", \"PRIME A REVERSER\"))  WHERE assure LIKE :name " +

@@ -8,7 +8,7 @@ class DataStoreRepository(private val sharedPrefs: SharedPreferences){
         private const val SHARED_PREFERENCE_NEWLY_INSTALLED = "newly_installed"
     }
 
-    fun readPredefinedMessage(): String = sharedPrefs.getString(SHARED_PREFERENCE_MESSAGE, "VIDE")!!
+    fun readPredefinedMessage(): String? = sharedPrefs.getString(SHARED_PREFERENCE_MESSAGE, "")
 
     fun savePredefinedMessage(msg: String) = sharedPrefs.edit().putString(SHARED_PREFERENCE_MESSAGE, msg).apply()
 

@@ -47,4 +47,7 @@ object ConstantsVariables {
     const val INTENT_LIST_WORKER = "ListOfExpiryContracts"
     const val APP_USAGE_STATE = "App_usage_state"
 
+    const val predefinedMsgVehicleId = "VEHICLE_ID"
+    const val predefinedMsgDateId = "DATE_ID"
+
 }

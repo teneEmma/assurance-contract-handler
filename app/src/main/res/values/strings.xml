@@ -3,6 +3,7 @@
     <string name="action_settings">Settings</string>
     <string name="action_search">Search</string>
     <string name="action_filter">Filter</string>
+    <string name="action_sort">Trier</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">Importer Des Fichiers</string>
     <string name="second_fragment_label">Base De Donée</string>
@@ -73,6 +74,10 @@
     <string name="save_success">BASE DE DONNEE MIS A JOUR</string>
     <string name="reading_file_permission">READ PERMISSION</string>
 
+
+    <!-- CUSTOMER LIST FRAGMENT -->
+    <string name="sorted_toast">Tri Appliqué</string>
+
     <!-- CONTRACT LIST FRAGMENT -->
     <string name="search_bar_query_hint">Faire une recherche…</string>
     <string name="it_is_a_footer">Option non valide</string>
@@ -132,6 +137,17 @@
     <string name="attestation_title">ATTESTATION:</string>
     <string name="echeance_title">echeance:</string>
     <string name="effet_title">effet:</string>
+    <string name="predefined_message">
+        Good Day Dear Client. Just to inform you that, the instance of your vehicle
+        VEHICLE_ID will expire on the DATE_ID.\n
+        According to the financial law of 2023, here arre the new prices of vignettes:\n
+        01CV to 07CV 30,000frs\n
+        08CV to 13CV 50,000frs\n
+        14CV to 20CV 70,000frs\n
+
+        YOUR INSURANCE COMPANY ORION INSURANCE-LIMBE BRANCH-OPPOSITE CMPS GARDENS.\n
+        THANKS
+    </string>
     <string name="customer_details_cardview" translatable="false">Represent les clients ACTIFS, ayant des NUMEROS et le TOTAL des Clients</string>
 
 </resources>

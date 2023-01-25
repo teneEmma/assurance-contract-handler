@@ -3,16 +3,16 @@ package com.kod.assurancecontracthandler.views.fragments.home.listcustomers
 import android.content.Intent
 import android.os.Bundle
 import android.text.Html
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.SearchView
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kod.assurancecontracthandler.R
@@ -22,22 +22,28 @@ import com.kod.assurancecontracthandler.model.Customer
 import com.kod.assurancecontracthandler.viewmodels.customerviewmodel.CustomerViewModel
 import com.kod.assurancecontracthandler.viewmodels.customerviewmodel.CustomerViewModelFactory
 import com.kod.assurancecontracthandler.views.customerdetails.CustomerDetailsActivity
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class ListCustomersFragment : Fragment(), SearchView.OnQueryTextListener {
 
     private lateinit var binding: FragmentListCustomersBinding
     private lateinit var rvAdapter: ListCustomersAdapter
     private lateinit var customerViewModel: CustomerViewModel
+    private lateinit var sortImage: ImageView
 
-        override fun onCreateView(
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
+    override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentListCustomersBinding.inflate(inflater, container, false)
         customerViewModel = ViewModelProvider(this,
             CustomerViewModelFactory(requireActivity().application))[CustomerViewModel::class.java]
-        setupSearchView()
-        setRecyclerView()
         return binding.root
     }
 
@@ -61,10 +67,14 @@ class ListCustomersFragment : Fragment(), SearchView.OnQueryTextListener {
 
     override fun onResume() {
         super.onResume()
-        if(binding.searchViewClient.isActivated.not()) updateAllData()
+        if(binding.searchViewClient.isActivated.not() &&
+                sortImage.isSelected.not()) updateAllData()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        setupSearchView()
+        setRecyclerView()
+
         updateAllData()
         swipeToRefresh()
 
@@ -105,6 +115,32 @@ class ListCustomersFragment : Fragment(), SearchView.OnQueryTextListener {
         }
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.menu_list_customers, menu)
+        sortImage = menu.findItem(R.id.action_sort).actionView as ImageView
+        sortImage.isSelected = false
+        sortImage.setImageDrawable(ContextCompat.getDrawable(requireContext(),
+            R.drawable.filter_selector))
+        sortImage.apply {
+            setOnClickListener {
+                isSelected = isSelected.not()
+                if(isSelected){
+                    toast(getString(R.string.sorted_toast))
+                    sortAllCustomers()
+                }else{
+                    customerViewModel.fetchCustomers()
+                }
+            }
+        }
+    }
+
+    private fun sortAllCustomers() {
+        lifecycleScope.launch(Dispatchers.IO) {
+            customerViewModel.sortWithNumbers()
+        }
+    }
+
     private fun toast(message: String){
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
@@ -127,7 +163,9 @@ class ListCustomersFragment : Fragment(), SearchView.OnQueryTextListener {
 
     private fun swipeToRefresh(){
         binding.swipeToRefresh.setOnRefreshListener {
-            updateAllData()
+            if(sortImage.isSelected.not()){
+                updateAllData()
+            }
             binding.swipeToRefresh.isRefreshing = false
         }
     }

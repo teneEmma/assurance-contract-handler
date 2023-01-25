@@ -77,7 +77,7 @@ class AppApplication: Application() {
             .setRequiresBatteryNotLow(false)
             .build()
         val workManager = WorkManager.getInstance(this)
-        val workRequest = PeriodicWorkRequestBuilder<ExpirationWorker>(1, TimeUnit.DAYS)
+        val workRequest = PeriodicWorkRequestBuilder<ExpirationWorker>(15, TimeUnit.MINUTES)
             .setConstraints(constraints)
             .build()
         workManager.enqueueUniquePeriodicWork(CHECKING_EXPIRY_CONTRACTS_WORKNAME, ExistingPeriodicWorkPolicy.KEEP, workRequest)

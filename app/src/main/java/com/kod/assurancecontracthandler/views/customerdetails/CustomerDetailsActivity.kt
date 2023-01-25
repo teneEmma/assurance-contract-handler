@@ -28,10 +28,14 @@ import com.kod.assurancecontracthandler.databinding.EditCustomerBinding
 import com.kod.assurancecontracthandler.model.Contract
 import com.kod.assurancecontracthandler.model.Customer
 import com.kod.assurancecontracthandler.common.utilities.DataStoreRepository
+import com.kod.assurancecontracthandler.common.utilities.TimeConverters
 import com.kod.assurancecontracthandler.viewmodels.databaseviewmodel.DBViewModel
 import com.kod.assurancecontracthandler.views.fragments.home.contractlist.GridViewItemAdapter
 import java.net.URLEncoder
+import java.text.DateFormat
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.LocalDateTime
 import java.util.*
 
 class CustomerDetailsActivity : AppCompatActivity() {
@@ -225,14 +229,12 @@ class CustomerDetailsActivity : AppCompatActivity() {
                     ContactAction.SMS.action -> showMessageLayout {msg-> sendSMS(msg) }
                     ContactAction.WHATSAPP_TEXT.action -> showMessageLayout{msg-> sendWhatsappMsg(msg) }
                 }
-
             }
                 binding.recyclerContact.adapter = recyclerView
                 binding.recyclerContact.layoutManager = LinearLayoutManager(applicationContext)
                 binding.recyclerContact.setHasFixedSize(true)
             }
         }
-
     }
     private fun isWhatsappInstalled(packageName: String): Boolean {
         return try {
@@ -247,6 +249,23 @@ class CustomerDetailsActivity : AppCompatActivity() {
     }
 
     private fun showMessageLayout(function: (String) -> Unit){
+        var message = dataStore.readPredefinedMessage()
+        if (message.isNullOrEmpty()) message = resources.getString(R.string.predefined_message)
+
+        if(customer.value?.echeance == null || customer.value?.echeance == 0L && customer.value?.mark.isNullOrEmpty()){
+            message = ""
+            binding.btnSendMessage.isEnabled = false
+        } else {
+            customer.value?.mark?.let {
+                message = message!!.replace(ConstantsVariables.predefinedMsgVehicleId, it)
+            }
+
+            val date = DateFormat.getDateInstance(DateFormat.MEDIUM).format(Date(customer.value?.echeance!!))
+            message = message!!.replace(ConstantsVariables.predefinedMsgDateId, date)
+            binding.etMessageToSend.setText(message)
+            binding.btnSendMessage.isEnabled = true
+        }
+
         binding.apply {
             llEnterMessage.visibility = View.VISIBLE
             etMessageToSend.doOnTextChanged { text, _, _, _ ->
@@ -319,9 +338,9 @@ class CustomerDetailsActivity : AppCompatActivity() {
 
     private fun retrieveCustomer(): Customer?{
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
-            intent.getParcelableExtra("customer", Customer::class.java)
+            intent.getParcelableExtra(ConstantsVariables.customerKey, Customer::class.java)
         else
-            intent.getParcelableExtra("customer") as? Customer
+            intent.getParcelableExtra(ConstantsVariables.customerKey) as? Customer
     }
 
     private fun getCustomerContracts(customerName: String){
