@@ -10,6 +10,7 @@ import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
@@ -79,7 +80,6 @@ class CustomerDetailsActivity : AppCompatActivity() {
         }
 
         customer.value = retrieveCustomer()
-//        setupNotification()
     }
 
     private fun toast(message: String){
@@ -244,6 +244,8 @@ class CustomerDetailsActivity : AppCompatActivity() {
                 packageManager.getPackageInfo(packageName, PackageManager.GET_ACTIVITIES)
             true
         }catch (e: PackageManager.NameNotFoundException){
+            e.printStackTrace()
+            Log.e("WHATSAPP", e.toString())
             false
         }
     }
