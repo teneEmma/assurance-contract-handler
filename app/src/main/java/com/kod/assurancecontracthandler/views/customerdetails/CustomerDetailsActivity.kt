@@ -10,7 +10,6 @@ import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
@@ -29,14 +28,11 @@ import com.kod.assurancecontracthandler.databinding.EditCustomerBinding
 import com.kod.assurancecontracthandler.model.Contract
 import com.kod.assurancecontracthandler.model.Customer
 import com.kod.assurancecontracthandler.common.utilities.DataStoreRepository
-import com.kod.assurancecontracthandler.common.utilities.TimeConverters
 import com.kod.assurancecontracthandler.viewmodels.databaseviewmodel.DBViewModel
 import com.kod.assurancecontracthandler.views.fragments.home.contractlist.GridViewItemAdapter
 import java.net.URLEncoder
 import java.text.DateFormat
 import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.LocalDateTime
 import java.util.*
 
 class CustomerDetailsActivity : AppCompatActivity() {
@@ -245,7 +241,6 @@ class CustomerDetailsActivity : AppCompatActivity() {
             true
         }catch (e: PackageManager.NameNotFoundException){
             e.printStackTrace()
-            Log.e("WHATSAPP", e.toString())
             false
         }
     }
@@ -264,6 +259,9 @@ class CustomerDetailsActivity : AppCompatActivity() {
 
             val date = DateFormat.getDateInstance(DateFormat.MEDIUM).format(Date(customer.value?.echeance!!))
             message = message!!.replace(ConstantsVariables.predefinedMsgDateId, date)
+            customer.value?.immatriculation?.let {
+                message = message!!.replace(ConstantsVariables.predefinedImmatricualtionId, it)
+            }
             binding.etMessageToSend.setText(message)
             binding.btnSendMessage.isEnabled = true
         }

@@ -22,8 +22,6 @@ class DBViewModel(application: Application): AndroidViewModel(application) {
     val hasQueried: LiveData<Boolean>
     get() = _hasQueried
 
-//    var _myTestFlow =  MutableSharedFlow<List<String>?>(null)
-//    var myTestFlow: StateFlow<List<String>?> = _myTestFlow.asStateFlow()
     fun executeFunWithAnimation(execute: suspend () -> Unit){
         viewModelScope.launch(Dispatchers.IO) {
             _hasQueried.postValue(false)
@@ -92,8 +90,12 @@ class DBViewModel(application: Application): AndroidViewModel(application) {
         return list
     }
 
-    fun fetchExpiringContractsIn(today: Long, expDate: Long): List<ContractDbDto> {
+    fun fetchExpiringContractsIn(today: Long, expDate: Long): List<ContractDbDto>? {
         return repository.getExpiringContractsIn(today, expDate)
+    }
+
+    fun isContractsExpiring(today: Long, expDate: Long): Boolean {
+        return repository.numberOfContractsExpiring(today, expDate) != 0
     }
 
 }

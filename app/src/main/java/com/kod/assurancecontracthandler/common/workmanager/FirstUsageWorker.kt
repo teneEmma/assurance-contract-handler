@@ -10,11 +10,11 @@ import com.kod.assurancecontracthandler.model.Customer
 
 class FirstUsageWorker(context: Context, params: WorkerParameters) : ExpirationWorker(context, params) {
     override suspend fun doWork(): Result {
-        setupNotification(arrayListOf())
+        setupNotification()
         return Result.success()
     }
 
-    override fun setupNotification(listContracts: ArrayList<Customer>) {
+    override fun setupNotification() {
         val builder = NotificationCompat.Builder(context, ConstantsVariables.FIRST_USAGE_CHANNEL_ID_STRING)
             .setSmallIcon(R.mipmap.ic_launcher_round)
             .setContentTitle(ConstantsVariables.WELCOME_NOTIFICATION_TITLE)

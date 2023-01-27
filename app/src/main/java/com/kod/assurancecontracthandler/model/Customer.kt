@@ -13,7 +13,7 @@ data class Customer(
     @ColumnInfo(name = "telephone") var phoneNumber: String?
 ) : Parcelable{
     @Ignore var carteRose: String? = null
-    @Ignore var attestation: String? = null
+    @Ignore var immatriculation: String? = null
     @Ignore var numeroPolice: String? = null
     @Ignore var mark: String? = null
     @Ignore var effet: Long? = null
@@ -24,7 +24,7 @@ data class Customer(
             parcel.writeString(customerName)
             parcel.writeString(phoneNumber)
             parcel.writeString(carteRose)
-            parcel.writeString(attestation)
+            parcel.writeString(immatriculation)
             parcel.writeString(numeroPolice)
             parcel.writeString(mark)
             effet?.let { parcel.writeLong(it) }
@@ -44,7 +44,7 @@ data class Customer(
 
             val customer = Customer(name, phoneNumber)
             customer.carteRose = carteRose
-            customer.attestation = attestation
+            customer.immatriculation = attestation
             customer.numeroPolice = numeroPolice
             customer.mark = mark
             customer.effet = effet

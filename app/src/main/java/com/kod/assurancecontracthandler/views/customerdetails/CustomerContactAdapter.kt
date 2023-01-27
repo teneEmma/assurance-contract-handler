@@ -3,19 +3,18 @@ package com.kod.assurancecontracthandler.views.customerdetails
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.kod.assurancecontracthandler.R
 import com.kod.assurancecontracthandler.common.usecases.ContactAction
+import com.kod.assurancecontracthandler.databinding.ContactListItemBinding
 
 class CustomerContactAdapter(private val listContacts: List<String>, private val iconContactActionClicked: (Int, String) -> Unit): RecyclerView.Adapter<CustomerContactAdapter.ContactViewHolder>() {
 
-    class ContactViewHolder(view: View): RecyclerView.ViewHolder(view){
-        private val number = itemView.findViewById<TextView>(R.id.tv_phone_number)
+    inner class ContactViewHolder(view: View): RecyclerView.ViewHolder(view){
+        val binding = ContactListItemBinding.bind(view)
 
         fun bindView(phoneNumber: String){
-            number.text = phoneNumber
+            binding.tvPhoneNumber.text = phoneNumber
         }
     }
 
@@ -28,13 +27,13 @@ class CustomerContactAdapter(private val listContacts: List<String>, private val
         val currentNumber = listContacts[position]
 
         holder.bindView(currentNumber)
-        holder.itemView.findViewById<ImageView>(R.id.iv_phone_number).setOnClickListener{
+        holder.binding.ivPhoneNumber.setOnClickListener{
             iconContactActionClicked.invoke(ContactAction.CALL.action, currentNumber)
         }
-        holder.itemView.findViewById<ImageView>(R.id.iv_message).setOnClickListener{
+        holder.binding.ivMessage.setOnClickListener{
             iconContactActionClicked.invoke(ContactAction.SMS.action, currentNumber)
         }
-        holder.itemView.findViewById<ImageView>(R.id.iv_whatsapp).setOnClickListener{
+        holder.binding.ivWhatsapp.setOnClickListener{
             iconContactActionClicked.invoke(ContactAction.WHATSAPP_TEXT.action, currentNumber)
         }
     }

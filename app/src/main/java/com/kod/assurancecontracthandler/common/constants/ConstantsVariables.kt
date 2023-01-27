@@ -49,5 +49,6 @@ object ConstantsVariables {
 
     const val predefinedMsgVehicleId = "VEHICLE_ID"
     const val predefinedMsgDateId = "DATE_ID"
+    const val predefinedImmatricualtionId = "IMMATRICULATION_ID"
 
 }

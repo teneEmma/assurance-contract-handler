@@ -23,5 +23,6 @@ class ContractRepository(private val contractDao: ContractDAO) {
 
     fun searchForClient(query: SimpleSQLiteQuery) = contractDao.searchForAClient(query)
 
-    fun getExpiringContractsIn(today: Long, maxTime: Long): List<ContractDbDto> = contractDao.getExpiringContractsIn(today,  maxTime)
+    fun getExpiringContractsIn(today: Long, maxTime: Long): List<ContractDbDto>? = contractDao.getExpiringContractsIn(today,  maxTime)
+    fun numberOfContractsExpiring(today: Long, maxTime: Long): Int = contractDao.numberOfContractsExpiring(today,  maxTime)
 }

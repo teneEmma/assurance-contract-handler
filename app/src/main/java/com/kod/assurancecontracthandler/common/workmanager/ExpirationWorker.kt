@@ -4,7 +4,6 @@ import android.app.Application
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.work.CoroutineWorker
@@ -14,7 +13,6 @@ import com.kod.assurancecontracthandler.common.constants.ConstantsVariables
 import com.kod.assurancecontracthandler.common.constants.ConstantsVariables.INTENT_LIST_WORKER
 import com.kod.assurancecontracthandler.model.Contract
 import com.kod.assurancecontracthandler.model.Customer
-import com.kod.assurancecontracthandler.common.utilities.DataStoreRepository
 import com.kod.assurancecontracthandler.viewmodels.databaseviewmodel.DBViewModel
 import com.kod.assurancecontracthandler.views.expiringactivity.ExpiringContractsActivity
 import kotlinx.coroutines.Dispatchers
@@ -30,30 +28,21 @@ open class ExpirationWorker(val context: Context, workerParams: WorkerParameters
     }
 
     private suspend fun checkExpiringContracts(){
-        val listCustomers = arrayListOf<Customer>()
         val today = LocalDateTime.now().toEpochSecond(ZoneOffset.UTC)*1000
         val maxDate = LocalDateTime.now().plusMonths(1).toEpochSecond(ZoneOffset.UTC)*1000
         withContext(Dispatchers.IO){
-            dbViewModel.apply {
-                val result = fetchExpiringContractsIn(today, maxDate)
-                result.forEach {
-                    it.contract?.let { it1 ->
-                        listCustomers.add(setCustomer(it1))
-                    }
-                }
-            }
 
-            if (listCustomers.isEmpty().not()){
-                setupNotification(listCustomers)
+            if (dbViewModel.isContractsExpiring(today, maxDate)){
+                setupNotification()
             }
         }
     }
 
-    open fun setupNotification(listContracts: ArrayList<Customer>){
+    open fun setupNotification(){
 
         val intent = Intent(context, ExpiringContractsActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            putParcelableArrayListExtra(INTENT_LIST_WORKER, listContracts)
+//            putParcelableArrayListExtra(INTENT_LIST_WORKER, listContracts)
         }
 
         val pendingIntent: PendingIntent = PendingIntent.getActivity(context, 0,
@@ -74,16 +63,5 @@ open class ExpirationWorker(val context: Context, workerParams: WorkerParameters
         NotificationManagerCompat.from(context).apply{
             notify(ConstantsVariables.expiryChannelID_str, ConstantsVariables.expiryChannelID_int, builder.build())
         }
-    }
-
-    private fun setCustomer(contract: Contract): Customer{
-        val customer = Customer(contract.assure, contract.telephone.toString())
-        customer.attestation = contract.attestation
-        customer.carteRose = contract.carteRose
-        customer.effet = contract.effet?.time
-        customer.echeance = contract.echeance?.time
-        customer.numeroPolice = contract.numeroPolice
-        customer.mark = contract.mark
-        return customer
     }
 }

@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.kod.assurancecontracthandler.R
 import com.kod.assurancecontracthandler.common.utilities.CustomerCallback
+import com.kod.assurancecontracthandler.databinding.RvItemCustomerBinding
 import com.kod.assurancecontracthandler.model.Customer
 import org.apache.xmlbeans.impl.tool.Diff
 
@@ -17,11 +18,11 @@ class ListCustomersAdapter(private val listener: (Customer)-> Unit) :
     var listCustomers: List<Customer> = emptyList()
 
     class MyViewHolder(view: View): RecyclerView.ViewHolder(view){
-        private val customerName: TextView = view.findViewById(R.id.tv_item_customer_customer_name)
+        private val binding = RvItemCustomerBinding.bind(view)
 
         fun bindItems(customer: Customer, ){
             itemView.setBackgroundColor(itemView.context.getColor(R.color.dialog_background))
-            customerName.text = customer.customerName
+            binding.tvItemCustomerName.text = customer.customerName
         }
     }
 

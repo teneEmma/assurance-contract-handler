@@ -114,15 +114,15 @@
                 android:layout_gravity="center"
                 android:textColor="@color/contract_item_header"
                 android:textSize="11sp"
-                android:text="@string/attestation_title"/>
+                android:text="@string/immatriculation_title"/>
 
             <TextView
-                android:id="@+id/column_attestion"
+                android:id="@+id/column_immatriculation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:textStyle="italic|bold"
-                android:text="@string/column_attestation"/>
+                android:text="@string/immatriculation_value"/>
         </LinearLayout>
 
         <LinearLayout

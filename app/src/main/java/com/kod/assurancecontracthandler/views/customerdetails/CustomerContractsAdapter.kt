@@ -9,6 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.kod.assurancecontracthandler.R
+import com.kod.assurancecontracthandler.databinding.ContractListItemBinding
 import com.kod.assurancecontracthandler.model.Contract
 import com.kod.assurancecontracthandler.model.ContractDbDto
 import java.util.Calendar
@@ -18,18 +19,17 @@ class CustomerContractsAdapter(private val listContracts: List<ContractDbDto>,pr
 
 
     class ContractViewHolder(view: View): RecyclerView.ViewHolder(view){
-        private val contractNumber = itemView.findViewById<TextView>(R.id.tv_contract_number)
-        private val contractState = itemView.findViewById<ImageView>(R.id.iv_contract_active_state)
+        val binding = ContractListItemBinding.bind(view)
 
         fun bindView(contract: ContractDbDto){
             val attestation = contract.contract?.attestation?.replace('*', '-', false)
             val contractNumberStr = "$attestation-${contract.contract?.carteRose}"
-            contractNumber.text = contractNumberStr
+            binding.tvContractNumber.text = contractNumberStr
             val myContract = contract.contract
             if(myContract?.let { isContractActive(it) } == true)
-                contractState.setColorFilter(Color.GREEN)
+                binding.ivContractActiveState.setColorFilter(Color.GREEN)
             else
-                contractState.setColorFilter(Color.RED)
+                binding.ivContractActiveState.setColorFilter(Color.RED)
         }
 
         fun isContractActive(contract: Contract): Boolean{
@@ -44,7 +44,7 @@ class CustomerContractsAdapter(private val listContracts: List<ContractDbDto>,pr
         val currentContract = listContracts[position]
 
         holder.bindView(currentContract)
-        holder.itemView.findViewById<ImageView>(R.id.iv_contract_active_state).setOnClickListener{
+        holder.binding.ivContractActiveState.setOnClickListener{
             currentContract.contract?.let { it1 ->
                 activeStateTouched.invoke(holder.isContractActive(it1)) }
         }

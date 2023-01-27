@@ -39,7 +39,6 @@ import com.kod.assurancecontracthandler.views.customerdetails.CustomerDetailsAct
 import com.kod.assurancecontracthandler.views.expiringactivity.ExpiringContractsActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.ZoneOffset
@@ -206,7 +205,7 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener{
             lifecycleScope.launch(Dispatchers.IO) {
                 dbViewModel.apply {
                     val result = fetchExpiringContractsIn(today, maxDate)
-                    result.forEach {
+                    result?.forEach {
                         it.contract?.let { it1 ->
                             listCustomers.add(setCustomer(it1))
                         }
@@ -223,7 +222,7 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener{
 
     private fun setCustomer(contract: Contract): Customer{
         val customer = Customer(contract.assure, contract.telephone.toString())
-        customer.attestation = contract.attestation
+        customer.immatriculation = contract.immatriculation
         customer.carteRose = contract.carteRose
         customer.effet = contract.effet?.time
         customer.echeance = contract.echeance?.time
@@ -234,7 +233,7 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener{
 
     private fun filterFabClicked(){
         binding.fabFilterResults.setOnClickListener {
-            filterBinding = FilterDialogBinding.inflate(layoutInflater)
+            filterBinding = FilterDialogBinding.bind(it)
             showDialog()
             filterViewModel.searchChip
                 ?.let{searchChip->
@@ -516,6 +515,10 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener{
             val customer = Customer(c?.assure, c?.telephone.toString())
             customer.echeance = c?.echeance?.time
             customer.mark = c?.mark
+            customer.immatriculation = c?.immatriculation
+            customer.numeroPolice = c?.numeroPolice
+            customer.carteRose = c?.carteRose
+            customer.effet = c?.effet?.time
             val intent = Intent(activity, CustomerDetailsActivity::class.java)
             intent.putExtra(ConstantsVariables.customerKey, customer)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK

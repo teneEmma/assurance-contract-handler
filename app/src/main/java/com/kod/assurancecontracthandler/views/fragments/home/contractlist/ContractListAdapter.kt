@@ -5,12 +5,11 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.kod.assurancecontrac.ContractsCallback
 import com.kod.assurancecontracthandler.R
+import com.kod.assurancecontracthandler.databinding.RvItemBinding
 import com.kod.assurancecontracthandler.model.ContractDbDto
 import java.text.SimpleDateFormat
 import java.util.*
@@ -19,32 +18,36 @@ class ContractListAdapter(private val clickFunction: (ContractDbDto) -> Unit,
                           private val touchFunction: ()-> Unit):
     RecyclerView.Adapter<ContractListAdapter.ContractViewHolder>() {
     private var contractList: List<ContractDbDto> = emptyList()
+    var isExpiringActivity = false
 
-    class ContractViewHolder(view: View): RecyclerView.ViewHolder(view){
-        val id: TextView = itemView.findViewById(R.id.column_id)
-        private val assurerName: TextView = itemView.findViewById(R.id.column_assure)
-        private val dateContracted: TextView = itemView.findViewById(R.id.column_effet)
-        private val expiryDate: TextView = itemView.findViewById(R.id.column_echeance)
-        private val attestation: TextView = itemView.findViewById(R.id.column_attestion)
-        private val carteGrise: TextView = itemView.findViewById(R.id.column_carteRose)
-        private val total: TextView = itemView.findViewById(R.id.tv_total)
+    inner class ContractViewHolder(view: View): RecyclerView.ViewHolder(view){
+        private var itemBinding = RvItemBinding.bind(itemView)
 
-        fun bindItems(contract: ContractDbDto){
+        fun bindItems(contract: ContractDbDto) {
             val isFooter = (contract.contract?.numeroPolice.isNullOrEmpty() ||
                     contract.contract?.attestation.isNullOrEmpty())
-            id.text = contract.id.toString()
+            itemBinding.apply {
+                columnId.text = contract.id.toString()
 
-            val grandTotal = "${contract.contract?.DTA.toString()}XAF"
+                val grandTotal = "${contract.contract?.DTA.toString()}XAF"
 
-            assurerName.text = contract.contract!!.assure.toString()
-            dateContracted.text = contract.contract.effet?.let {
-                SimpleDateFormat("dd/MM/yy", Locale.getDefault()).format(it) }
-            expiryDate.text = contract.contract.echeance?.let {
-                SimpleDateFormat("dd/MM/yy", Locale.getDefault()).format(it)
+                columnAssure.text = contract.contract!!.assure.toString()
+                columnEffet.text = contract.contract.effet?.let {
+                    SimpleDateFormat("dd/MM/yy", Locale.getDefault()).format(it)
+                }
+                columnEcheance.text = contract.contract.echeance?.let {
+                    SimpleDateFormat("dd/MM/yy", Locale.getDefault()).format(it)
+                }
+                columnImmatriculation.text = contract.contract.immatriculation.toString()
+                columnCarteRose.text = contract.contract.carteRose.toString()
+                tvTotal.text = grandTotal
+                if (isExpiringActivity) {
+                    columnEffet.visibility = View.GONE
+                    columnCarteRose.visibility = View.GONE
+                    titleEffet.visibility = View.GONE
+                    titleCarteRose.visibility = View.GONE
+                }
             }
-            attestation.text = contract.contract.attestation.toString()
-            carteGrise.text = contract.contract.carteRose.toString()
-            total.text = grandTotal
             setBackgroundColor(isFooter)
         }
 
@@ -65,13 +68,12 @@ class ContractListAdapter(private val clickFunction: (ContractDbDto) -> Unit,
                 otherVisibility = View.GONE
                 footerVisibility = View.VISIBLE
             }
-
-            id.visibility = otherVisibility
-            val dates = itemView.findViewById<LinearLayout>(R.id.dates)
-            val attestationCarte = itemView.findViewById<LinearLayout>(R.id.attestationCarte)
+            itemBinding.columnId.visibility = otherVisibility
+            val dates = itemBinding.dates
+            val attestationCarte = itemBinding.attestationCarte
             dates.visibility = otherVisibility
             attestationCarte.visibility = otherVisibility
-            total.visibility = footerVisibility
+            itemBinding.tvTotal.visibility = footerVisibility
         }
     }
     override fun getItemCount(): Int = contractList.size
