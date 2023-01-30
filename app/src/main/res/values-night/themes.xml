@@ -34,7 +34,7 @@
 
     <style name="btn_positive_style" parent="Widget.MaterialComponents.Button">
         <item name="background">@drawable/btn_round</item>
-        <item name="android:foreground">?attr/selectableItemBackground</item>
+<!--        <item name="android:foreground">?attr/selectableItemBackground</item>-->
         <item name="android:clickable">true</item>
         <item name="android:layout_margin">10dp</item>
         <item name="android:textStyle">bold</item>

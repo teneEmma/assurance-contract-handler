@@ -10,8 +10,9 @@
         app:showAsAction="ifRoom"/>
 
     <item
-        android:id="@+id/action_settings_customer_list"
+        android:id="@+id/action_settings_customers"
         android:icon="@drawable/ic_settings"
         android:title="@string/action_settings"
         app:showAsAction="ifRoom" />
+
 </menu>

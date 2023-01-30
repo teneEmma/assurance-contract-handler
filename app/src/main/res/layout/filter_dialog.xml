@@ -256,9 +256,10 @@
             tools:listitem="@layout/main_group_sliders"
             android:divider="@android:color/darker_gray" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginTop="8dp">
 
             <androidx.appcompat.widget.AppCompatButton
@@ -293,7 +294,7 @@
                 app:layout_constraintStart_toEndOf="@+id/btnReset"
                 app:layout_constraintTop_toTopOf="parent" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
 
     </LinearLayout>
 

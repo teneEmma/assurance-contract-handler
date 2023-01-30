@@ -25,10 +25,12 @@ import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.slider.RangeSlider
 import com.kod.assurancecontracthandler.R
 import com.kod.assurancecontracthandler.common.constants.ConstantsVariables
+import com.kod.assurancecontracthandler.common.utilities.BottomDialogView
 import com.kod.assurancecontracthandler.databinding.ContractDeetailsBinding
 import com.kod.assurancecontracthandler.databinding.ExpandableSliderItemBinding
 import com.kod.assurancecontracthandler.databinding.FilterDialogBinding
 import com.kod.assurancecontracthandler.databinding.FragmentListContractsBinding
+import com.kod.assurancecontracthandler.databinding.SettingsActivityBinding
 import com.kod.assurancecontracthandler.model.Contract
 import com.kod.assurancecontracthandler.model.ContractDbDto
 import com.kod.assurancecontracthandler.model.Customer
@@ -37,9 +39,9 @@ import com.kod.assurancecontracthandler.viewmodels.databaseviewmodel.DBViewModel
 import com.kod.assurancecontracthandler.viewmodels.databaseviewmodel.FilterViewModel
 import com.kod.assurancecontracthandler.views.customerdetails.CustomerDetailsActivity
 import com.kod.assurancecontracthandler.views.expiringactivity.ExpiringContractsActivity
+import com.kod.assurancecontracthandler.views.settings.SettingsActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 import java.util.*
@@ -217,6 +219,11 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener{
                 startActivity(intent)
             }
         }
+        else if(item.itemId == R.id.action_settings){
+            val intent = Intent(requireContext(), SettingsActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            startActivity(intent)
+        }
         return true
     }
 
@@ -233,7 +240,7 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener{
 
     private fun filterFabClicked(){
         binding.fabFilterResults.setOnClickListener {
-            filterBinding = FilterDialogBinding.bind(it)
+            filterBinding = FilterDialogBinding.inflate(layoutInflater)
             showDialog()
             filterViewModel.searchChip
                 ?.let{searchChip->
@@ -499,7 +506,7 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener{
         }
 
         val c = contractDbDto.contract
-        manageContractDetailViews(contractItemBinding, c)
+        BottomDialogView().manageContractDetailViews(contractItemBinding, c, requireContext())
 
         val width = (resources.displayMetrics.widthPixels * 0.90).toInt()
         val height = (resources.displayMetrics.heightPixels * 0.80).toInt()
@@ -527,50 +534,7 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener{
         }
     }
 
-    private fun manageContractDetailViews(contractItemBinding: ContractDeetailsBinding, c: Contract?){
-        contractItemBinding.assureName.text = c?.assure
-        if (c?.numeroPolice.isNullOrEmpty() || c?.attestation.isNullOrEmpty()){
-            val price = "${c?.DTA} XAF"
-            contractItemBinding.tvGrandTotal.visibility = View.VISIBLE
-            contractItemBinding.llCarStuff.visibility = View.GONE
-            contractItemBinding.tvApporteur.visibility = View.GONE
-            contractItemBinding.effetEcheance.visibility = View.GONE
-            contractItemBinding.dividerBottom.visibility = View.GONE
-            contractItemBinding.dividerEffetEcheance.visibility = View.GONE
-            contractItemBinding.tvGrandTotal.text = price
-            return
-        }
 
-        contractItemBinding.tvGrandTotal.visibility = View.GONE
-        contractItemBinding.llCarStuff.visibility = View.VISIBLE
-        contractItemBinding.tvApporteur.visibility = View.VISIBLE
-        contractItemBinding.effetEcheance.visibility = View.VISIBLE
-        contractItemBinding.dividerBottom.visibility = View.VISIBLE
-        contractItemBinding.dividerEffetEcheance.visibility = View.VISIBLE
-
-        val carTitles = ConstantsVariables.carDetailsTitle
-        val pricesTitles = ConstantsVariables.pricesTitle
-        val pricesValues = listOf(
-            c?.DTA.toString(), c?.PN.toString(), c?.ACC.toString(), c?.FC.toString(),
-            c?.TVA?.toString(),c?.CR.toString(), c?.PTTC?.toString(), c?.COM_PN.toString(),
-            c?.COM_ACC.toString(), c?.TOTAL_COM?.toString(), c?.NET_A_REVERSER.toString(),
-            c?.ENCAIS.toString(), c?.COMM_LIMBE?.toString(), c?.COMM_APPORT.toString() )
-        val carValues: List<String?> = listOf(
-            c?.mark, c?.immatriculation, c?.puissanceVehicule, c?.carteRose, c?.categorie?.toString(), c?.zone )
-        val apporteur = "APPORTEUR: ${c?.APPORTEUR}"
-
-
-        contractItemBinding.tvApporteur.text = apporteur
-        contractItemBinding.dateEffet.text = c?.effet?.let {
-            SimpleDateFormat("dd/MM/yy", Locale.getDefault()).format(it) }
-        contractItemBinding.dateEcheance.text = c?.echeance?.let {
-            SimpleDateFormat("dd/MM/yy", Locale.getDefault()).format(it) }
-        contractItemBinding.gvPrices.adapter = GridViewItemAdapter(requireContext(),
-            pricesTitles, pricesValues)
-        contractItemBinding.gvCarStuff.adapter = GridViewItemAdapter(requireContext(),
-            carTitles, carValues)
-
-    }
 
     private fun addExcelFile(){
         findNavController().navigate(R.id.action_HomeFragment_to_SelectFileFragment)

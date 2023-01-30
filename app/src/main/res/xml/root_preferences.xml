@@ -1,0 +1,46 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory app:title="@string/General_header">
+
+        <EditTextPreference
+            app:key="predefined_message"
+            app:summary="@string/language_summary"
+            app:dialogMessage="@string/message_summary"
+            app:title="@string/default_message_title" />
+
+        <SwitchPreferenceCompat
+            app:key="layout_mode"
+            app:title="@string/layout_mode_title"
+            app:summaryOff="@string/mode_off"
+            app:summaryOn="@string/mode_on"/>
+
+        <ListPreference
+            app:summary="@string/language_summary"
+            app:entries="@array/entries_languages"
+            app:entryValues="@array/entry_values_languages"
+            app:defaultValue="reply"
+            app:key="languages"
+            app:title="@string/language_title"
+            app:useSimpleSummaryProvider="true" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/Notification_header">
+
+        <SwitchPreferenceCompat
+            app:key="notifications"
+            app:title="@string/expiring_notification_title"
+            app:defaultValue="true"
+            app:summary="@string/expiring_notification_summary"/>
+
+        <DropDownPreference
+            app:dependency="notifications"
+            app:entries="@array/entries_expiring_contracts"
+            app:entryValues="@array/entry_values_epiring_contracts"
+            app:key="expiring_notification_sync_interval"
+            app:title="@string/expiring_notification_display_interval_summary"
+            app:useSimpleSummaryProvider="true" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

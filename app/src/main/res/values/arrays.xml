@@ -1,0 +1,28 @@
+<resources>
+    <!-- Reply Preference -->
+    <string-array name="entries_languages">
+        <item>Français</item>
+        <item>Anglais</item>
+    </string-array>
+
+    <string-array name="entry_values_languages">
+        <item>Francais</item>
+        <item>Anglais</item>
+    </string-array>
+
+    <string-array name="entries_expiring_contracts">
+        <item>1 Day</item>
+        <item>2 Day</item>
+        <item>1 Week</item>
+        <item>2 Week</item>
+        <item>1 Montth</item>
+    </string-array>
+
+    <string-array name="entry_values_epiring_contracts">
+        <item>1</item>
+        <item>2</item>
+        <item>7</item>
+        <item>14</item>
+        <item>30</item>
+    </string-array>
+</resources>

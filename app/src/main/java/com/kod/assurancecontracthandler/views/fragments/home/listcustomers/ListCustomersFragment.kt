@@ -22,6 +22,7 @@ import com.kod.assurancecontracthandler.model.Customer
 import com.kod.assurancecontracthandler.viewmodels.customerviewmodel.CustomerViewModel
 import com.kod.assurancecontracthandler.viewmodels.customerviewmodel.CustomerViewModelFactory
 import com.kod.assurancecontracthandler.views.customerdetails.CustomerDetailsActivity
+import com.kod.assurancecontracthandler.views.settings.SettingsActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -120,7 +121,8 @@ class ListCustomersFragment : Fragment(), SearchView.OnQueryTextListener {
         inflater.inflate(R.menu.menu_list_customers, menu)
         sortImage = menu.findItem(R.id.action_sort).actionView as ImageView
         sortImage.isSelected = false
-        sortImage.setImageDrawable(ContextCompat.getDrawable(requireContext(),
+        sortImage.setImageDrawable(
+            ContextCompat.getDrawable(requireContext(),
             R.drawable.filter_selector))
         sortImage.apply {
             setOnClickListener {
@@ -133,6 +135,15 @@ class ListCustomersFragment : Fragment(), SearchView.OnQueryTextListener {
                 }
             }
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if(item.itemId == R.id.action_settings_customers){
+            val intent = Intent(requireContext(), SettingsActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            startActivity(intent)
+        }
+        return true
     }
 
     private fun sortAllCustomers() {

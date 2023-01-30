@@ -7,7 +7,7 @@ object ConstantsVariables {
     val customerKey = "customer"
     val pricesTitle = listOf("DTA", "PN", "ACC", "FC", "TVA", "CR", "PTTC", "COM PN",
         "COM ACC", "TOTAL COM", "NET A REVERSER", "ENCAIS", "C LIMBE", "C APPORT")
-    val carDetailsTitle = listOf("MARK", "IMMATRICULATION", "PUISS / ENERGIE", "CARTE ROSE", "CATEGORIE", "ZONE")
+    val carDetailsTitle = listOf("ATTESTATION", "N° POLICE", "COMPAGNIE", "MARK", "IMMATRICULATION", "PUISS / ENERGIE", "CARTE ROSE", "CATEGORIE", "ZONE")
     const val datePickerTag = "DATE_RANGE_PICKER"
     val possibleBeginningSheetValues = listOf("SEMAINE", "MOIS DE")
     val possibleHeaderValues = listOf("ATTESTATION", "CARTE ROSE", "ASSURE")

@@ -153,21 +153,36 @@
         THANKS
     </string>
     <string name="customer_details_cardview" translatable="false">Represent les clients ACTIFS, ayant des NUMEROS et le TOTAL des Clients</string>
-    <string name="title_activity_settings">SettingsActivity</string>
+    <string name="title_activity_settings">PARAMETRES</string>
 
+    <!-- SETTINGS -->
     <!-- Preference Titles -->
-    <string name="messages_header">Messages</string>
-    <string name="sync_header">Sync</string>
+    <string name="General_header">GENERAL</string>
+    <string name="Notification_header">NOTIFICATION</string>
 
     <!-- Messages Preferences -->
-    <string name="signature_title">Your signature</string>
-    <string name="reply_title">Default reply action</string>
+    <string name="default_message_title">Message Par Défaut</string>
+    <string name="layout_mode_title">Night mode</string>
+    <string name="mode_off">Désactivé</string>
+    <string name="mode_on">Activé</string>
+    <string name="language_title">Langue</string>
+    <string name="language_summary">Choisir une langue</string>
+    <string name="language_dialog_summary">
+        Remplacer les champs à remplir automatiquement par:\n
+        ASSURE_ID = nom de l\'assureur\nIMMATRICULATION_ID = nom de l\'apporteur\n
+        ECHEANCE_ID = date d\'écheance.\nSi valide, sera colorié</string>
+    <string name="message_summary">Le message par défaut à envoyé aux clients par whatsapp ou SMS</string>
+    <!--    <string name="reply_title">Default reply action</string>-->
 
     <!-- Sync Preferences -->
-    <string name="sync_title">Sync email periodically</string>
+    <string name="expiring_notification_title">Expiring contracts</string>
+    <string name="expiring_notification_summary">Show notifications for expiring Contracts</string>
+    <string name="expiring_notification_display_interval_summary">When to frequently show notifications</string>
+    <string name="about_title">About Assurance Contract Handler</string>
     <string name="attachment_title">Download incoming attachments</string>
     <string name="attachment_summary_on">Automatically download attachments for incoming emails
     </string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
 
 </resources>
+

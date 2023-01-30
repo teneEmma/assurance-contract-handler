@@ -18,6 +18,7 @@
     <HorizontalScrollView
         android:id="@+id/horizontal_sv_search"
         android:layout_width="match_parent"
+        android:layout_marginHorizontal="5dp"
         android:layout_height="wrap_content"
         android:layout_below="@id/searchView"
         android:scrollbars="none">
