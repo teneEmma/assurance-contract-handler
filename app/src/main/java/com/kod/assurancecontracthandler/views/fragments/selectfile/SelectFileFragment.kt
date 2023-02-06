@@ -4,11 +4,11 @@ import android.Manifest
 import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
@@ -32,7 +32,7 @@ class SelectFileFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var excelDocumentVM: ExcelDocumentsViewModel
     private lateinit var dbViewModel: DBViewModel
-    private lateinit var listOfContracts: List<ContractDbDto>
+    private var listOfContracts: List<ContractDbDto>? = emptyList()
     private var fileName: String? = null
     private val documentLauncher =
         registerForActivityResult(ActivityResultContracts.OpenDocument()){ uri->
@@ -47,12 +47,17 @@ class SelectFileFragment : Fragment() {
         }
     private val requestPermissionLauncher: ActivityResultLauncher<Array<String>> =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()){ permissions->
-            permissions.entries.forEach {
-                if (!it.value){
-                    longSnack("${getPermissionString(it.key.substringAfter("permission."))} Needed")
-                    showPermissionDialog()
-                    return@registerForActivityResult
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU){
+                permissions.entries.forEach {
+                    if (!it.value) {
+                        longSnack("${getPermissionString(it.key.substringAfter("permission."))} Needed")
+                        showPermissionDialog()
+                        return@registerForActivityResult
+                    }
                 }
+            }else{
+                pickFile()
+                return@registerForActivityResult
             }
             pickFile()
     }
@@ -118,9 +123,14 @@ class SelectFileFragment : Fragment() {
         }
 
         binding.btnSaveFile.setOnClickListener {
-            addContracts(listOfContracts)
-            shortSnack(resources.getString(R.string.save_success))
-            backToVisualize()
+            if(listOfContracts.isNullOrEmpty().not()){
+                addContracts(listOfContracts!!)
+                shortSnack(resources.getString(R.string.save_success))
+                backToVisualize()
+            }else{
+                shortSnack(resources.getString(R.string.something_wrong))
+            }
+
         }
 
         binding.actvImportFile.setOnClickListener {
@@ -160,10 +170,6 @@ class SelectFileFragment : Fragment() {
 
     private fun shortSnack(message: String){
         Snackbar.make(requireView(), message, Snackbar.LENGTH_SHORT).show()
-    }
-
-    private fun toast(message: String){
-        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 
     private fun addContracts(contracts: List<ContractDbDto>) = dbViewModel.apply {

@@ -215,7 +215,7 @@ class CustomerDetailsActivity : AppCompatActivity() {
                 message = message!!.replace(ConstantsVariables.predefinedMsgVehicleId, it)
             }
 
-            val date = DateFormat.getDateInstance(DateFormat.MEDIUM).format(Date(customer.value?.echeance!!))
+            val date = DateFormat.getDateInstance(DateFormat.MEDIUM).format(Date(customer.value?.effet!!))
             message = message!!.replace(ConstantsVariables.predefinedMsgDateId, date)
             customer.value?.immatriculation?.let {
                 message = message!!.replace(ConstantsVariables.predefinedImmatricualtionId, it)

@@ -74,6 +74,7 @@
     <string name="writing_file_permission">"WRITING PERMISSION"</string>
     <string name="load_success">CHARGE AVEC SUCCESS</string>
     <string name="save_success">BASE DE DONNEE MIS A JOUR</string>
+    <string name="something_wrong">Une erreur c\'est produte. Veuillez réessayer</string>
     <string name="reading_file_permission">READ PERMISSION</string>
 
 

@@ -221,7 +221,7 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener{
         }
         else if(item.itemId == R.id.action_settings){
             val intent = Intent(requireContext(), SettingsActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
             startActivity(intent)
         }
         return true

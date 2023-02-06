@@ -76,13 +76,28 @@ interface ModelSchemaStructurer {
         return SheetCursorPosition.Footer(contract)
     }
 
+    private fun policeNumberValidation(strValue: String): String{
+        Log.e("N° POLICE BEFORE", strValue)
+        var result = strValue
+        if (result.contains(".")){
+            result = ""
+            strValue.split(".").forEach { result += it }
+            result = result.split("E")[0]
+        }
+        if (result.contains("3018")){
+            result = "PRU${result}"
+        }
+        Log.e("N° POLICE AFTER", result)
+        return result
+    }
+
     private fun setContractObj(parameter: List<Any?>, header: MutableList<String>): SheetCursorPosition<T> {
         val result = Contract(0)
 
         doubleToInt(parameter.getOrNull(header.indexOf("N°")).toString())?.let { result.index = it }
         result.attestation = parameter.getOrNull(header.indexOf("ATTESTATION")).toString()
         result.carteRose = doubleToInt(parameter.getOrNull(header.indexOf("CARTE ROSE"))).toString()
-        result.numeroPolice = parameter.getOrNull(header.indexOf("N°POLICE")).toString()
+        result.numeroPolice = policeNumberValidation(parameter.getOrNull(header.indexOf("N°POLICE")).toString())
         result.compagnie = parameter.getOrNull(header.indexOf("COMPAGNIE")).toString()
         result.telephone = phoneNumbValidation(parameter.getOrNull(header.indexOf("TEL")).toString())
         result.assure = parameter.getOrNull(header.indexOf("ASSURE")).toString()
