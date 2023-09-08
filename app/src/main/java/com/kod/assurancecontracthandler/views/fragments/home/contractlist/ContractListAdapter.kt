@@ -23,11 +23,11 @@ class ContractListAdapter(private val clickFunction: (ContractDbDto) -> Unit,
     inner class ContractViewHolder(view: View): RecyclerView.ViewHolder(view){
         private var itemBinding = RvItemBinding.bind(itemView)
 
-        fun bindItems(contract: ContractDbDto) {
+        fun bindItems(contract: ContractDbDto, position: Int) {
             val isFooter = (contract.contract?.numeroPolice.isNullOrEmpty() ||
                     contract.contract?.attestation.isNullOrEmpty())
             itemBinding.apply {
-                columnId.text = contract.id.toString()
+                columnId.text = (position+1).toString()
 
                 val grandTotal = "${contract.contract?.DTA.toString()}XAF"
 
@@ -98,7 +98,7 @@ class ContractListAdapter(private val clickFunction: (ContractDbDto) -> Unit,
     override fun onBindViewHolder(holder: ContractViewHolder, position: Int) {
         val currentHabit = contractList[position]
 
-        holder.bindItems(currentHabit)
+        holder.bindItems(currentHabit, position)
         holder.itemView.setOnLongClickListener{
             clickFunction(currentHabit)
             true

@@ -4,31 +4,31 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.view.View
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.content.res.AppCompatResources
+import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.kod.assurancecontracthandler.R
 import com.kod.assurancecontracthandler.common.constants.ConstantsVariables
 import com.kod.assurancecontracthandler.common.utilities.BottomDialogView
 import com.kod.assurancecontracthandler.databinding.ActivityExpiringContractsBinding
 import com.kod.assurancecontracthandler.databinding.ContractDeetailsBinding
-import com.kod.assurancecontracthandler.model.Contract
 import com.kod.assurancecontracthandler.model.ContractDbDto
 import com.kod.assurancecontracthandler.model.Customer
 import com.kod.assurancecontracthandler.viewmodels.databaseviewmodel.DBViewModel
 import com.kod.assurancecontracthandler.viewmodels.databaseviewmodel.DBViewModelFactory
 import com.kod.assurancecontracthandler.views.customerdetails.CustomerDetailsActivity
 import com.kod.assurancecontracthandler.views.fragments.home.contractlist.ContractListAdapter
-import com.kod.assurancecontracthandler.views.fragments.home.contractlist.GridViewItemAdapter
-import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.ZoneOffset
-import java.util.*
 
-class ExpiringContractsActivity : AppCompatActivity() {
+class ExpiringContractsActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
     var binding: ActivityExpiringContractsBinding? = null
     private lateinit var dbViewModel: DBViewModel
     private var expListContracts = MutableLiveData<List<ContractDbDto>?>()
@@ -47,6 +47,7 @@ class ExpiringContractsActivity : AppCompatActivity() {
         expListContracts.observe(this) { listContracts->
             listContracts?.let { adapter?.setContractList(it) }
         }
+        setupSearchView()
     }
 
     override fun onDestroy() {
@@ -113,5 +114,38 @@ class ExpiringContractsActivity : AppCompatActivity() {
                 expListContracts.postValue(fetchExpiringContractsIn(today, maxDate))
             }
         }
+    }
+
+    private fun setupSearchView(){
+        binding!!.searchView.queryHint = resources.getString(R.string.search_bar_query_hint_exp)
+        binding!!.searchView.isSubmitButtonEnabled = false
+        binding!!.searchView.background = AppCompatResources.getDrawable(this, R.drawable.elevated_zone)
+        binding!!.searchView.setIconifiedByDefault(false)
+        binding!!.searchView.setOnQueryTextListener(this)
+
+        binding!!.searchView.findViewById<ImageView>(com.google.android.material.R.id.search_close_btn).apply {
+            setOnClickListener {
+                binding!!.searchView.
+                findViewById<TextView>(com.google.android.material.R.id.search_src_text).text = ""
+            }
+        }
+    }
+
+    override fun onQueryTextSubmit(query: String?): Boolean {
+        expListContracts.postValue(expListContracts.value?.filter {
+            query?.uppercase()?.let { queryTxt->
+                it.contract?.assure?.uppercase()?.contains(queryTxt) } == true
+        })
+
+        return true
+    }
+
+    override fun onQueryTextChange(newText: String?): Boolean {
+        expListContracts.postValue(expListContracts.value?.filter {
+            newText?.uppercase()?.let { newTxt ->
+                it.contract?.assure?.uppercase()?.contains(newTxt) } == true
+        })
+
+        return true
     }
 }

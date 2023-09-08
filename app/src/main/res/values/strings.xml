@@ -48,7 +48,7 @@
     <string name="puissance">PUISSANCE</string>
     <string name="phone_number">650123456</string>
     <string name="contract_number" tools:ignore="TypographyDashes">000–A–1234567-12345678</string>
-    <string name="prix_min">2000XAF</string>
+    <string name="prix_min">1000XAF</string>
     <string name="prix_max">500000XAF</string>
     <string name="puissance_min">01CV-ESS</string>
     <string name="puissance_max">30CV-ESS</string>
@@ -83,6 +83,7 @@
 
     <!-- CONTRACT LIST FRAGMENT -->
     <string name="search_bar_query_hint">Faire une recherche…</string>
+    <string name="search_bar_query_hint_exp">Rechercher un contrat…</string>
     <string name="it_is_a_footer">Option non valide</string>
     <string name="time_interval">Choisir L\'Interval</string>
     <string name="filtering_progress">filtering progress</string>

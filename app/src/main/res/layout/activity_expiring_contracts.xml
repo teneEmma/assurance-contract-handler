@@ -10,15 +10,28 @@
         android:id="@+id/contract_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
         android:background="@drawable/edit_text_round"
         android:text="@string/liste_title"
         style="@style/text_heading" />
 
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/searchView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/contract_title"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="7dp"
+        android:layout_marginHorizontal="10dp"
+        android:inputType="text"
+        android:background="@drawable/elevated_zone"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_sliders_worker"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/contract_title"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/searchView"
         android:scrollbars="none"
         tools:listitem="@layout/rv_item"
         android:background="@drawable/elevated_zone"/>

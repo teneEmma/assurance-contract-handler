@@ -27,6 +27,7 @@ interface CustomerDAO {
     @Query("SELECT count(assure) from contract Where assure is not NULL AND echeance < :today")
     fun getActiveContracts(today: Long): Int
 
+    //TODO: Add the ("OR") part for the customer's number
     @Query("SELECT DISTINCT assure,telephone  FROM (SELECT * from contract WHERE assure " +
             "NOT IN(\"DTA\", \"SOMME\", \"TOTAL\", \"PRIME A REVERSER\"))  WHERE assure LIKE :name " +
             "ORDER BY assure")

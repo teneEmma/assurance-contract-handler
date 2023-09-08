@@ -5,6 +5,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
@@ -12,6 +13,7 @@ import android.widget.Toast
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.SearchView
 import androidx.core.util.Pair
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -30,7 +32,6 @@ import com.kod.assurancecontracthandler.databinding.ContractDeetailsBinding
 import com.kod.assurancecontracthandler.databinding.ExpandableSliderItemBinding
 import com.kod.assurancecontracthandler.databinding.FilterDialogBinding
 import com.kod.assurancecontracthandler.databinding.FragmentListContractsBinding
-import com.kod.assurancecontracthandler.databinding.SettingsActivityBinding
 import com.kod.assurancecontracthandler.model.Contract
 import com.kod.assurancecontracthandler.model.ContractDbDto
 import com.kod.assurancecontracthandler.model.Customer
@@ -50,7 +51,7 @@ import java.util.*
 class ContractListFragment : Fragment(), SearchView.OnQueryTextListener{
 
     private lateinit var binding: FragmentListContractsBinding
-    lateinit var dbViewModel: DBViewModel
+    private lateinit var dbViewModel: DBViewModel
     private lateinit var filterViewModel: FilterViewModel
     private lateinit var filterBinding: FilterDialogBinding
     private lateinit var expandableAdapter: ExpandableSliderAdapter
@@ -306,13 +307,21 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener{
 
         expandableAdapter = ExpandableSliderAdapter(requireContext(),
             groupTitleList, childDataList
-        )
+        ) { groupChild, minMax ->
+            if(groupChild.first == 0){
+                filterViewModel.group1SliderValues[groupChild.second] =
+                    kotlin.Pair(minMax.first, minMax.second)
+            }else{
+                filterViewModel.group2SliderValues[groupChild.second] =
+                    kotlin.Pair(minMax.first, minMax.second)
+            }
+        }
 
         filterBinding.expandableLvSliders.setAdapter(expandableAdapter)
-        filterBinding.expandableLvSliders.setOnChildClickListener { _, v, groupPosition, childPosition, _ ->
-            makeOthersVisible(groupPosition, childPosition, v)
-            true
-        }
+//        filterBinding.expandableLvSliders.setOnChildClickListener { parent, v, groupPosition, childPosition, _ ->
+//            expandableAdapter.getChildView(groupPosition, childPosition, false, v, parent)
+//            true
+//        }
     }
 
     private fun showDatePickerDialog(){
@@ -372,56 +381,7 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener{
         }}
     }
 
-    private fun makeOthersVisible(groupPosition: Int, childPosition: Int, convertView: View?){
-        val view = expandableAdapter.getChildView(groupPosition, childPosition , false,  convertView, null)
-        filterViewModel.childrenTouched.add(childPosition)
-        expandableSBinding = ExpandableSliderItemBinding.bind(view)
 
-        expandableSBinding?.prixSlider?.apply {
-            visibility = View.VISIBLE
-            if (groupPosition == 1){
-                values = mutableListOf(1.0f, 30.0f)
-                valueFrom = 1.0f
-                valueTo = 30.0f
-                stepSize = 1.0f
-                expandableSBinding!!.etPriceRangeMin.text = resources.getText(R.string.puissance_min)
-                expandableSBinding!!.etPriceRangeMax.text = resources.getText(R.string.puissance_max)
-            }
-
-            setOnFocusChangeListener { v, hasFocus ->
-                if (hasFocus.not())
-                    v.visibility = View.GONE
-            }
-
-            addOnSliderTouchListener(object : RangeSlider.OnSliderTouchListener{
-                override fun onStartTrackingTouch(slider: RangeSlider) {
-
-                }
-
-                override fun onStopTrackingTouch(slider: RangeSlider) {
-                    val minVal = slider.values[0].toInt()
-                    val maxVal = slider.values[1].toInt()
-                    val minStr: String
-                    val maxStr: String
-                    if(groupPosition == 0){
-                        filterViewModel.group1SliderValues[childPosition] =
-                            kotlin.Pair(minVal, maxVal)
-                        minStr = minVal.toString() + ConstantsVariables.priceUnit
-                        maxStr = maxVal.toString() + ConstantsVariables.priceUnit
-                    }else{
-                        filterViewModel.group2SliderValues[childPosition] =
-                            kotlin.Pair(minVal, maxVal)
-                        minStr = minVal.toString() + ConstantsVariables.powerUnit
-                        maxStr = maxVal.toString() + ConstantsVariables.powerUnit
-                    }
-                    expandableSBinding!!.etPriceRangeMin.text = minStr
-                    expandableSBinding!!.etPriceRangeMax.text = maxStr
-                }
-            })
-        }
-        expandableSBinding!!.llEtPriceRange.visibility = View.VISIBLE
-
-    }
 
     private fun resetAllFilterData(){
         filterViewModel.clearData()

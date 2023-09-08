@@ -23,7 +23,7 @@ class FilterViewModel: ViewModel() {
     var maxDate: Long? = null
     var group1SliderValues = hashMapOf<Int, Pair<Int, Int>>()
     var group2SliderValues = hashMapOf<Int, Pair<Int, Int>>()
-    val childrenTouched = mutableListOf<Int>()
+    var childrenTouched: Int? = null
     var searchText: String = ""
 
     private val _isSearching = MutableLiveData<Boolean>()
@@ -42,6 +42,8 @@ class FilterViewModel: ViewModel() {
             filteredValues = filteredValues.filter { this.apporteur?.let { value ->
                 it.contract?.APPORTEUR?.uppercase()?.contains(value.uppercase()) } == true }
         }
+        /*TODO: Replace it it.contract?.APPORTEUR?.uppercase()?.contains(value.uppercase()) to
+        TODO: it.contract?.APPORTEUR?.contains(value, ignoreCase=true)*/
         if(checkField(immatriculation)) {
             filteredValues = filteredValues.filter { this.immatriculation?.let { value ->
                 it.contract?.immatriculation?.uppercase()?.contains(value.uppercase()) } == true }
