@@ -1,0 +1,31 @@
+name: Building the app
+
+on:
+  # Would be triggered when a pull request is created.
+  push:
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: [ubuntu-latest, self-hosted]
+
+    steps:
+      # Check out the code from the repository
+      - uses: actions/checkout@v2
+
+      # Set up Java 11 using AdoptOpenJDK
+      - uses: actions/setup-java@v2
+        with:
+          java-version: '11'
+          distribution: 'adopt'
+
+      # Validate the Gradle wrapper
+      - name: Validate Gradle wrapper
+        uses: gradle/wrapper-validation-action@e6e38bacfdf1a337459f332974bb2327a31aaf4b
+
+      # Run Gradle tasks to build and test the app
+      - name: Build and test
+        run: ./gradlew build test
+
+
