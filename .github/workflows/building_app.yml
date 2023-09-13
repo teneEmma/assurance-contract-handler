@@ -38,6 +38,6 @@ jobs:
         uses: actions/upload-artifact@v3.1.0
         with:
           name: app
-          path: app/build/outut/apk/debug/app-debug.apk
+          path: app/build/outputs/apk/debug/app-debug.apk
 
 
