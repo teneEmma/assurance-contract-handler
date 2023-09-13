@@ -2,30 +2,38 @@ name: Building the app
 
 on:
   # Would be triggered when a pull request is created.
-  push:
   pull_request:
     branches: [ master ]
 
 jobs:
   build:
-    runs-on: [ubuntu-latest, self-hosted]
+    runs-on: ubuntu-latest
 
     steps:
       # Check out the code from the repository
-      - uses: actions/checkout@v2
+      - name: Checkout.
+        uses: actions/checkout@v2.5.1
 
-      # Set up Java 11 using AdoptOpenJDK
-      - uses: actions/setup-java@v2
+      # Set up Java 11 using  AdoptOpenJDK
+      - name: Setting up Java.
+        uses: actions/setup-java@v2
         with:
           java-version: '11'
           distribution: 'temurin'
 
       # Validate the Gradle wrapper
-      - name: Validate Gradle wrapper
-        uses: gradle/gradle-build-action@bd5760595778326ba7f1441bcf7e88b49de61a25 # v2.6.0
+      - name: Build with Gradle.
+        uses: gradle/gradle-build-action@ef76a971e2fa3f867b617efd72f2fbd72cf6f8bc
 
       # Run Gradle tasks to build and test the app
       - name: Build and test
         run: ./gradlew build test
+
+      # Run Gradle tasks to build and test the app
+      - name: Upload the apk.
+        uses: action/upload-artifact@v3.0.0
+        with:
+          name: app
+          path: app/build/outut/apk/debug/app-debug.apk
 
 
