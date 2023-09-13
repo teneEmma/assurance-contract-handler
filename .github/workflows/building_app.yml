@@ -39,11 +39,4 @@ jobs:
         with:
           name: app
           path: app/build/outputs/apk/debug/app-debug.apk
-      
-      # Send a discord notification that the run was successful.
-      - name: Sending success build app discord message.
-        uses: fateyan/action-discord-notifier@v1.2.0
-        with:
-          webhook: https://discord.com/api/webhooks/1151639521377669190/eIyFoD1Lgojgx125cPPcRcSHsAmIMoJpvdJp08sIWhkcm91Cj6ayMgjtL7hG4Az2R1Jp
-          message-title: '💪💪💪 safely built app'
           
