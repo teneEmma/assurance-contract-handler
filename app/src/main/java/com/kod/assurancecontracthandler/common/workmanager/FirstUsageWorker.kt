@@ -6,7 +6,6 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.work.WorkerParameters
 import com.kod.assurancecontracthandler.R
 import com.kod.assurancecontracthandler.common.constants.ConstantsVariables
-import com.kod.assurancecontracthandler.model.Customer
 
 class FirstUsageWorker(context: Context, params: WorkerParameters) : ExpirationWorker(context, params) {
     override suspend fun doWork(): Result {

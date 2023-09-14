@@ -1,8 +1,5 @@
 package com.kod.assurancecontracthandler.common.usecases
 
-import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.kod.assurancecontracthandler.model.Contract
 import org.apache.poi.ss.formula.functions.T
 import java.util.*

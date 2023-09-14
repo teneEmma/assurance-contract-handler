@@ -10,9 +10,6 @@ import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.kod.assurancecontracthandler.R
 import com.kod.assurancecontracthandler.common.constants.ConstantsVariables
-import com.kod.assurancecontracthandler.common.constants.ConstantsVariables.INTENT_LIST_WORKER
-import com.kod.assurancecontracthandler.model.Contract
-import com.kod.assurancecontracthandler.model.Customer
 import com.kod.assurancecontracthandler.viewmodels.databaseviewmodel.DBViewModel
 import com.kod.assurancecontracthandler.views.expiringactivity.ExpiringContractsActivity
 import kotlinx.coroutines.Dispatchers

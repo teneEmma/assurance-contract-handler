@@ -1,13 +1,15 @@
 package com.kod.assurancecontracthandler.viewmodels.databaseviewmodel
 
 import android.app.Application
-import androidx.lifecycle.*
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import androidx.sqlite.db.SimpleSQLiteQuery
 import com.kod.assurancecontracthandler.model.ContractDbDto
 import com.kod.assurancecontracthandler.model.database.ContractDatabase
 import com.kod.assurancecontracthandler.repository.ContractRepository
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 class DBViewModel(application: Application): AndroidViewModel(application) {

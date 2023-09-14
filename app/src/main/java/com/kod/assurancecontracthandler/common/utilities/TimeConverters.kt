@@ -1,13 +1,9 @@
 package com.kod.assurancecontracthandler.common.utilities
 
-import android.util.Log
 import androidx.room.TypeConverter
 import com.kod.assurancecontracthandler.common.constants.ConstantsVariables
 import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 import java.util.*
-import kotlin.collections.HashMap
 
 class TimeConverters {
     @TypeConverter

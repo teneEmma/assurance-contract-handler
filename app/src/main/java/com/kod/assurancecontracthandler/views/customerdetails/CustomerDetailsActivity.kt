@@ -23,17 +23,15 @@ import com.kod.assurancecontracthandler.R
 import com.kod.assurancecontracthandler.common.constants.ConstantsVariables
 import com.kod.assurancecontracthandler.common.usecases.ContactAction
 import com.kod.assurancecontracthandler.common.utilities.BottomDialogView
+import com.kod.assurancecontracthandler.common.utilities.DataStoreRepository
 import com.kod.assurancecontracthandler.databinding.ActivityCustomerDetailsBinding
 import com.kod.assurancecontracthandler.databinding.ContractDeetailsBinding
 import com.kod.assurancecontracthandler.databinding.EditCustomerBinding
 import com.kod.assurancecontracthandler.model.Contract
 import com.kod.assurancecontracthandler.model.Customer
-import com.kod.assurancecontracthandler.common.utilities.DataStoreRepository
 import com.kod.assurancecontracthandler.viewmodels.databaseviewmodel.DBViewModel
-import com.kod.assurancecontracthandler.views.fragments.home.contractlist.GridViewItemAdapter
 import java.net.URLEncoder
 import java.text.DateFormat
-import java.text.SimpleDateFormat
 import java.util.*
 
 class CustomerDetailsActivity : AppCompatActivity() {

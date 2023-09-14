@@ -7,10 +7,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.kod.assurancecontracthandler.common.usecases.ErrorLevel
+import com.kod.assurancecontracthandler.common.usecases.SheetCursorPosition
 import com.kod.assurancecontracthandler.common.utilities.ModelSchemaStructurer
 import com.kod.assurancecontracthandler.model.ContractDbDto
-import com.kod.assurancecontracthandler.common.usecases.SheetCursorPosition
-import com.kod.assurancecontracthandler.model.Contract
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.apache.poi.hssf.usermodel.HSSFCell
@@ -18,8 +17,6 @@ import org.apache.poi.hssf.usermodel.HSSFDateUtil
 import org.apache.poi.ss.formula.functions.T
 import org.apache.poi.ss.usermodel.Cell
 import org.apache.poi.ss.usermodel.Row
-import org.apache.poi.ss.usermodel.WorkbookFactory
-import org.apache.poi.xssf.usermodel.XSSFCell
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import java.io.FileInputStream
 import java.io.IOException

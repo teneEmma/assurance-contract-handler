@@ -1,7 +1,6 @@
 package com.kod.assurancecontracthandler.viewmodels.customerviewmodel
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,8 +11,7 @@ import com.kod.assurancecontracthandler.repository.CustomerRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.util.Calendar
-import java.util.Date
+import java.util.*
 
 class CustomerViewModel(application: Application): ViewModel() {
     private val  repository: CustomerRepository

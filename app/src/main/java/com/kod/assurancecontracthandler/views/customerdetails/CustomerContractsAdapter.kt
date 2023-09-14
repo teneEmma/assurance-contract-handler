@@ -1,18 +1,15 @@
 package com.kod.assurancecontracthandler.views.customerdetails
 
 import android.graphics.Color
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.kod.assurancecontracthandler.R
 import com.kod.assurancecontracthandler.databinding.ContractListItemBinding
 import com.kod.assurancecontracthandler.model.Contract
 import com.kod.assurancecontracthandler.model.ContractDbDto
-import java.util.Calendar
+import java.util.*
 
 class CustomerContractsAdapter(private val listContracts: List<ContractDbDto>,private val itemClicked: (Contract) -> Unit, private val activeStateTouched: (Boolean) -> Unit):
     RecyclerView.Adapter<CustomerContractsAdapter.ContractViewHolder>() {
