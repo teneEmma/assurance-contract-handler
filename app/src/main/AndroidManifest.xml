@@ -26,8 +26,8 @@
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AssuranceContractHandler"
-        tools:targetApi="31" >
+        android:theme="@style/AppTheme.AssuranceContractHandler"
+        tools:targetApi="31">
         <activity
             android:name=".views.settings.SettingsActivity"
             android:exported="false"
@@ -35,11 +35,11 @@
         <activity
             android:name=".views.expiringactivity.ExpiringContractsActivity"
             android:exported="false"
-            android:theme="@style/Theme.AssuranceContractHandler.NoActionBar" />
+            android:theme="@style/AppTheme.AssuranceContractHandler.NoActionBar" />
         <activity
             android:name=".views.mainactivity.MainActivity"
             android:exported="true"
-            android:theme="@style/Theme.AssuranceContractHandler.NoActionBar" >
+            android:theme="@style/AppTheme.AssuranceContractHandler.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -49,7 +49,7 @@
         <activity
             android:name=".views.customerdetails.CustomerDetailsActivity"
             android:label="Details Client"
-            android:theme="@style/Theme.AssuranceContractHandler.NoActionBar" />
+            android:theme="@style/AppTheme.AssuranceContractHandler.NoActionBar" />
     </application>
 
 </manifest>

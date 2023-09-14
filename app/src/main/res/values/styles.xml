@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Headers"
+           parent="TextAppearance.AppCompat">
+        <item name="android:textColor">@color/black</item>
+        <item name="fontFamily">@font/header_2</item>
+    </style>
+
+    <style name="Headers.header_1">
+        <item name="android:textSize">60sp</item>
+    </style>
+
+    <style name="Headers.header_2">
+        <item name="android:textSize">40sp</item>
+    </style>
+
+    <style name="normal"
+           parent="TextAppearance.AppCompat">
+        <item name="android:textColor">@color/black</item>
+        <item name="fontFamily">@font/normal</item>
+        <item name="android:textSize">24sp</item>
+    </style>
+
+    <style name="AppActionBar"
+           parent="Theme.AppCompat.DayNight">
+        <item name="android:background">?attr/colorSecondary</item>
+    </style>
+
+    <style name="AppToolBar"
+           parent="@style/Widget.MaterialComponents.Toolbar">
+        <item name="titleTextAppearance">@style/AppToolBar.TitleTextStyle</item>
+    </style>
+
+    <style name="AppToolBar.TitleTextStyle"
+           parent="@style/TextAppearance.MaterialComponents.Headline1">
+        <item name="fontFamily">@font/normal</item>
+        <item name="android:textSize">24sp</item>
+    </style>
+
+</resources>

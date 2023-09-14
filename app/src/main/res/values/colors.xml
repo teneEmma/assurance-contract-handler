@@ -2,12 +2,20 @@
 <resources>
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>
-    <color name="purple_700">#FF6200EE</color>
-    <color name="teal_200">@color/purple_500</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="red">#FF0000</color>
+    <color name="red">#ff601410</color>
+
+    <!--  Colors which are specific to the app  -->
+    <color name="green">#107C42</color>
+    <color name="light_green">#D0FBE7</color>
+    <color name="gray">#998e8d</color>
+    <color name="dark_green">#0E4025</color>
+
+    <!-- Colors from setting_implmentation branch -->
     <color name="bright_green">#08FF00</color>
     <color name="thick_green">#00733B</color>
     <color name="gradient_no_dark">#DDD9D9</color>
