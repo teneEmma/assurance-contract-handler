@@ -1,5 +1,11 @@
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_name">Assurance Contract Handler</string>
     <string name="welcome">Welcome</string>
     <string name="file_description">excel file</string>
+
+    <!--   Example on how to exclude a line from being translated -->
+    <string name="exclude_string_from_translation">
+            Visit us at <xliff:g
+            id="application_homepage">http://my/app/home.html</xliff:g>
+    </string>
 </resources>
