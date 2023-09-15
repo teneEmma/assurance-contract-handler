@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "867177391257",
+    "project_id": "contract-handler",
+    "storage_bucket": "contract-handler.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:867177391257:android:b3e5882c55aa2f4fdb4408",
+        "android_client_info": {
+          "package_name": "com.kod.assurancecontracthandler"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "867177391257-d4a4fqerbmqmjk937p5gpr89nelkosvt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC6i0rPCroIVgKWd32SIP5oXb8HXQ8pLxE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "867177391257-d4a4fqerbmqmjk937p5gpr89nelkosvt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
