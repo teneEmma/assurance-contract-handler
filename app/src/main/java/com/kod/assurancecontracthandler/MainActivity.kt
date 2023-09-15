@@ -14,9 +14,5 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         setSupportActionBar(binding.toolbar)
-
-        binding.createBug.setOnClickListener {
-            throw RuntimeException()
-        }
     }
 }
