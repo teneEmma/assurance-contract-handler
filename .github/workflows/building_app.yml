@@ -4,6 +4,8 @@ on:
   # Would be triggered when a pull request is created.
   pull_request:
     branches: [ master ]
+  push:
+    branches: [ master ]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
