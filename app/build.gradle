@@ -61,9 +61,4 @@ dependencies {
     // Google crashlytics service.
     implementation 'com.google.firebase:firebase-crashlytics-ktx:18.4.1'
     implementation 'com.google.firebase:firebase-analytics-ktx:21.3.0'
-
-    // Dependencies for excel files.
-    implementation 'org.apache.poi:poi:5.2.0'
-    implementation 'org.apache.poi:poi-ooxml:5.2.0'
-
 }
