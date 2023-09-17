@@ -7,8 +7,13 @@
 
         <item name="colorSecondary">@color/green</item>
 
+        <item name="android:textColor">@color/green</item>
+
+        <!--  The text color for the toolbar title  -->
+        <item name="titleTextColor">@color/white</item>
+
         <!-- The background color of activities -->
-        <item name="android:windowBackground">@color/white</item>
+        <item name="android:windowBackground">@color/light_green</item>
 
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
@@ -22,7 +27,4 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="AppTheme.AssuranceContractHandler.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
-    <style name="AppTheme.AssuranceContractHandler.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>

@@ -8,6 +8,11 @@
         <!--  The color for the action bar.  -->
         <item name="colorSecondary">@color/black</item>
 
+        <item name="android:textColor">@color/light_green</item>
+
+        <!--  The text color for the toolbar title  -->
+        <item name="titleTextColor">@color/light_green</item>
+
         <!-- The background color of activities -->
         <item name="android:windowBackground">@color/black</item>
 
