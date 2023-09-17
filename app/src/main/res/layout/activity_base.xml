@@ -13,17 +13,14 @@
             android:layout_height="wrap_content"
             style="@style/AppActionBar"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            android:theme="@style/AppTheme.AssuranceContractHandler.AppBarOverlay">
+            app:layout_constraintStart_toStartOf="parent">
 
         <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:titleCentered="true"
-                app:titleTextAppearance="@style/AppToolBar.TitleTextStyle"
-                style="@style/AppToolBar"
-                app:popupTheme="@style/AppTheme.AssuranceContractHandler.PopupOverlay"/>
+                app:titleTextAppearance="@style/AppToolBar.TitleTextStyle"/>
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -33,8 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
             android:text="@string/welcome"
-            android:textColor="@color/white"
-            style="@style/Headers.header_1"
+            android:textAppearance="@style/Headers.header_1"
             android:textAlignment="center"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

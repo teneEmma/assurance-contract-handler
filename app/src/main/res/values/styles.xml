@@ -2,7 +2,6 @@
 <resources>
     <style name="Headers"
            parent="TextAppearance.AppCompat">
-        <item name="android:textColor">@color/black</item>
         <item name="fontFamily">@font/header_2</item>
     </style>
 
@@ -16,7 +15,6 @@
 
     <style name="normal"
            parent="TextAppearance.AppCompat">
-        <item name="android:textColor">@color/black</item>
         <item name="fontFamily">@font/normal</item>
         <item name="android:textSize">24sp</item>
     </style>
@@ -31,8 +29,7 @@
         <item name="titleTextAppearance">@style/AppToolBar.TitleTextStyle</item>
     </style>
 
-    <style name="AppToolBar.TitleTextStyle"
-           parent="@style/TextAppearance.MaterialComponents.Headline1">
+    <style name="AppToolBar.TitleTextStyle">
         <item name="fontFamily">@font/normal</item>
         <item name="android:textSize">24sp</item>
     </style>
