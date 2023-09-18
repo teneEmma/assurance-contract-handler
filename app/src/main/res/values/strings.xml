@@ -14,4 +14,11 @@
     <string name="list_customers_title">Customers</string>
 
     <string name="file_description">excel file</string>
+    <string name="import_file">Import a file…</string>
+    <string name="contract_file_name">contracts_file_name.xls</string>
+    <string name="cancel_text">Cancel</string>
+    <string name="save">Save</string>
+
+    <string name="content_description_loading_progress" translatable="false">Loading Progress</string>
+
 </resources>
