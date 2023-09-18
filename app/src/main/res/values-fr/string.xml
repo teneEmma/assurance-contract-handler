@@ -15,4 +15,9 @@
     <string name="list_customers_title">Clients</string>
 
     <string name="file_description">fichier excel</string>
+    <string name="import_file">Importer un fichier…</string>
+    <string name="contract_file_name">non_du_fichier_des_contrats.xls</string>
+    <string name="cancel_text">Annuler</string>
+    <string name="save">Sauvegarder</string>
+
 </resources>
