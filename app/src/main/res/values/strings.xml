@@ -8,5 +8,10 @@
             Visit us at <xliff:g
             id="application_homepage">http://my/app/home.html</xliff:g>
     </string>
+
+    <string name="title_select_file_fragment">File Selection</string>
+    <string name="list_contract_title">Contracts</string>
+    <string name="list_customers_title">Customers</string>
+
     <string name="file_description">excel file</string>
 </resources>
