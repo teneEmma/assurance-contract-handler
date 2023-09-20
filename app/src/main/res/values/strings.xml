@@ -18,7 +18,23 @@
     <string name="contract_file_name">contracts_file_name.xls</string>
     <string name="cancel_text">Cancel</string>
     <string name="save">Save</string>
+    <string name="empty_database">Empty Database</string>
+    <string name="column_assure">CLIENT NAME</string>
+    <string name="carte_rose_title">CARTE ROSE:</string>
+    <string name="attestation_title">ATTESTATION:</string>
+    <string name="plate_number_title">Plate Number:</string>
+    <string name="due_date_title">Due Date:</string>
+    <string name="start_date_title">Start Date:</string>
+    <string name="column_attestation" translatable="false">000*Z*0112233</string>
+    <string name="column_carteRose" translatable="false">00011333</string>
+    <string name="column_start_date" translatable="false">2000/01/01</string>
+    <string name="column_echeance" translatable="false">2000/01/01</string>
+    <string name="column_id" translatable="false">01</string>
+    <string name="plate_number_value" translatable="false">RR 000 XX</string>
+    <string name="grand_total" translatable="false">- XAF</string>
 
-    <string name="content_description_loading_progress" translatable="false">Loading Progress</string>
+    <string name="content_description_loading_progress">Loading Progress</string>
+    <string name="content_description_fab_add_document">Add a document</string>
+    <string name="content_description_fab_filter">Filter</string>
 
 </resources>
