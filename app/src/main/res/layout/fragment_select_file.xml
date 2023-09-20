@@ -6,16 +6,97 @@
     android:layout_height="match_parent"
     tools:context=".views.main.fragmentFileSelection.SelectFileFragment">
 
+    <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/il_import_files"
+            style="@style/SelectFile_text_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="20dp"
+            android:padding="10dp"
+            app:endIconDrawable="@drawable/ic_folder"
+            app:endIconTint="@color/white"
+            app:endIconMode="custom"
+            app:endIconCheckable="true"
+            app:hintEnabled="false"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+            android:id="@+id/actv_import_file"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textAppearance="@style/normal"
+            android:padding="8dp"
+            android:hint="@string/import_file"
+            android:inputType="none" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <ImageView
+            android:id="@+id/image_excel"
+            android:layout_width="200dp"
+            android:layout_height="300dp"
+            android:layout_margin="10dp"
+            android:contentDescription="@string/file_description"
+            android:src="@drawable/xls"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/il_import_files" />
+
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/fileLoadingPB"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:visibility="gone"
+            app:indicatorColor="?attr/colorPrimary"
+            app:trackColor="@color/gray"
+            android:contentDescription="@string/content_description_loading_progress"/>
+
     <TextView
+            android:id="@+id/textview_second"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
-            android:text="@string/title_select_file_fragment"
+            android:text="@string/contract_file_name"
+            android:textAppearance="@style/normal"
             android:textAlignment="center"
-            android:textAppearance="@style/Headers.header_2"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toBottomOf="@id/image_excel" />
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textview_second">
+
+        <Button
+                android:id="@+id/btn_cancel_file"
+                style="@style/AppButton.Secondary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="20dp"
+                android:text="@string/cancel_text" />
+
+        <Button
+                android:id="@+id/btn_Save_file"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/ic_save"
+                style="@style/AppButton.Primary"
+                android:enabled="false"
+                android:text="@string/save"
+                tools:ignore="RtlHardcoded" />
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
