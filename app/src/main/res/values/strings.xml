@@ -25,6 +25,8 @@
     <string name="plate_number_title">Plate Number:</string>
     <string name="due_date_title">Due Date:</string>
     <string name="start_date_title">Start Date:</string>
+    <string name="customer_name">NAMES</string>
+    <string name="profile_picture">Profile Picture</string>
     <string name="column_attestation" translatable="false">000*Z*0112233</string>
     <string name="column_carteRose" translatable="false">00011333</string>
     <string name="column_start_date" translatable="false">2000/01/01</string>
@@ -32,6 +34,7 @@
     <string name="column_id" translatable="false">01</string>
     <string name="plate_number_value" translatable="false">RR 000 XX</string>
     <string name="grand_total" translatable="false">- XAF</string>
+    <string name="number_0" translatable="false">0</string>
 
     <string name="content_description_loading_progress">Loading Progress</string>
     <string name="content_description_fab_add_document">Add a document</string>
