@@ -15,4 +15,7 @@
     <color name="gray">#998e8d</color>
     <color name="dark_green">#0E4025</color>
     <color name="transparent_elevated">@color/material_on_surface_stroke</color>
+    <color name="start_date_color">@color/purple_500</color>
+    <color name="title_color">#000000</color>
+
 </resources>
