@@ -26,6 +26,8 @@
     <string name="plate_number_title">Plate Number:</string>
     <string name="due_date_title">Effet:</string>
     <string name="start_date_title">Echéance:</string>
+    <string name="customer_name">NOMS Prenoms</string>
+    <string name="profile_picture">Photo De Profil</string>
 
     <string name="content_description_loading_progress">Niveau De Progression</string>
     <string name="content_description_fab_add_document">Ajouter un document</string>
