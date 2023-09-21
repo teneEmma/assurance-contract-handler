@@ -29,11 +29,10 @@
         <item name="tabTextColor">?attr/titleTextColor</item>
         <item name="tabIndicatorAnimationMode">elastic</item>
         <item name="tabMode">fixed</item>
-        <item name="tabIndicatorColor">?attr/colorPrimary</item>
+        <item name="tabIndicatorColor">?attr/colorAccent</item>
         <item name="tabRippleColor">?attr/colorAccent</item>
-        <item name="tabIndicatorFullWidth">false</item>
+        <item name="tabIndicatorFullWidth">true</item>
         <item name="tabIndicatorHeight">4dp</item>
-        <item name="tabSelectedTextColor">?attr/colorPrimary</item>
     </style>
 
 </resources>

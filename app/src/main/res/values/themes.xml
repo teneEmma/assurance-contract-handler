@@ -22,6 +22,26 @@
         <item name="android:actionBarStyle" >@style/AppActionBar</item>
     </style>
 
+    <style name="AppTabLayout" parent="Widget.Design.TabLayout">
+        <item name="enforceTextAppearance">false</item>
+        <item name="android:background">?attr/colorPrimary</item>
+        <item name="tabTextAppearance">@style/normal</item>
+        <item name="tabTextColor">?attr/titleTextColor</item>
+        <item name="tabIndicatorAnimationMode">elastic</item>
+        <item name="tabMode">fixed</item>
+        <item name="android:elevation">4dp</item>
+        <item name="tabIndicatorColor">?attr/colorAccent</item>
+        <item name="tabRippleColor">?attr/colorAccent</item>
+        <item name="tabIndicatorFullWidth">true</item>
+        <item name="tabIndicatorHeight">4dp</item>
+    </style>
+
+    <style name="AppToolBarTheme" parent="Theme.AppCompat">
+        <item name="android:textColorPrimary">?attr/titleTextColor</item>
+        <item name="android:textColorSecondary">?attr/titleTextColor</item>
+        <item name="actionMenuTextColor">?attr/titleTextColor</item>
+    </style>
+
     <style name="AppTheme.AssuranceContractHandler.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
