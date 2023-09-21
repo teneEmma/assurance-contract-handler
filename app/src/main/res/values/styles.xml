@@ -20,7 +20,7 @@
     </style>
 
     <style name="AppActionBar"
-           parent="Theme.AppCompat.DayNight">
+           parent="Theme.MaterialComponents.Light">
         <item name="android:background">?attr/colorSecondary</item>
     </style>
 
