@@ -1,7 +1,7 @@
 package com.kod.assurancecontracthandler.repository
 
 import androidx.sqlite.db.SimpleSQLiteQuery
-import com.kod.assurancecontracthandler.Dao.ContractDAO
+import com.kod.assurancecontracthandler.dao.ContractDAO
 import com.kod.assurancecontracthandler.model.ContractDbDto
 
 class ContractRepository(private val contractDao: ContractDAO) {
