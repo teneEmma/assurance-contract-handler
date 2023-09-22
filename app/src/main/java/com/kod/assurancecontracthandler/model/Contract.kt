@@ -2,24 +2,22 @@ package com.kod.assurancecontracthandler.model
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
-import java.util.Date
 
 @Parcelize
 data class Contract(
-    var index: Int,
-    var attestation: String? ="",
-    var carteRose: String? = "0",
-    var numeroPolice: String? = "",
-    var compagnie: String? = "",
+    var attestation: String? = null,
+    var carteRose: String? = null,
+    var numeroPolice: String? = null,
+    var compagnie: String? = null,
     var telephone: Long? = null,
-    var assure: String? = "",
-    var effet: Date? = null,
-    var echeance: Date?= null,
-    var puissanceVehicule: String? = "",
-    var mark: String? = "",
-    var immatriculation: String? = "",
-    var categorie: Int? = 1,
-    var zone: String? = "C",
+    var assure: String? = null,
+    var effet: String? = null,
+    var echeance: String?= null,
+    var puissanceVehicule: String? = null,
+    var mark: String? = null,
+    var immatriculation: String? = null,
+    var categorie: Int? = null,
+    var zone: String? = null,
     var duree: Int? = null,
     var DTA: Int? = null,
     var PN: Int? = null,
