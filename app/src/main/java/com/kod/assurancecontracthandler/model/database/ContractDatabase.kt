@@ -4,19 +4,13 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import androidx.room.TypeConverters
-import com.kod.assurancecontracthandler.Dao.ContractDAO
-import com.kod.assurancecontracthandler.Dao.CustomerDAO
-import com.kod.assurancecontracthandler.common.utilities.TimeConverters
+import com.kod.assurancecontracthandler.dao.ContractDAO
 import com.kod.assurancecontracthandler.model.ContractDbDto
 
 @Database(entities = [ContractDbDto::class], version = 1, exportSchema = true)
-@TypeConverters(TimeConverters::class)
 abstract class ContractDatabase: RoomDatabase() {
 
     abstract fun contractDao(): ContractDAO
-
-    abstract fun customerDao(): CustomerDAO
     companion object{
         @Volatile
         private var INSTANCE: ContractDatabase? = null
