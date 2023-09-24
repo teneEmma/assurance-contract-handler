@@ -28,6 +28,17 @@
     <string name="start_date_title">Echéance:</string>
     <string name="customer_name">NOMS Prenoms</string>
     <string name="profile_picture">Photo De Profil</string>
+    <string name="save_successful">Base de données mis-à-jour avec success</string>
+    <string name="save_failed">Une erreur c\'est produte. Veuillez réessayer</string>
+    <string name="load_successful">Chargé avec success</string>
+    <string name="reading_file_permission">PERMISSION DE LECTURE</string>
+    <string name="writing_file_permission">"PERMISSION D\'ECRITURE"</string>
+    <string name="file_select_not">Aucun fichier sélectioné</string>
+    <string name="no_access_to_files_text">Pas d\'accèss aux fichiers</string>
+    <string name="permission_str">Accordez moi les permissions necessaires pourouvoir acceder a vos
+        differents fichiers</string>
+    <string name="grant_permission_text">Donner les permissions</string>
+    <string name="needed_text">necessaire</string>
 
     <string name="content_description_loading_progress">Niveau De Progression</string>
     <string name="content_description_fab_add_document">Ajouter un document</string>
