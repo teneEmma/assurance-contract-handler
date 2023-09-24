@@ -27,6 +27,16 @@
     <string name="start_date_title">Start Date:</string>
     <string name="customer_name">NAMES</string>
     <string name="profile_picture">Profile Picture</string>
+    <string name="save_successful">Database updated successfully</string>
+    <string name="save_failed">An error occurred. Please retry</string>
+    <string name="load_successful">Loaded with success</string>
+    <string name="reading_file_permission">READ PERMISSION</string>
+    <string name="writing_file_permission">"WRITING PERMISSION"</string>
+    <string name="file_select_not">No files selected</string>
+    <string name="no_access_to_files_text">No access to files</string>
+    <string name="permission_str">Grant me necessary permissions to access your files</string>
+    <string name="grant_permission_text">DONNER LES PERMISSION</string>
+    <string name="needed_text">needed</string>
     <string name="column_attestation" translatable="false">000*Z*0112233</string>
     <string name="column_carteRose" translatable="false">00011333</string>
     <string name="column_start_date" translatable="false">2000/01/01</string>
