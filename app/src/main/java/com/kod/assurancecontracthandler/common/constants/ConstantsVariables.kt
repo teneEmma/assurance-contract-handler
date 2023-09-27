@@ -3,6 +3,8 @@ package com.kod.assurancecontracthandler.common.constants
 object ConstantsVariables {
     val months = listOf("JANVIER","FEVRIER","MARS","AVRIL", "MAI", "JUIN", "JUILLET", "AOUT",
     "SEPTEMBRE","OCTOBRE","NOVEMBRE","DECEMBRE")
+    val possibleBeginningSheetValues = listOf("SEMAINE", "MOIS DE")
+    val possibleHeaderValues = listOf("ATTESTATION", "CARTE ROSE", "ASSURE")
 
     enum class ExcelDateStringHeaderSuffix(val value: String){
         WeekString("SEMAINE DU"),
