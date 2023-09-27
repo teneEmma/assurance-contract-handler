@@ -5,9 +5,9 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.kod.assurancecontracthandler.dao.ContractDAO
-import com.kod.assurancecontracthandler.model.ContractDbDto
+import com.kod.assurancecontracthandler.model.BaseContract
 
-@Database(entities = [ContractDbDto::class], version = 1, exportSchema = true)
+@Database(entities = [BaseContract::class], version = 1, exportSchema = true)
 abstract class ContractDatabase: RoomDatabase() {
 
     abstract fun contractDao(): ContractDAO
