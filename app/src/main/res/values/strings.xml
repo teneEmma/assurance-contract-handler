@@ -37,6 +37,9 @@
     <string name="permission_str">Grant me necessary permissions to access your files</string>
     <string name="grant_permission_text">DONNER LES PERMISSION</string>
     <string name="needed_text">needed</string>
+    <string name="error_on_file_reading">Error on file</string>
+    <string name="please_retry">Please retry</string>
+    <string name="file_cant_be_read">The file couldn\'t be read</string>
     <string name="column_attestation" translatable="false">000*Z*0112233</string>
     <string name="column_carteRose" translatable="false">00011333</string>
     <string name="column_start_date" translatable="false">2000/01/01</string>
