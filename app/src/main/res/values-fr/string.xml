@@ -39,6 +39,9 @@
         differents fichiers</string>
     <string name="grant_permission_text">Donner les permissions</string>
     <string name="needed_text">necessaire</string>
+    <string name="error_on_file_reading">Erreur de fichier</string>
+    <string name="please_retry">Veuillez Réessayer</string>
+    <string name="file_cant_be_read">Le Fichier n\'a pas pu être complemtement ou entierement lu</string>
 
     <string name="content_description_loading_progress">Niveau De Progression</string>
     <string name="content_description_fab_add_document">Ajouter un document</string>
