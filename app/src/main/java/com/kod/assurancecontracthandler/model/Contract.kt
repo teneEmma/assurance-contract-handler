@@ -9,7 +9,7 @@ data class Contract(
     var carteRose: String? = null,
     var numeroPolice: String? = null,
     var compagnie: String? = null,
-    var telephone: Long? = null,
+    var telephone: String? = null,
     var assure: String? = null,
     var effet: String? = null,
     var echeance: String?= null,

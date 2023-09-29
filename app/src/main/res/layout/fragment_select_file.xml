@@ -14,7 +14,7 @@
             android:layout_marginVertical="20dp"
             android:padding="10dp"
             app:endIconDrawable="@drawable/ic_folder"
-            app:endIconTint="@color/white"
+            app:endIconTint="?android:colorPrimary"
             app:endIconMode="custom"
             app:endIconCheckable="true"
             app:hintEnabled="false"
@@ -27,9 +27,11 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:textAppearance="@style/normal"
+            android:clickable="true"
             android:padding="8dp"
             android:hint="@string/import_file"
-            android:inputType="none" />
+            android:inputType="none"
+            android:focusable="false"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
