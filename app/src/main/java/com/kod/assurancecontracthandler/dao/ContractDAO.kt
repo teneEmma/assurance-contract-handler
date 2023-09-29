@@ -7,10 +7,10 @@ import com.kod.assurancecontracthandler.model.BaseContract
 @Dao
 sealed interface ContractDAO{
 
-    @Insert(onConflict = OnConflictStrategy.ABORT)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addContract(contract: BaseContract)
 
-    @Insert(onConflict = OnConflictStrategy.ABORT)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addContracts(contract: List<BaseContract>)
 
     @Update
