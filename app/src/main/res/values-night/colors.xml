@@ -4,5 +4,6 @@
     <color name="start_date_color">#A379FF</color>
     <color name="title_color">@color/gray</color>
     <color name="dialog_color">#03100C</color>
+    <color name="id_background">@color/light_green</color>
 
 </resources>
