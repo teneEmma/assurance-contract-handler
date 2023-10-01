@@ -17,9 +17,10 @@
     <color name="transparent_elevated">@color/material_on_surface_stroke</color>
     <color name="start_date_color">@color/purple_500</color>
     <color name="title_color">#000000</color>
-    <color name="dialog_color">?android:windowBackground</color>
+    <color name="dialog_color">@color/light_green</color>
 
     <!--  For the texts on the buttom bar of a view  -->
     <color name="bright_green">#08FF00</color>
     <color name="yellow">#FFD600</color>
+    <color name="id_background">@color/green</color>
 </resources>
