@@ -20,6 +20,9 @@
 
         <!-- Action bar style. -->
         <item name="android:actionBarStyle" >@style/AppActionBar</item>
+
+        <!--  For bottom sheet  -->
+        <item name="bottomSheetDialogTheme">@style/AppTheme.AssuranceContractHandler.BottomSheetStyle</item>
     </style>
 
     <style name="AppTabLayout" parent="Widget.Design.TabLayout">
@@ -45,6 +48,16 @@
     <style name="AppTheme.AssuranceContractHandler.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.AssuranceContractHandler.BottomSheetStyle"
+           parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/AppTheme.AssuranceContractHandler.BottomSheetStyle.AppModalStyle</item>
+    </style>
+
+    <style name="AppTheme.AssuranceContractHandler.BottomSheetStyle.AppModalStyle"
+           parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/bottom_dialog_sheet_round</item>
     </style>
 
 </resources>
