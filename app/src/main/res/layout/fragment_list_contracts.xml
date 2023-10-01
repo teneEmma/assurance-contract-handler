@@ -6,7 +6,6 @@
                 android:layout_height="match_parent"
                 tools:context=".views.main.fragmentListContracts.ContractListFragment">
 
-
     <androidx.appcompat.widget.SearchView
             android:id="@+id/searchView"
             android:layout_width="match_parent"
