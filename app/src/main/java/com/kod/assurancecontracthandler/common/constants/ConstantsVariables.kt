@@ -5,6 +5,9 @@ object ConstantsVariables {
     "SEPTEMBRE","OCTOBRE","NOVEMBRE","DECEMBRE")
     val possibleBeginningSheetValues = listOf("SEMAINE", "MOIS DE")
     val possibleHeaderValues = listOf("ATTESTATION", "CARTE ROSE", "ASSURE", "N°")
+    val carDetailsTitle = listOf("ATTESTATION", "N° POLICE", "COMPAGNIE", "MARK", "IMMATRICULATION", "PUISS / ENERGIE", "CARTE ROSE", "CATEGORIE", "ZONE")
+    val pricesTitle = listOf("DTA", "PN", "ACC", "FC", "TVA", "CR", "PTTC", "COM PN",
+        "COM ACC", "TOTAL COM", "NET A REVERSER", "ENCAIS", "C LIMBE", "C APPORT")
 
     enum class ExcelDateStringHeaderSuffix(val value: String){
         WeekString("SEMAINE DU"),
