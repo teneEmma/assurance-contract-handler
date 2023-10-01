@@ -1,10 +1,10 @@
 package com.kod.assurancecontrac
 
 import androidx.recyclerview.widget.DiffUtil
-import com.kod.assurancecontracthandler.model.ContractDbDto
+import com.kod.assurancecontracthandler.model.BaseContract
 
 
-class ContractsCallback(private val oldList: List<ContractDbDto>?, private val newList: List<ContractDbDto>)
+class ContractsCallback(private val oldList: List<BaseContract>?, private val newList: List<BaseContract>)
     : DiffUtil.Callback(){
     override fun getOldListSize(): Int {
         return if (oldList.isNullOrEmpty()) 0
@@ -23,8 +23,4 @@ class ContractsCallback(private val oldList: List<ContractDbDto>?, private val n
                 oldList?.get(oldItemPosition)?.contract?.telephone ==
                 newList[newItemPosition].contract?.telephone
     }
-
-//    override fun getChangePayload(oldItemPosition: Int, newItemPosition: Int): Any? {
-//        return super.getChangePayload(oldItemPosition, newItemPosition)
-//    }
 }

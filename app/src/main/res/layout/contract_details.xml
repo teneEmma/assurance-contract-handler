@@ -1,136 +1,138 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <TextView
-        android:id="@+id/assure_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="5dp"
-        android:layout_marginBottom="5dp"
-        style="@style/text_heading"
-        android:background="@drawable/edit_text_round"
-        android:clickable="true"
-        android:focusable="true"
-        android:text="@string/column_assure"
-        android:textAlignment="center"
-        android:textSize="26sp"
-        android:textStyle="bold" />
+            android:id="@+id/assurer_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="5dp"
+            android:textAppearance="@style/Headers.header_2"
+            android:background="@drawable/edit_text_round"
+            android:clickable="true"
+            android:focusable="true"
+            android:text="@string/column_assure"
+            android:textAlignment="center"
+            android:textSize="26sp"/>
 
     <com.google.android.material.divider.MaterialDivider
-        android:id="@+id/divider_bottom"
-        android:layout_marginTop="5dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/assure_name"
-        app:dividerInsetStart="30dp"
-        app:dividerInsetEnd="30dp"/>
+            android:id="@+id/divider_bottom"
+            android:layout_marginTop="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/assurer_name"
+            app:dividerInsetStart="30dp"
+            app:dividerInsetEnd="30dp"/>
 
     <LinearLayout
-        android:id="@+id/effet_echeance"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/tv_apporteur"
-        android:layout_centerHorizontal="true"
-        android:layout_margin="5dp">
-
-        <TextView
-            android:id="@+id/date_effet"
+            android:id="@+id/start_end_dates"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="8dp"
-            android:text="@string/column_echeance"
-            android:textAlignment="center"
-            android:textColor="@color/bright_green"
-            android:textStyle="bold"
-            tools:ignore="TextContrastCheck" />
+            android:layout_below="@id/tv_provider"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="5dp">
 
         <TextView
-            android:id="@+id/date_echeance"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="8dp"
-            android:textColor="@color/red"
-            android:text="@string/column_effet"
-            android:textAlignment="center"
-            android:textStyle="bold"/>
+                android:id="@+id/start_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="8dp"
+                android:text="@string/column_echeance"
+                android:textAppearance="@style/normal"
+                android:textSize="14sp"
+                android:textAlignment="center"
+                android:textColor="@color/start_date_color"
+                android:textStyle="bold"
+                tools:ignore="TextContrastCheck"/>
+
+        <TextView
+                android:id="@+id/due_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="8dp"
+                android:textAppearance="@style/normal"
+                android:textSize="14sp"
+                android:textColor="@color/red"
+                android:text="@string/column_start_date"
+                android:textAlignment="center"
+                android:textStyle="bold"/>
 
     </LinearLayout>
 
     <com.google.android.material.divider.MaterialDivider
-        android:id="@+id/divider_effet_echeance"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/tv_apporteur"
-        app:dividerInsetStart="50dp"
-        app:dividerInsetEnd="50dp"/>
+            android:id="@+id/divider_effet_echeance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_provider"
+            app:dividerInsetStart="50dp"
+            app:dividerInsetEnd="50dp"/>
 
     <LinearLayout
-        android:id="@+id/ll_car_stuff"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/effet_echeance"
-        android:orientation="vertical">
+            android:id="@+id/ll_car_stuff"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/start_end_dates"
+            android:orientation="vertical">
 
         <GridView
-            android:id="@+id/gv_car_stuff"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clickable="false"
-            android:layout_marginTop="15dp"
-            android:numColumns="3"
-            android:verticalSpacing="15dp"
-            android:scrollbars="none"/>
+                android:id="@+id/gv_car_stuff"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:layout_marginTop="15dp"
+                android:numColumns="3"
+                android:verticalSpacing="15dp"
+                android:scrollbars="none"/>
 
         <com.google.android.material.divider.MaterialDivider
-            android:id="@+id/divider_gv_items"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:dividerInsetStart="20dp"
-            app:dividerInsetEnd="20dp"/>
+                android:id="@+id/divider_gv_items"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:dividerInsetStart="20dp"
+                app:dividerInsetEnd="20dp"/>
 
         <GridView
-            android:id="@+id/gv_prices"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clickable="false"
-            android:layout_marginTop="15dp"
-            android:numColumns="4"
-            android:stretchMode="columnWidth"
-            android:verticalSpacing="15dp"
-            android:scrollbars="none"/>
+                android:id="@+id/gv_prices"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:layout_marginTop="15dp"
+                android:numColumns="4"
+                android:stretchMode="columnWidth"
+                android:verticalSpacing="15dp"
+                android:scrollbars="none"/>
 
     </LinearLayout>
 
     <TextView
-        android:id="@+id/tv_apporteur"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_margin="5dp"
-        android:layout_below="@id/divider_bottom"
-        android:text="@string/apporteur"
-        android:textAlignment="center"
-        android:textStyle="bold"
-        tools:ignore="VisualLintOverlap" />
+            android:id="@+id/tv_provider"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="5dp"
+            android:layout_below="@id/divider_bottom"
+            android:text="@string/provider_text"
+            android:textAppearance="@style/normal"
+            android:textSize="18sp"
+            android:textAlignment="center"
+            android:textStyle="bold"
+            tools:ignore="VisualLintOverlap"/>
 
     <TextView
-        android:id="@+id/tv_grand_total"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/assure_name"
-        android:layout_marginBottom="25dp"
-        android:textColor="?attr/colorPrimary"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:text="@string/price_xaf"
-        android:textAlignment="center"/>
+            android:id="@+id/tv_grand_total"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/assurer_name"
+            android:layout_marginBottom="25dp"
+            android:textAppearance="@style/Headers.header_2"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:text="@string/price_xaf"
+            android:textAlignment="center"/>
 
 </RelativeLayout>
