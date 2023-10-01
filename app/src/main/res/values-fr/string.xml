@@ -23,7 +23,7 @@
     <string name="column_assure">NOM DU CLIENT</string>
     <string name="carte_rose_title">CARTE ROSE:</string>
     <string name="attestation_title">ATTESTATION:</string>
-    <string name="plate_number_title">Plate Number:</string>
+    <string name="plate_number_title">IMMATRICULATION:</string>
     <string name="due_date_title">Effet:</string>
     <string name="start_date_title">Echéance:</string>
     <string name="customer_name">NOMS Prenoms</string>
@@ -42,9 +42,17 @@
     <string name="error_on_file_reading">Erreur de fichier</string>
     <string name="please_retry">Veuillez Réessayer</string>
     <string name="file_cant_be_read">Le Fichier n\'a pas pu être complemtement ou entierement lu</string>
+    <string name="no_result">Aucun résultat</string>
+    <string name="search_bar_query_hint">Rechercher…</string>
+    <string name="to_be_implemented_text">Pas encore implémenté</string>
+    <string name="provider_text">APPORTEUR: NOM APORTEUR</string>
+    <string name="non_valid_option">Option non valide</string>
 
     <string name="content_description_loading_progress">Niveau De Progression</string>
     <string name="content_description_fab_add_document">Ajouter un document</string>
     <string name="content_description_fab_filter">Filter</string>
+
+    <string name="action_settings">Parametres</string>
+    <string name="action_exp_contracts">Contrats qui vont expirer</string>
 
 </resources>
