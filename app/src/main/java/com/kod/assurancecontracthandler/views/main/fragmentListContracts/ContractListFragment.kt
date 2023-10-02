@@ -22,7 +22,6 @@ import com.kod.assurancecontracthandler.model.database.ContractDatabase
 import com.kod.assurancecontracthandler.repository.ContractRepository
 import com.kod.assurancecontracthandler.viewmodels.databaseviewmodel.DatabaseViewModel
 import com.kod.assurancecontracthandler.viewmodels.databaseviewmodel.DatabaseViewModelFactory
-import com.kod.assurancecontracthandler.views.fragments.home.contractlist.ContractListAdapter
 
 
 class ContractListFragment : Fragment() {

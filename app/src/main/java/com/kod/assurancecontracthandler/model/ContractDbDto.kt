@@ -16,8 +16,9 @@ import kotlinx.parcelize.Parcelize
 @Entity(tableName = "contract")
 @Parcelize
 data class BaseContract(
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey
     var id: Int,
     @Embedded
     val contract: Contract?
-): Parcelable
+) : Parcelable {
+}

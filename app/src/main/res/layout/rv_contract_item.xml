@@ -70,10 +70,12 @@
                         android:id="@+id/column_immatriculation"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:maxWidth="100dp"
                         android:layout_gravity="center_horizontal|start"
                         android:textSize="14sp"
                         android:textStyle="italic|bold"
-                        android:text="@string/plate_number_value"
+                        android:textAlignment="center"
+                        android:text="string/plate_number_value"
                         android:textAppearance="@style/Headers.header_2"/>
             </LinearLayout>
 
