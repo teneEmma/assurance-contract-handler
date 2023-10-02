@@ -69,7 +69,9 @@ class SelectFileFragment : Fragment() {
                     intent.setData(uri)
                     startActivity(intent)
                 }
+                return@registerForActivityResult
             }
+            pickFile()
         }
 
     override fun onCreateView(
@@ -98,10 +100,8 @@ class SelectFileFragment : Fragment() {
 
         excelDocumentVM.successful.observe(viewLifecycleOwner) { success ->
             if (success == ProcessState.Success) {
-                shortSnack(resources.getString(R.string.load_successful))
                 binding.btnSaveFile.visibility = View.VISIBLE
             } else {
-                longSnack(resources.getString(R.string.file_cant_be_read))
                 binding.btnSaveFile.visibility = View.GONE
             }
         }

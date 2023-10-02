@@ -6,13 +6,11 @@ import androidx.lifecycle.MutableLiveData
 import com.kod.assurancecontracthandler.R
 import com.kod.assurancecontracthandler.common.constants.ConstantsVariables
 import com.kod.assurancecontracthandler.common.usecases.ProcessState
+import com.kod.assurancecontracthandler.common.utilities.TimeConverters
 import com.kod.assurancecontracthandler.model.BaseContract
 import com.kod.assurancecontracthandler.model.Contract
 import com.kod.assurancecontracthandler.viewmodels.baseviewmodel.BaseViewModel
-import org.apache.poi.ss.usermodel.Cell
-import org.apache.poi.ss.usermodel.CellType
-import org.apache.poi.ss.usermodel.Row
-import org.apache.poi.ss.usermodel.Sheet
+import org.apache.poi.ss.usermodel.*
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import java.io.FileInputStream
 import java.io.IOException
@@ -47,7 +45,9 @@ class ExcelDocumentsViewModel : BaseViewModel() {
         _isLoading.postValue(false)
         if (contracts.isEmpty()) {
             _isSuccessful.postValue(ProcessState.Failed)
+            _messageResourceId.postValue(R.string.file_cant_be_read)
         } else {
+            _messageResourceId.postValue(R.string.load_successful)
             _isSuccessful.postValue(ProcessState.Success)
         }
         _listOfContracts.postValue(contracts)
@@ -62,13 +62,13 @@ class ExcelDocumentsViewModel : BaseViewModel() {
             val contractList = readRowsFromSheet(rowIterator, numbRows)
             contracts.addAll(contractList)
         }
-
         return contracts
     }
 
     private fun readRowsFromSheet(rowIterator: Iterator<Row>, numberOfRows: Int): List<BaseContract> {
         var headers: Map<String, String> = mutableMapOf()
         val contracts: MutableList<BaseContract> = mutableListOf()
+        val hashCodes = mutableListOf<Int>()
 
         while (rowIterator.hasNext()) {
             val row = rowIterator.next()
@@ -98,12 +98,27 @@ class ExcelDocumentsViewModel : BaseViewModel() {
                 }
             }
             if (rowMap.isNotEmpty()) {
-                val contract = setContractObj2(rowMap)
+                val baseContract = setContractObj2(rowMap)
 
-                contracts.add(contract)
+                if (baseContract.contract?.assure == null) {
+                    continue
+                }
+                if (contracts.contains(baseContract)) {
+                    continue
+                }
+                contracts.add(baseContract)
             }
         }
         return contracts
+    }
+
+    private fun contractWithoutIrrelevantFieldsHashCode(contract: Contract?): Int {
+        val newContract = contract?.apply {
+            telephone = null
+            ENCAIS = null
+            APPORTEUR = null
+        }
+        return newContract.hashCode()
     }
 
     private fun readColumn(cellIterator: Iterator<Cell>): List<String> {
@@ -116,40 +131,51 @@ class ExcelDocumentsViewModel : BaseViewModel() {
         return headerMap
     }
 
+    private fun notStringifyingNull(value: Any?): String? {
+        return value?.toString()
+    }
+
     private fun setContractObj2(row: Map<String, Any?>): BaseContract {
         val contract = Contract()
 
-        contract.attestation = row[ExcelSheetHeadersKeys.keyAttestation].toString()
-        contract.compagnie = row[ExcelSheetHeadersKeys.keyCompany].toString()
-        contract.assure = row[ExcelSheetHeadersKeys.keyAssurer].toString()
-        contract.effet = row[ExcelSheetHeadersKeys.keyStartDate].toString()
-        contract.echeance = row[ExcelSheetHeadersKeys.keyDueDate].toString()
-        contract.puissanceVehicule = row[ExcelSheetHeadersKeys.keyPower].toString()
-        contract.mark = row[ExcelSheetHeadersKeys.keyMark].toString()
-        contract.immatriculation = row[ExcelSheetHeadersKeys.keyRegistration].toString()
-        contract.zone = row[ExcelSheetHeadersKeys.keyZone].toString()
-        contract.APPORTEUR = row[ExcelSheetHeadersKeys.keyPROVIDER].toString()
-        contract.numeroPolice = policeNumberValidation(row[ExcelSheetHeadersKeys.keyPoliceNumber].toString())
-        contract.telephone = phoneNumbValidation(row[ExcelSheetHeadersKeys.keyPhoneNumber])
-        contract.categorie = doubleToInt(row[ExcelSheetHeadersKeys.keyCategory])
-        contract.carteRose = doubleToInt(row[ExcelSheetHeadersKeys.keyPinkCard]).toString()
-        contract.duree = doubleToInt(row[ExcelSheetHeadersKeys.keyDuration].toString())
-        contract.DTA = doubleToInt(row[ExcelSheetHeadersKeys.keyDta])
-        contract.PN = doubleToInt(row[ExcelSheetHeadersKeys.keyPn])
-        contract.ACC = doubleToInt(row[ExcelSheetHeadersKeys.keyAcc])
-        contract.FC = doubleToInt(row[ExcelSheetHeadersKeys.keyFC])
-        contract.TVA = doubleToInt(row[ExcelSheetHeadersKeys.keyTVA])
-        contract.CR = doubleToInt(row[ExcelSheetHeadersKeys.keyCR])
-        contract.PTTC = doubleToInt(row[ExcelSheetHeadersKeys.keyPTTC])
-        contract.COM_PN = doubleToInt(row[ExcelSheetHeadersKeys.keyCOM_PN])
-        contract.COM_ACC = doubleToInt(row[ExcelSheetHeadersKeys.keyCOM_ACC])
-        contract.TOTAL_COM = doubleToInt(row[ExcelSheetHeadersKeys.keyTOTAL_COM])
-        contract.NET_A_REVERSER = doubleToInt(row[ExcelSheetHeadersKeys.keyTOTAL_TO_GIVE])
-        contract.ENCAIS = doubleToInt(row[ExcelSheetHeadersKeys.keyCASH_IN])
-        contract.COMM_LIMBE = doubleToInt(row[ExcelSheetHeadersKeys.keyCOMM_LIMBE])
-        contract.COMM_APPORT = doubleToInt(row[ExcelSheetHeadersKeys.keyCOMM_PROVIDER])
+        contract.apply {
+            attestation = notStringifyingNull(row[ExcelSheetHeadersKeys.keyAttestation])
+            compagnie = notStringifyingNull(row[ExcelSheetHeadersKeys.keyCompany])
+            assure = notStringifyingNull(row[ExcelSheetHeadersKeys.keyAssurer])
+            effet = notStringifyingNull(row[ExcelSheetHeadersKeys.keyStartDate])
+            echeance = notStringifyingNull(row[ExcelSheetHeadersKeys.keyDueDate])
+            puissanceVehicule = notStringifyingNull(row[ExcelSheetHeadersKeys.keyPower])
+            mark = notStringifyingNull(row[ExcelSheetHeadersKeys.keyMark])
+            immatriculation = notStringifyingNull(row[ExcelSheetHeadersKeys.keyRegistration])
+            zone = notStringifyingNull(row[ExcelSheetHeadersKeys.keyZone])
+            APPORTEUR = notStringifyingNull(row[ExcelSheetHeadersKeys.keyPROVIDER])
+            numeroPolice = notStringifyingNull(row[ExcelSheetHeadersKeys.keyPoliceNumber])?.let {
+                policeNumberValidation(
+                    it
+                )
+            }
+            telephone = phoneNumbValidation(row[ExcelSheetHeadersKeys.keyPhoneNumber])
+            categorie = doubleToInt(row[ExcelSheetHeadersKeys.keyCategory])
+            carteRose = notStringifyingNull(doubleToInt(row[ExcelSheetHeadersKeys.keyPinkCard]))
+            duree = doubleToInt(notStringifyingNull(row[ExcelSheetHeadersKeys.keyDuration]))
+            DTA = doubleToInt(row[ExcelSheetHeadersKeys.keyDta])
+            PN = doubleToInt(row[ExcelSheetHeadersKeys.keyPn])
+            ACC = doubleToInt(row[ExcelSheetHeadersKeys.keyAcc])
+            FC = doubleToInt(row[ExcelSheetHeadersKeys.keyFC])
+            TVA = doubleToInt(row[ExcelSheetHeadersKeys.keyTVA])
+            CR = doubleToInt(row[ExcelSheetHeadersKeys.keyCR])
+            PTTC = doubleToInt(row[ExcelSheetHeadersKeys.keyPTTC])
+            COM_PN = doubleToInt(row[ExcelSheetHeadersKeys.keyCOM_PN])
+            COM_ACC = doubleToInt(row[ExcelSheetHeadersKeys.keyCOM_ACC])
+            TOTAL_COM = doubleToInt(row[ExcelSheetHeadersKeys.keyTOTAL_COM])
+            NET_A_REVERSER = doubleToInt(row[ExcelSheetHeadersKeys.keyTOTAL_TO_GIVE])
+            ENCAIS = doubleToInt(row[ExcelSheetHeadersKeys.keyCASH_IN])
+            COMM_LIMBE = doubleToInt(row[ExcelSheetHeadersKeys.keyCOMM_LIMBE])
+            COMM_APPORT = doubleToInt(row[ExcelSheetHeadersKeys.keyCOMM_PROVIDER])
+        }
 
-        return BaseContract(id = 0, contract)
+        val hashCode = contractWithoutIrrelevantFieldsHashCode(contract)
+        return BaseContract(id = hashCode, contract)
     }
 
     private fun phoneNumbValidation(parameter: Any?): String? {
@@ -158,8 +184,7 @@ class ExcelDocumentsViewModel : BaseViewModel() {
 
             if (result?.contains("\\d{9}$".toRegex()) == true) {
                 result
-            }
-            else null
+            } else null
         } else null
     }
 
@@ -237,7 +262,14 @@ class ExcelDocumentsViewModel : BaseViewModel() {
         return when (cell.cellType) {
             CellType.BOOLEAN -> cell.booleanCellValue
             CellType.STRING -> cell.stringCellValue
-            CellType.NUMERIC -> cell.numericCellValue
+            CellType.NUMERIC -> {
+                if (DateUtil.isCellDateFormatted(cell)) {
+                    TimeConverters().formatISODateToLocaleDate(cell.localDateTimeCellValue.toString())
+                } else {
+                    cell.numericCellValue
+                }
+            }
+
             CellType.FORMULA -> {
                 when (cell.cachedFormulaResultType) {
                     CellType.NUMERIC -> cell.numericCellValue.roundToInt()

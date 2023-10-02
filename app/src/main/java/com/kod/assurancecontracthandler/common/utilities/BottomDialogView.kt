@@ -5,7 +5,7 @@ import android.view.View
 import com.kod.assurancecontracthandler.common.constants.ConstantsVariables
 import com.kod.assurancecontracthandler.databinding.ContractDetailsBinding
 import com.kod.assurancecontracthandler.model.Contract
-import com.kod.assurancecontracthandler.views.fragments.home.contractlist.GridViewItemAdapter
+import com.kod.assurancecontracthandler.views.main.fragmentListContracts.GridViewItemAdapter
 
 class BottomDialogView {
 

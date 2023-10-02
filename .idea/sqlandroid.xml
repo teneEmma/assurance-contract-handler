@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SQLAndroidSettings">
+    <option name="databases">
+      <map>
+        <entry key="contracts2_/home/kodage111/Desktop/APPS &amp; Programming Codes/APPS/AssuranceContractHandler2/AndroidSqlEditorDatabases/">
+          <value>
+            <list>
+              <option value="8BFY0YVTQ" />
+              <option value="/databases/contract_database-wal" />
+              <option value="contracts2" />
+              <option value="contracts2" />
+              <option value="false" />
+              <option value="com.kod.assurancecontracthandler" />
+            </list>
+          </value>
+        </entry>
+        <entry key="contracts3_/home/kodage111/Desktop/APPS &amp; Programming Codes/APPS/AssuranceContractHandler2/AndroidSqlEditorDatabases/">
+          <value>
+            <list>
+              <option value="8BFY0YVTQ" />
+              <option value="/databases/contract_database" />
+              <option value="contracts3" />
+              <option value="contracts3" />
+              <option value="false" />
+              <option value="com.kod.assurancecontracthandler" />
+            </list>
+          </value>
+        </entry>
+        <entry key="contracts_/home/kodage111/Desktop/APPS &amp; Programming Codes/APPS/AssuranceContractHandler2/AndroidSqlEditorDatabases/">
+          <value>
+            <list>
+              <option value="8BFY0YVTQ" />
+              <option value="/databases/contract_database-shm" />
+              <option value="contracts" />
+              <option value="contracts" />
+              <option value="false" />
+              <option value="com.kod.assurancecontracthandler" />
+            </list>
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="storageVersion" value="2" />
+  </component>
+</project>

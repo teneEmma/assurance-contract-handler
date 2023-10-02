@@ -8,6 +8,8 @@ object ConstantsVariables {
     val carDetailsTitle = listOf("ATTESTATION", "N° POLICE", "COMPAGNIE", "MARK", "IMMATRICULATION", "PUISS / ENERGIE", "CARTE ROSE", "CATEGORIE", "ZONE")
     val pricesTitle = listOf("DTA", "PN", "ACC", "FC", "TVA", "CR", "PTTC", "COM PN",
         "COM ACC", "TOTAL COM", "NET A REVERSER", "ENCAIS", "C LIMBE", "C APPORT")
+    const val isoDatePattern = "yyyy-MM-dd'T'HH:mm"
+    const val desiredDatePattern = "dd/MM/yyyy"
 
     enum class ExcelDateStringHeaderSuffix(val value: String){
         WeekString("SEMAINE DU"),
