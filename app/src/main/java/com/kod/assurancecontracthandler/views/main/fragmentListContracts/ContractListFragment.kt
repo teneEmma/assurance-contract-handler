@@ -57,7 +57,6 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener {
     private var rvAdapter: ContractListAdapter? = null
     private var dialogTouchContract: BottomSheetDialog? = null
 
-
     companion object {
         fun newInstance() = ContractListFragment()
     }
