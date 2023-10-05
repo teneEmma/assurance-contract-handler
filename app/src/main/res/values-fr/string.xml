@@ -47,6 +47,25 @@
     <string name="to_be_implemented_text">Pas encore implémenté</string>
     <string name="provider_text">APPORTEUR: NOM APORTEUR</string>
     <string name="non_valid_option">Option non valide</string>
+    <string name="no_selected_chips">Aucune palette n\'a été choisie</string>
+    <string name="select_date">Selectioner une date</string>
+    <string name="filter_provider_name">Filtrer le nom de l\'apporteur</string>
+    <string name="plate_number_number">N° d\'immatriculation</string>
+    <string name="name_of_company_text">Nom de la compagnie</string>
+    <string name="name_of_assurer_text">Assuré</string>
+    <string name="mark_vehicle_text">Marque du vehicule</string>
+    <string name="police_number_text">N° de police</string>
+    <string name="attestation_number_text">N° attestation</string>
+    <string name="pink_card_text">Carte rose</string>
+    <string name="reset">Réinitialiser</string>
+    <string name="apply">Appliquer</string>
+    <string name="main_group_slider_title">Filtrer les prix</string>
+    <string name="chose_time_interval">Choisir L\'Interval</string>
+    <string name="date_selected">Interval choisi:</string>
+    <string name="and_text">et</string>
+    <string name="start_date_text">effet</string>
+    <string name="end_date_text">echéance</string>
+    <string name="no_result_found">No result was found</string>
 
     <string name="content_description_loading_progress">Niveau De Progression</string>
     <string name="content_description_fab_add_document">Ajouter un document</string>
