@@ -139,21 +139,21 @@ class ContractListViewModel(private val repository: ContractRepository) : BaseVi
     private var _maxDate: Long? = null
     private var _slidersValues: MutableMap<String, MutableMap<String, Pair<Float, Float>?>> = initializeSlidersMap()
     private var _selectedFilteredChips: List<Int> = emptyList()
-    var providerTextViewContent: String = ""
+    private var providerTextViewContent: String = ""
         private set
-    var matriculationTextViewContent: String = ""
+    private var matriculationTextViewContent: String = ""
         private set
-    var registrationTextViewContent: String = ""
+    private var registrationTextViewContent: String = ""
         private set
-    var pinkCardTextViewContent: String = ""
+    private var pinkCardTextViewContent: String = ""
         private set
-    var companyTextViewContent: String = ""
+    private var companyTextViewContent: String = ""
         private set
-    var assurerTextViewContent: String = ""
+    private var assurerTextViewContent: String = ""
         private set
-    var markTextViewContent: String = ""
+    private var markTextViewContent: String = ""
         private set
-    var policeNumberTextViewContent: String = ""
+    private var policeNumberTextViewContent: String = ""
         private set
 
     private fun initializeSlidersMap(): MutableMap<String, MutableMap<String, Pair<Float, Float>?>> {
