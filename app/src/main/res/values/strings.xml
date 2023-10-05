@@ -45,6 +45,25 @@
     <string name="to_be_implemented_text">Not yet implemented</string>
     <string name="provider_text">PROVIDER: PROVIDER\'S NAME</string>
     <string name="non_valid_option">Option is not valid</string>
+    <string name="no_selected_chips">No chip has been selected</string>
+    <string name="select_date">Select a date</string>
+    <string name="filter_provider_name">Filter by provider\'s name</string>
+    <string name="plate_number_number">Plate number</string>
+    <string name="name_of_company_text">Name of company</string>
+    <string name="name_of_assurer_text">Assurer</string>
+    <string name="mark_vehicle_text">Mark of vehicle</string>
+    <string name="police_number_text">Police number</string>
+    <string name="attestation_number_text">Attestation number</string>
+    <string name="pink_card_text">Pink card</string>
+    <string name="reset">Reset</string>
+    <string name="apply">Apply</string>
+    <string name="main_group_slider_title">Filter prices</string>
+    <string name="chose_time_interval">Chose time interval</string>
+    <string name="date_selected">Date selected:</string>
+    <string name="and_text">and</string>
+    <string name="start_date_text">start date</string>
+    <string name="end_date_text">end date</string>
+    <string name="no_result_found">No result was found</string>
 
     <string name="column_attestation" translatable="false">000*Z*0112233</string>
     <string name="column_carteRose" translatable="false">00011333</string>
@@ -55,6 +74,9 @@
     <string name="grand_total" translatable="false">- XAF</string>
     <string name="number_0" translatable="false">0</string>
     <string name="price_xaf" translatable="false">1000000 XAF</string>
+    <string name="price_min" translatable="false">1000XAF</string>
+    <string name="price_max" translatable="false">500000XAF</string>
+    <string name="priceSeperator" translatable="false">-</string>
 
     <string name="content_description_loading_progress">Loading Progress</string>
     <string name="content_description_fab_add_document">Add a document</string>
