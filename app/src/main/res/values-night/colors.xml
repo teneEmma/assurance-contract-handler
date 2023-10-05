@@ -6,4 +6,9 @@
     <color name="dialog_color">#03100C</color>
     <color name="id_background">@color/light_green</color>
 
+    <!--  Colors for chips  -->
+    <color name="chip_background_color_unchecked">#03100C</color>
+    <color name="chip_stroke_color_unchecked">@color/transparent_elevated</color>
+    <color name="chip_text_color_unchecked">@color/light_green</color>
+    <color name="chip_text_color_checked">@color/light_green</color>
 </resources>
