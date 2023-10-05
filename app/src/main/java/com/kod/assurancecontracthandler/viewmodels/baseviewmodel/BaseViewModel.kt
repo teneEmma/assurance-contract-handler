@@ -4,27 +4,34 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kod.assurancecontracthandler.model.BaseContract
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 /**
  *  The base ViewModel for all our viewModels. It contains the base values which each viewModel can contain.
  *  @param hasQueried A live value which indicates the state of the execution of a function through the
- *  [executeFunWithAnimation].
- *  @property executeFunWithAnimation Executes concurrently a given function while updating a live value.
+ *  [executeFunctionWithAnimation].
+ *  @property executeFunctionWithAnimation Executes concurrently a given function while updating a live value.
  *  @property executeFunWithoutAnimation Just concurrently execute a function.
  */
 abstract class BaseViewModel : ViewModel() {
-    private val _hasQueried = MutableLiveData<Boolean>()
-    val hasQueried: LiveData<Boolean>
-        get() = _hasQueried
+    companion object {
+        @JvmStatic
+        protected val _allContracts: MutableLiveData<List<BaseContract>?> = MutableLiveData(null)
 
-    open val messageResourceId: LiveData<Int>? = null
-    open fun executeFunWithAnimation(execute: suspend () -> Unit) {
+        @JvmStatic
+        protected val _isLoading = MutableLiveData<Boolean>()
+
+        @JvmStatic
+        protected val messageResourceId: LiveData<Int>? = null
+    }
+
+    open fun executeFunctionWithAnimation(execute: suspend () -> Unit) {
         viewModelScope.launch(Dispatchers.IO) {
-            _hasQueried.postValue(false)
+            _isLoading.postValue(true)
             execute()
-            _hasQueried.postValue(true)
+            _isLoading.postValue(false)
         }
     }
 

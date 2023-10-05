@@ -5,7 +5,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 // TODO: Document this function.
-class TimeConverters {
+object TimeConverters {
     fun dateFromExcelHeader(str: String): HashMap<String, String?> {
         val startDateStr = ConstantsVariables.StartEndDatesTexts.Start.value
         val endDateStr = ConstantsVariables.StartEndDatesTexts.End.value
@@ -48,9 +48,6 @@ class TimeConverters {
         }
     }
 
-    /**
-     *
-     */
     private fun dateFromFormattedString(str: String): String? {
         val dateRegex = Regex(
             "^(?:(?:31(\\/|-|\\.)(?:0?[13578]|1[02]|(?:Jan|Mar|May|Jul|Aug|Oct|Dec)))\\1|" +
@@ -72,5 +69,14 @@ class TimeConverters {
         val formattedDate = SimpleDateFormat(ConstantsVariables.desiredDatePattern, Locale("en"))
 
         return isoDate?.let { formattedDate.format(it) }
+    }
+
+    fun formatLongToLocaleDate(dateInLong: Long?): String? {
+        if(dateInLong == null){
+            return null
+        }
+        val date = Date(dateInLong)
+        val formattedDate= SimpleDateFormat(ConstantsVariables.desiredDatePattern, Locale("en"))
+        return formattedDate.format(date)
     }
 }
