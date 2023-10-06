@@ -3,7 +3,7 @@
     <color name="transparent_elevated">@color/material_on_surface_stroke</color>
     <color name="start_date_color">#A379FF</color>
     <color name="title_color">@color/gray</color>
-    <color name="dialog_color">#03100C</color>
+    <color name="dialog_color">#212523</color>
     <color name="id_background">@color/light_green</color>
 
     <!--  Colors for chips  -->
