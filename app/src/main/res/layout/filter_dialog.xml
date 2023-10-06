@@ -1,0 +1,347 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:padding="5dp"
+            android:fillViewport="true"
+            android:layout_margin="4dp"
+            android:background="@drawable/dialog_round">
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+        <HorizontalScrollView
+                android:id="@+id/horizontal_sv_filter"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="none">
+
+            <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/chipGroup_filter"
+                    android:singleLine="true"
+                    android:layout_marginTop="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:singleLine="true"
+                    app:singleSelection="false"/>
+
+        </HorizontalScrollView>
+
+        <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/il_filterDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:focusable="false"
+                app:hintTextAppearance="@style/normal"
+                style="@style/SelectFile_text_input"
+                app:hintEnabled="true"
+                app:hintTextColor="@color/purple_500"
+                android:hint="@string/select_date"
+                app:endIconMode="clear_text">
+
+            <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/btn_date_picker"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="@style/normal"
+                    android:textSize="18sp"
+                    android:focusable="false"
+                    android:clickable="true"
+                    android:drawableEnd="@drawable/ic_calendar"
+                    android:drawableTint="?android:colorPrimary"
+                    android:inputType="date"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <LinearLayout
+                android:id="@+id/selected_date_ll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginVertical="5dp">
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="@style/normal"
+                    android:textSize="14sp"
+                    android:text="@string/date_selected"/>
+
+            <TextView
+                    android:id="@+id/start_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="8dp"
+                    android:textAppearance="@style/Headers.header_2"
+                    android:textSize="16sp"
+                    android:textColor="@color/start_date_color"
+                    android:text="@string/start_date_text"/>
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="@style/normal"
+                    android:textSize="14sp"
+                    android:text="@string/and_text"/>
+
+            <TextView
+                    android:id="@+id/end_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="8dp"
+                    android:textAppearance="@style/Headers.header_2"
+                    android:textSize="16sp"
+                    android:textColor="@color/red"
+                    android:text="@string/end_date_text"/>
+
+        </LinearLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/il_filter_apporteur"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/SelectFile_text_input"
+                app:hintEnabled="true"
+                app:hintTextAppearance="@style/normal"
+                app:hintTextColor="@color/purple_500"
+                android:hint="@string/filter_provider_name"
+                app:endIconMode="clear_text"
+                app:endIconTint="?android:colorPrimary"
+                android:visibility="gone">
+
+            <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_filterApporteur"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:textAppearance="@style/normal"
+                    android:textSize="18sp"
+                    android:inputType="text"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/il_filter_assurer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/SelectFile_text_input"
+                app:hintTextAppearance="@style/normal"
+                app:hintEnabled="true"
+                app:hintTextColor="@color/purple_500"
+                android:hint="@string/name_of_assurer_text"
+                app:endIconMode="clear_text"
+                app:endIconTint="?android:colorPrimary"
+                android:visibility="gone">
+
+            <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_filterAssurer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="@style/normal"
+                    android:textSize="18sp"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:inputType="text"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/il_filter_attestation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/SelectFile_text_input"
+                app:hintTextAppearance="@style/normal"
+                app:hintEnabled="true"
+                app:hintTextColor="@color/purple_500"
+                android:hint="@string/attestation_number_text"
+                app:endIconMode="clear_text"
+                app:endIconTint="?android:colorPrimary"
+                android:visibility="gone">
+
+            <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_filterAttestation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:textAppearance="@style/normal"
+                    android:textSize="18sp"
+                    android:inputType="text"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/il_filter_carteRose"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/SelectFile_text_input"
+                app:hintTextAppearance="@style/normal"
+                app:hintEnabled="true"
+                app:hintTextColor="@color/purple_500"
+                android:hint="@string/pink_card_text"
+                app:endIconMode="clear_text"
+                app:endIconTint="?android:colorPrimary"
+                android:visibility="gone">
+
+            <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_filterCarteRose"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:textAppearance="@style/normal"
+                    android:textSize="18sp"
+                    android:inputType="text"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/il_filter_compagnie"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/SelectFile_text_input"
+                app:hintTextAppearance="@style/normal"
+                app:hintEnabled="true"
+                app:hintTextColor="@color/purple_500"
+                android:hint="@string/name_of_company_text"
+                app:endIconMode="clear_text"
+                app:endIconTint="?android:colorPrimary"
+                android:visibility="gone">
+
+            <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_filterCompagnie"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:textAppearance="@style/normal"
+                    android:textSize="18sp"
+                    android:inputType="text"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/il_filter_immatriculation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/SelectFile_text_input"
+                app:hintEnabled="true"
+                app:hintTextAppearance="@style/normal"
+                app:hintTextColor="@color/purple_500"
+                android:hint="@string/plate_number_number"
+                app:endIconMode="clear_text"
+                app:endIconTint="?android:colorPrimary"
+                android:visibility="gone">
+
+            <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_filterimmatriculation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:textAppearance="@style/normal"
+                    android:textSize="18sp"
+                    android:inputType="text"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/il_filter_mark"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/SelectFile_text_input"
+                app:hintTextAppearance="@style/normal"
+                app:hintEnabled="true"
+                app:hintTextColor="@color/purple_500"
+                android:hint="@string/mark_vehicle_text"
+                app:endIconMode="clear_text"
+                app:endIconTint="?android:colorPrimary"
+                android:visibility="gone">
+
+            <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_filterMark"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:textAppearance="@style/normal"
+                    android:textSize="18sp"
+                    android:inputType="text"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/il_filter_numero_police"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/SelectFile_text_input"
+                app:hintTextAppearance="@style/normal"
+                app:hintEnabled="true"
+                app:hintTextColor="@color/purple_500"
+                android:hint="@string/police_number_text"
+                app:endIconMode="clear_text"
+                app:endIconTint="?android:colorPrimary"
+                android:visibility="gone">
+
+            <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_filterPolice"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:textAppearance="@style/normal"
+                    android:textSize="18sp"
+                    android:inputType="text"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <ExpandableListView
+                android:id="@+id/expandable_lv_sliders"
+                android:layout_width="match_parent"
+                android:layout_height="350dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/elevated_zone"
+                android:nestedScrollingEnabled="true"
+                android:isScrollContainer="false"
+                android:dividerHeight="1dp"
+                tools:listitem="@layout/main_group_sliders"
+                android:divider="@android:color/darker_gray"/>
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:orientation="horizontal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textview_second">
+
+            <Button
+                    android:id="@+id/btn_reset"
+                    style="@style/AppButton.Secondary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="20dp"
+                    android:drawableLeft="@drawable/outline_cancel_24"
+                    android:text="@string/reset"/>
+
+            <Button
+                    android:id="@+id/btn_apply_filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/ic_filter"
+                    style="@style/AppButton.Primary"
+                    android:text="@string/apply"
+                    tools:ignore="RtlHardcoded"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>
