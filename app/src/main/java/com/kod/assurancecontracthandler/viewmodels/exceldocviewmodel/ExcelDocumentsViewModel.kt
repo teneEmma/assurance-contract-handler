@@ -264,7 +264,7 @@ class ExcelDocumentsViewModel : BaseViewModel() {
             CellType.STRING -> cell.stringCellValue
             CellType.NUMERIC -> {
                 if (DateUtil.isCellDateFormatted(cell)) {
-                    TimeConverters().formatISODateToLocaleDate(cell.localDateTimeCellValue.toString())
+                    TimeConverters.formatISODateToLocaleDate(cell.localDateTimeCellValue.toString())
                 } else {
                     cell.numericCellValue
                 }
