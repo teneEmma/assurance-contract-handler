@@ -11,6 +11,7 @@ import androidx.core.view.isVisible
 import com.google.android.material.slider.RangeSlider
 import com.kod.assurancecontracthandler.R
 import com.kod.assurancecontracthandler.common.constants.ConstantsVariables
+import com.kod.assurancecontracthandler.common.utilities.DataTypesConversionAndFormattingUtils
 import com.kod.assurancecontracthandler.databinding.ExpandableSliderItemBinding
 
 class ExpandableSliderAdapter(
@@ -40,8 +41,8 @@ class ExpandableSliderAdapter(
             expandableSBinding.priceSlider.setLabelFormatter { value ->
                 "$value${ConstantsVariables.priceUnit}"
             }
-            expandableSBinding.etPriceRangeMax.text = ConstantsVariables.minPriceText
-            expandableSBinding.etPriceRangeMin.text = ConstantsVariables.maxPriceText
+            expandableSBinding.etPriceRangeMax.text = ConstantsVariables.maxPriceText
+            expandableSBinding.etPriceRangeMin.text = ConstantsVariables.minPriceText
         } else {
             val minValue = slidersValues[groupKey]?.get(childKey)?.first ?: 1.0F
             val maxValue = slidersValues[groupKey]?.get(childKey)?.second ?: 30.0F
@@ -52,8 +53,8 @@ class ExpandableSliderAdapter(
             expandableSBinding.priceSlider.setLabelFormatter { value ->
                 "$value${ConstantsVariables.powerUnit}"
             }
-            expandableSBinding.etPriceRangeMax.text = ConstantsVariables.minPowerText
-            expandableSBinding.etPriceRangeMin.text = ConstantsVariables.maxPowerText
+            expandableSBinding.etPriceRangeMax.text = ConstantsVariables.maxPowerText
+            expandableSBinding.etPriceRangeMin.text = ConstantsVariables.minPowerText
         }
 
     }
@@ -76,7 +77,7 @@ class ExpandableSliderAdapter(
 
         try {
             setSliderValues(groupPosition, childPosition, expandableSBinding)
-        } catch (e: Exception){
+        } catch (e: Exception) {
             Log.e("CRASH_SLIDERS", e.stackTraceToString())
         }
 
@@ -104,6 +105,16 @@ class ExpandableSliderAdapter(
 
                     override fun onStopTrackingTouch(slider: RangeSlider) {
                         values = mutableListOf(slider.values[0], slider.values[1])
+                        val minValueString = DataTypesConversionAndFormattingUtils.addPowerOrPriceUnitToAttribute(
+                            slider.values[0].toString(),
+                            groupPosition
+                        )
+                        val maxValueString = DataTypesConversionAndFormattingUtils.addPowerOrPriceUnitToAttribute(
+                            slider.values[1].toString(),
+                            groupPosition
+                        )
+                        expandableSBinding.etPriceRangeMin.text = minValueString
+                        expandableSBinding.etPriceRangeMax.text = maxValueString
                         sliderListenerCallback(
                             Pair(groupPosition, childPosition),
                             Pair(slider.values[0], slider.values[1])

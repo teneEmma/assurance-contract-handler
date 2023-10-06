@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.sqlite.db.SimpleSQLiteQuery
 import com.kod.assurancecontracthandler.R
 import com.kod.assurancecontracthandler.common.constants.ConstantsVariables
-import com.kod.assurancecontracthandler.common.utilities.DataTypesConversionUtils
+import com.kod.assurancecontracthandler.common.utilities.DataTypesConversionAndFormattingUtils
 import com.kod.assurancecontracthandler.common.utilities.TimeConverters
 import com.kod.assurancecontracthandler.model.BaseContract
 import com.kod.assurancecontracthandler.repository.ContractRepository
@@ -301,7 +301,7 @@ class ContractListViewModel(
                         filteredValues.filter { c ->
 
                             val vehiclePower =
-                                DataTypesConversionUtils.convertPowerFieldStringToFloat(c.contract?.puissanceVehicule)
+                                DataTypesConversionAndFormattingUtils.convertPowerFieldStringToFloat(c.contract?.puissanceVehicule)
                                     ?: return@filter false
 
                             vehiclePower >= childValue!!.first && vehiclePower <= childValue.second

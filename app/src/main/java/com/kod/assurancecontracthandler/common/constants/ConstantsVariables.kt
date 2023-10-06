@@ -35,8 +35,8 @@ object ConstantsVariables {
     const val datePickerTag = "DATE_RANGE_PICKER"
     const val priceUnit = "XAF"
     const val powerUnit = "CV-ESS"
-    const val minPriceText = "1000 $priceUnit"
-    const val maxPriceText = "500000 $priceUnit"
+    const val minPriceText = "1000.0 $priceUnit"
+    const val maxPriceText = "500000.0 $priceUnit"
     const val minPriceValue = 1000.0F
     const val maxPriceValue = 500000.0F
     const val minPowerText = "1.0 $powerUnit"
