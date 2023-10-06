@@ -11,24 +11,11 @@ import com.kod.assurancecontracthandler.model.BaseContract
 import com.kod.assurancecontracthandler.repository.ContractRepository
 import com.kod.assurancecontracthandler.viewmodels.baseviewmodel.BaseViewModel
 
-class ContractListViewModel(private val repository: ContractRepository) : BaseViewModel() {
-    //TODO: put these in xml files.
-    val expandableGroupTitlesList = listOf("FILTRER LES PRIX", "FILTRER LA PUISSANCE")
-    val expandableChildrenTitlesList = listOf(
-        listOf(
-            "ACC",
-            "COMMISION APPORTEUR",
-            "CR",
-            "DTA",
-            "ENCAISSEMENT",
-            "FC",
-            "NET_A_REVERSER",
-            "PN",
-            "PTTC",
-            "TVA"
-        ).sorted(),
-        listOf("PUISSANCE")
-    )
+class ContractListViewModel(
+    private val repository: ContractRepository,
+    private val expandableGroupTitlesList: List<String>,
+    private val expandableChildrenTitlesList: List<List<String>>
+) : BaseViewModel() {
 
     private var _selectedSearchChip: Int? = null
     private var _searchText: String = ""
@@ -227,7 +214,7 @@ class ContractListViewModel(private val repository: ContractRepository) : BaseVi
         return filteredValues
     }
 
-    private fun filterContractsUsingTextInputFields(contracts: List<BaseContract>): List<BaseContract>{
+    private fun filterContractsUsingTextInputFields(contracts: List<BaseContract>): List<BaseContract> {
         var filteredValues: List<BaseContract> = contracts
         if (checkField(providerTextViewContent)) {
             filteredValues = filteredValues.filter {
@@ -272,7 +259,7 @@ class ContractListViewModel(private val repository: ContractRepository) : BaseVi
         return filteredValues
     }
 
-    private fun filterContractsUsingSliders(contracts: List<BaseContract>):  List<BaseContract> {
+    private fun filterContractsUsingSliders(contracts: List<BaseContract>): List<BaseContract> {
         var filteredValues: List<BaseContract> = contracts
         slidersValues.entries.forEach { groups ->
             groups.value.entries.forEach { children ->

@@ -74,4 +74,26 @@
     <string name="action_settings">Parametres</string>
     <string name="action_exp_contracts">Contrats qui vont expirer</string>
 
+    <string-array name="expandable_group_titles_list">
+        <item>FILTRER LES PRIX</item>
+        <item>FILTRER LA PUISSANCE</item>
+    </string-array>
+
+    <string-array name="expandable_children_titles_list_1">
+        <item>ACC</item>
+        <item>COMMISSION APPORTEUR</item>
+        <item>CR</item>
+        <item>DTA</item>
+        <item>ENCAISSEMENT</item>
+        <item>FC</item>
+        <item>NET_A_REVERSER</item>
+        <item>PN</item>
+        <item>PTTC</item>
+        <item>TVA</item>
+    </string-array>
+
+    <string-array name="expandable_children_titles_list_2">
+        <item>POWER</item>
+    </string-array>
+
 </resources>

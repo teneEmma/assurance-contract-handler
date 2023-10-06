@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
@@ -52,7 +53,12 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener {
     private val contractListViewModel by viewModels<ContractListViewModel> {
         val contractDao = ContractDatabase.getDatabase(requireContext()).contractDao()
         val contractRepository = ContractRepository(contractDao)
-        ContractListViewModelFactory(contractRepository)
+        val groupTitleList = resources.getStringArray(R.array.expandable_group_titles_list).toList()
+        val childrenTitleList = listOf(
+            resources.getStringArray(R.array.expandable_children_titles_list_1).toList(),
+            resources.getStringArray(R.array.expandable_children_titles_list_2).toList()
+        )
+        ContractListViewModelFactory(contractRepository, groupTitleList, childrenTitleList)
     }
     private var rvAdapter: ContractListAdapter? = null
     private var dialogTouchContract: BottomSheetDialog? = null
@@ -245,9 +251,11 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener {
     }
 
     private fun setupExpandableListView() {
-        val groupTitleList = contractListViewModel.expandableGroupTitlesList
-        val childrenTitleList = contractListViewModel.expandableChildrenTitlesList
-
+        val groupTitleList = resources.getStringArray(R.array.expandable_group_titles_list).toList()
+        val childrenTitleList = listOf(
+            resources.getStringArray(R.array.expandable_children_titles_list_1).toList(),
+            resources.getStringArray(R.array.expandable_children_titles_list_2).toList()
+        )
         expandableAdapter = ExpandableSliderAdapter(
             requireContext(),
             groupTitleList,
@@ -299,12 +307,15 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener {
         }
     }
 
-    private fun setDatesTextViewsValues(){
+    private fun setDatesTextViewsValues() {
         filterDialogBinding.startDate.text =
-            TimeConverters.formatLongToLocaleDate(contractListViewModel.startDate) ?: resources.getString(R.string.start_date_text)
+            TimeConverters.formatLongToLocaleDate(contractListViewModel.startDate)
+                ?: resources.getString(R.string.start_date_text)
         filterDialogBinding.endDate.text =
-            TimeConverters.formatLongToLocaleDate(contractListViewModel.endDate) ?: resources.getString(R.string.end_date_text)
+            TimeConverters.formatLongToLocaleDate(contractListViewModel.endDate)
+                ?: resources.getString(R.string.end_date_text)
     }
+
     private fun deactivateAllSearchChips() {
         binding.searchView.findViewById<TextView>(com.google.android.material.R.id.search_src_text).text = ""
         binding.chipGroupSearch.isActivated = false
