@@ -1,4 +1,4 @@
-package com.kod.assurancecontracthandler.views.fragments.home.contractlist
+package com.kod.assurancecontracthandler.views.main.fragmentListContracts
 
 import android.content.Context
 import android.util.Log

@@ -4,7 +4,6 @@ import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
@@ -36,7 +35,6 @@ import com.kod.assurancecontracthandler.viewmodels.contractListViewModel.Contrac
 import com.kod.assurancecontracthandler.viewmodels.contractListViewModel.ContractListViewModelFactory
 import com.kod.assurancecontracthandler.viewmodels.databaseviewmodel.DatabaseViewModel
 import com.kod.assurancecontracthandler.viewmodels.databaseviewmodel.DatabaseViewModelFactory
-import com.kod.assurancecontracthandler.views.fragments.home.contractlist.ExpandableSliderAdapter
 
 class ContractListFragment : Fragment(), SearchView.OnQueryTextListener {
 
