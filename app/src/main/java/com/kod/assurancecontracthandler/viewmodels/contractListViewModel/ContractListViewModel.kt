@@ -16,7 +16,6 @@ class ContractListViewModel(
     private val expandableGroupTitlesList: List<String>,
     private val expandableChildrenTitlesList: List<List<String>>
 ) : BaseViewModel() {
-
     private var _selectedSearchChip: Int? = null
     private var _searchText: String = ""
     private val _shouldDisplayFabFilter = MutableLiveData<Boolean>(false)
@@ -54,6 +53,8 @@ class ContractListViewModel(
         } as MutableMap
     }
 
+    val allContracts: LiveData<List<BaseContract>?>
+        get() = _allContracts
     val selectedSearchChip: Int?
         get() = _selectedSearchChip
     val searchText: String

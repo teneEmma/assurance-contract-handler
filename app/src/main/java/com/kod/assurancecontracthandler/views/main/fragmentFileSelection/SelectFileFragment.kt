@@ -23,14 +23,11 @@ import com.kod.assurancecontracthandler.R
 import com.kod.assurancecontracthandler.common.usecases.ProcessState
 import com.kod.assurancecontracthandler.databinding.FragmentSelectFileBinding
 import com.kod.assurancecontracthandler.databinding.PermissionDialogBinding
-import com.kod.assurancecontracthandler.model.BaseContract
 import com.kod.assurancecontracthandler.model.MimeTypes
 import com.kod.assurancecontracthandler.model.database.ContractDatabase
 import com.kod.assurancecontracthandler.repository.ContractRepository
-import com.kod.assurancecontracthandler.viewmodels.databaseviewmodel.DatabaseViewModel
-import com.kod.assurancecontracthandler.viewmodels.databaseviewmodel.DatabaseViewModelFactory
-import com.kod.assurancecontracthandler.viewmodels.exceldocviewmodel.ExcelDocumentsViewModel
-import com.kod.assurancecontracthandler.viewmodels.exceldocviewmodel.ExcelDocumentsViewModelFactory
+import com.kod.assurancecontracthandler.viewmodels.exceldocviewmodel.SelectFileViewModel
+import com.kod.assurancecontracthandler.viewmodels.exceldocviewmodel.SelectFileViewModelFactory
 import java.io.FileInputStream
 
 
@@ -41,15 +38,11 @@ class SelectFileFragment : Fragment() {
     private var numberOfTimesClicked = 0
     private var shouldGoToSettingsPage = false
     private val binding get() = _binding!!
-    private val excelDocumentVM by viewModels<ExcelDocumentsViewModel> {
-        ExcelDocumentsViewModelFactory()
-    }
-    private val databaseViewModel by viewModels<DatabaseViewModel> {
+    private val selectFileViewModel by viewModels<SelectFileViewModel> {
         val contractDao = ContractDatabase.getDatabase(requireContext()).contractDao()
         val contractRepository = ContractRepository(contractDao)
-        DatabaseViewModelFactory(contractRepository)
+        SelectFileViewModelFactory(contractRepository)
     }
-    private var listOfContracts: List<BaseContract>? = emptyList()
     private var fileName: String? = null
     private val documentLauncher = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
         if (uri != null) {
@@ -84,11 +77,7 @@ class SelectFileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        excelDocumentVM.listOfContracts.observe(viewLifecycleOwner) {
-            it?.let { list -> listOfContracts = list }
-        }
-
-        excelDocumentVM.messageResourceId.observe(viewLifecycleOwner) {
+        selectFileViewModel.messageResourceId.observe(viewLifecycleOwner) {
             if (it != null) {
                 shortSnack(resources.getString(it))
             }
@@ -98,7 +87,7 @@ class SelectFileFragment : Fragment() {
             backToVisualize()
         }
 
-        excelDocumentVM.successful.observe(viewLifecycleOwner) { success ->
+        selectFileViewModel.successful.observe(viewLifecycleOwner) { success ->
             if (success == ProcessState.Success) {
                 binding.btnSaveFile.visibility = View.VISIBLE
             } else {
@@ -106,7 +95,7 @@ class SelectFileFragment : Fragment() {
             }
         }
 
-        excelDocumentVM.isLoading.observe(viewLifecycleOwner) { value ->
+        selectFileViewModel.isLoading.observe(viewLifecycleOwner) { value ->
             if (value) {
                 binding.fileLoadingPB.visibility = View.VISIBLE
                 setVisualEffects(false)
@@ -117,13 +106,13 @@ class SelectFileFragment : Fragment() {
             }
         }
 
-        excelDocumentVM.progression.observe(viewLifecycleOwner) {
+        selectFileViewModel.progression.observe(viewLifecycleOwner) {
             binding.fileLoadingPB.progress = it
         }
 
         binding.btnSaveFile.setOnClickListener {
-            if (!listOfContracts.isNullOrEmpty()) {
-                addContracts(listOfContracts!!)
+            if (!selectFileViewModel.listOfContracts.isNullOrEmpty()) {
+                addContracts()
                 shortSnack(resources.getString(R.string.save_successful))
                 backToVisualize()
             } else {
@@ -193,12 +182,12 @@ class SelectFileFragment : Fragment() {
         Snackbar.make(requireView(), message, Snackbar.LENGTH_LONG).show()
     }
 
-    private fun addContracts(contracts: List<BaseContract>) = databaseViewModel.apply {
-        executeFunctionWithAnimation { addContracts(contracts) }
+    private fun addContracts() = selectFileViewModel.apply {
+        executeFunctionWithAnimation { addContracts() }
     }
 
     private fun readDocument(inputStream: FileInputStream) {
-        excelDocumentVM.readDocumentWithAnimation(inputStream)
+        selectFileViewModel.readDocumentWithAnimation(inputStream)
     }
 
     private fun backToVisualize() {
