@@ -19,6 +19,12 @@
         <item name="android:textSize">24sp</item>
     </style>
 
+    <style name="small"
+           parent="TextAppearance.AppCompat">
+        <item name="fontFamily">@font/normal</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
     <style name="AppActionBar"
            parent="Theme.MaterialComponents.Light">
         <item name="android:background">?attr/colorSecondary</item>

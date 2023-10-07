@@ -22,10 +22,15 @@
         <!-- Action bar style. -->
         <item name="android:actionBarStyle" >@style/AppActionBar</item>
 
+        <item name="android:textAppearance" >@style/normal</item>
+
         <!--  For bottom sheet  -->
         <item name="bottomSheetDialogTheme">@style/AppTheme.AssuranceContractHandler.BottomSheetStyle</item>
 
         <item name="chipGroupStyle">@style/AppTheme.AssuranceContractHandler.ChipGroupStyle</item>
+
+        <!--  Slider style  -->
+        <item name="sliderStyle">@style/AppTheme.AssuranceContractHandler.SliderStyle</item>
     </style>
 
     <style name="AppTabLayout" parent="Widget.Design.TabLayout">
@@ -66,6 +71,21 @@
         <item name="android:textColor">@color/chip_text_color</item>
         <item name="tabTextAppearance">@style/Headers.header_2</item>
         <item name="android:textSize">29sp</item>
+    </style>
+
+    <style name="AppTheme.AssuranceContractHandler.SliderStyle" parent="Widget.MaterialComponents.Slider">
+        <item name="labelStyle">@style/AppTheme.AssuranceContractHandler.SliderStyle.LabelStyle</item>
+        <item name="materialThemeOverlay">@style/AppTheme.AssuranceContractHandler.SliderStyle.ThemeOverlay</item>
+    </style>
+
+    <style name="AppTheme.AssuranceContractHandler.SliderStyle.LabelStyle" parent="Widget.MaterialComponents.Tooltip">
+        <item name="android:textAppearance">@style/small</item>
+    </style>
+
+    <style name="AppTheme.AssuranceContractHandler.SliderStyle.ThemeOverlay" parent="">
+        <item name="colorPrimary">?android:colorAccent</item>
+        <item name="colorOnPrimary">?android:colorPrimary</item>
+        <item name="colorOnSurface">?android:colorAccent</item>
     </style>
 
 </resources>

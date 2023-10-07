@@ -26,6 +26,7 @@
             <com.google.android.material.slider.RangeSlider
                 android:id="@+id/price_slider"
                 android:layout_width="match_parent"
+                style="@style/AppTheme.AssuranceContractHandler.SliderStyle"
                 android:layout_height="wrap_content"
                 android:background="@drawable/edit_text_round"
                 android:layout_marginTop="10dp"

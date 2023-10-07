@@ -1,41 +1,65 @@
 package com.kod.assurancecontracthandler.views.main.fragmentListContracts
 
+import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.*
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.widget.SearchView
+import androidx.core.content.ContextCompat
+import androidx.core.util.Pair
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipGroup
 import com.google.android.material.color.MaterialColors
-import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.datepicker.MaterialDatePicker
 import com.kod.assurancecontracthandler.R
+import com.kod.assurancecontracthandler.common.constants.ConstantsVariables
 import com.kod.assurancecontracthandler.common.utilities.BottomDialogView
+import com.kod.assurancecontracthandler.common.utilities.TimeConverters
 import com.kod.assurancecontracthandler.databinding.ContractDetailsBinding
+import com.kod.assurancecontracthandler.databinding.FilterDialogBinding
 import com.kod.assurancecontracthandler.databinding.FragmentListContractsBinding
 import com.kod.assurancecontracthandler.model.BaseContract
 import com.kod.assurancecontracthandler.model.database.ContractDatabase
 import com.kod.assurancecontracthandler.repository.ContractRepository
+import com.kod.assurancecontracthandler.viewmodels.contractListViewModel.ContractListViewModel
+import com.kod.assurancecontracthandler.viewmodels.contractListViewModel.ContractListViewModelFactory
 import com.kod.assurancecontracthandler.viewmodels.databaseviewmodel.DatabaseViewModel
 import com.kod.assurancecontracthandler.viewmodels.databaseviewmodel.DatabaseViewModelFactory
 
-
-class ContractListFragment : Fragment() {
+class ContractListFragment : Fragment(), SearchView.OnQueryTextListener {
 
     private lateinit var binding: FragmentListContractsBinding
+    private lateinit var filterDialogBinding: FilterDialogBinding
+    private lateinit var dialog: Dialog
+    private lateinit var expandableAdapter: ExpandableSliderAdapter
 
     private val dbViewModel by viewModels<DatabaseViewModel> {
         val contractDao = ContractDatabase.getDatabase(requireContext()).contractDao()
         val contractRepository = ContractRepository(contractDao)
         DatabaseViewModelFactory(contractRepository)
     }
+    private val contractListViewModel by viewModels<ContractListViewModel> {
+        val contractDao = ContractDatabase.getDatabase(requireContext()).contractDao()
+        val contractRepository = ContractRepository(contractDao)
+        val groupTitleList = resources.getStringArray(R.array.expandable_group_titles_list).toList()
+        val childrenTitleList = listOf(
+            resources.getStringArray(R.array.expandable_children_titles_list_1).toList(),
+            resources.getStringArray(R.array.expandable_children_titles_list_2).toList()
+        )
+        ContractListViewModelFactory(contractRepository, groupTitleList, childrenTitleList)
+    }
     private var rvAdapter: ContractListAdapter? = null
     private var dialogTouchContract: BottomSheetDialog? = null
-
 
     companion object {
         fun newInstance() = ContractListFragment()
@@ -56,6 +80,7 @@ class ContractListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setRecyclerView()
+        setupSearchBarView()
 
         binding.addExcelFile.setOnClickListener {
             openAddExcelFilePage()
@@ -67,7 +92,9 @@ class ContractListFragment : Fragment() {
 
         lifecycleScope.launchWhenStarted {
             dbViewModel.allContracts.observe(viewLifecycleOwner) { listContracts ->
-                if (listContracts.isNullOrEmpty()) {
+                if (listContracts.isNullOrEmpty() && contractListViewModel.searchText.isEmpty() &&
+                    contractListViewModel.selectedSearchChip == null
+                ) {
                     binding.ivEmptyDatabase.visibility = View.VISIBLE
                     binding.tvEmptyDatabase.visibility = View.VISIBLE
                     binding.rvListContract.visibility = View.GONE
@@ -75,22 +102,249 @@ class ContractListFragment : Fragment() {
                     binding.ivEmptyDatabase.visibility = View.GONE
                     binding.tvEmptyDatabase.visibility = View.GONE
                     binding.rvListContract.visibility = View.VISIBLE
-                    listContracts.filter { contractDbDto ->
-                        contractDbDto.contract?.assure != "SOMME"
-                    }.let { listContract ->
-                        rvAdapter?.setContractList(listContract)
+                    if (listContracts != null) {
+                        rvAdapter?.setContractList(listContracts)
                     }
                 }
             }
         }
 
-        dbViewModel.hasQueried.observe(viewLifecycleOwner) {
-            if (it) binding.progressBar.hide()
-            else binding.progressBar.show()
+        dbViewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            if (isLoading) {
+                binding.progressBar.show()
+            } else {
+                binding.progressBar.hide()
+            }
+        }
+        contractListViewModel.messageResourceId.observe(viewLifecycleOwner) { resourceId ->
+            shortToast(resources.getString(resourceId))
         }
 
         updateContractsList()
         swipeToRefreshAfterChipCollapse()
+    }
+
+
+    private fun setupSearchBarView() {
+        binding.searchView.isSubmitButtonEnabled = false
+        binding.searchView.setIconifiedByDefault(false)
+        binding.searchView.setOnQueryTextListener(this)
+        binding.searchView.setOnQueryTextFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) {
+                return@setOnQueryTextFocusChangeListener
+            }
+            binding.chipGroupSearch.isEnabled = false
+            if (!binding.chipGroupSearch.isActivated) {
+                onClickFilterFab()
+                showChips(
+                    binding.chipGroupSearch, ConstantsVariables.searchBarChipsTitles,
+                    com.google.android.material.R.style.Widget_MaterialComponents_Chip_Action
+                )
+            }
+        }
+        binding.btnDismissSearch.setOnClickListener {
+            deactivateAllSearchChips()
+        }
+        contractListViewModel.shouldDisplayFabFilter.observe(viewLifecycleOwner) { containsSomeText ->
+            if (containsSomeText) {
+                binding.fabFilterDialog.visibility = View.VISIBLE
+                binding.addExcelFile.visibility = View.GONE
+                return@observe
+            }
+            binding.fabFilterDialog.visibility = View.GONE
+            binding.addExcelFile.visibility = View.VISIBLE
+        }
+
+        binding.searchView.findViewById<ImageView>(com.google.android.material.R.id.search_close_btn)
+            .setOnClickListener {
+                binding.searchView.findViewById<TextView>(com.google.android.material.R.id.search_src_text).text = ""
+            }
+        searchChipsChecked()
+    }
+
+    private fun onClickFilterFab() {
+        binding.fabFilterDialog.setOnClickListener {
+            filterDialogBinding = FilterDialogBinding.inflate(layoutInflater)
+            showFilterDialog()
+            showChips(
+                filterDialogBinding.chipGroupFilter, contractListViewModel.filterChipsToShow,
+                com.google.android.material.R.style.Widget_MaterialComponents_Chip_Filter
+            )
+
+            filterDialogBinding.btnDatePicker.setOnClickListener {
+                showDatePickerDialog()
+            }
+            setupExpandableListView()
+            filterChipsChecked()
+        }
+    }
+
+    private fun filterChipsChecked() {
+        // This order of appearance of textInputLayouts in this list has been order with respect to
+        // ConstantsVariables.filterDialogChips
+        val listTextViews = listOf(
+            filterDialogBinding.ilFilterApporteur,
+            filterDialogBinding.ilFilterAssurer, filterDialogBinding.ilFilterAttestation,
+            filterDialogBinding.ilFilterCarteRose, filterDialogBinding.ilFilterCompagnie,
+            filterDialogBinding.ilFilterImmatriculation, filterDialogBinding.ilFilterMark,
+            filterDialogBinding.ilFilterNumeroPolice
+        )
+
+        if (filterDialogBinding.chipGroupFilter.checkedChipIds.isNotEmpty()) {
+            filterDialogBinding.chipGroupFilter.checkedChipIds.let { checkedChips ->
+                listTextViews[checkedChips[0] - 1].visibility = View.VISIBLE
+            }
+        }
+
+        filterDialogBinding.chipGroupFilter.setOnCheckedStateChangeListener { _, checkedIds ->
+            contractListViewModel.onFilterChipCheckChanged(checkedIds)
+            listTextViews.forEachIndexed { index, v ->
+                if (!checkedIds.contains(index)) {
+                    v.visibility = View.GONE
+                    return@forEachIndexed
+                }
+                v.visibility = View.VISIBLE
+            }
+        }
+        filterDialogBinding.btnReset.setOnClickListener {
+            onResetBtnClicked()
+        }
+        applyBtnListener()
+    }
+
+    private fun applyBtnListener() {
+        filterDialogBinding.btnApplyFilter.setOnClickListener {
+            contractListViewModel.setEditTextValues(
+                filterDialogBinding.etFilterApporteur.text.toString().trim(),
+                filterDialogBinding.etFilterimmatriculation.text.toString().trim(),
+                filterDialogBinding.etFilterAttestation.text.toString().trim(),
+                filterDialogBinding.etFilterCarteRose.text.toString().trim(),
+                filterDialogBinding.etFilterCompagnie.text.toString().trim(),
+                filterDialogBinding.etFilterAssurer.text.toString().trim(),
+                filterDialogBinding.etFilterMark.text.toString().trim(),
+                filterDialogBinding.etFilterPolice.text.toString().trim(),
+            )
+
+            contractListViewModel.filterContracts()
+            onResetBtnClicked()
+            dialog.cancel()
+        }
+    }
+
+    private fun onResetBtnClicked() {
+        contractListViewModel.clearData()
+        filterDialogBinding.etFilterAttestation.text?.clear()
+        filterDialogBinding.etFilterApporteur.text?.clear()
+        filterDialogBinding.etFilterimmatriculation.text?.clear()
+        filterDialogBinding.etFilterCarteRose.text?.clear()
+        filterDialogBinding.etFilterCompagnie.text?.clear()
+        filterDialogBinding.etFilterAssurer.text?.clear()
+        filterDialogBinding.etFilterMark.text?.clear()
+        filterDialogBinding.etFilterPolice.text?.clear()
+        filterDialogBinding.chipGroupFilter.clearCheck()
+        filterDialogBinding.expandableLvSliders.clearChoices()
+        filterDialogBinding.expandableLvSliders.invalidate()
+        expandableAdapter.notifyDataSetInvalidated()
+        setDatesTextViewsValues()
+    }
+
+    private fun setupExpandableListView() {
+        val groupTitleList = resources.getStringArray(R.array.expandable_group_titles_list).toList()
+        val childrenTitleList = listOf(
+            resources.getStringArray(R.array.expandable_children_titles_list_1).toList(),
+            resources.getStringArray(R.array.expandable_children_titles_list_2).toList()
+        )
+        expandableAdapter = ExpandableSliderAdapter(
+            requireContext(),
+            groupTitleList,
+            childrenTitleList,
+            contractListViewModel.slidersValues
+        ) { groupChildPositions, minMaxValues ->
+            contractListViewModel.onSliderTouched(groupChildPositions, minMaxValues)
+        }
+
+        filterDialogBinding.expandableLvSliders.setAdapter(expandableAdapter)
+    }
+
+    private fun showFilterDialog() {
+        dialog = Dialog(requireContext())
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(filterDialogBinding.root)
+
+        val layoutParams = dialog.window
+            ?.let { window ->
+                setNewDialogParams(window)
+            }
+
+        dialog.show()
+        dialog.window?.attributes = layoutParams
+    }
+
+    private fun setNewDialogParams(window: Window): WindowManager.LayoutParams {
+        val layoutParams = window.attributes
+        layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT
+        layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT
+
+        return layoutParams
+    }
+
+    private fun showDatePickerDialog() {
+        val dateSelectionInterval = Pair(
+            MaterialDatePicker.thisMonthInUtcMilliseconds(),
+            MaterialDatePicker.todayInUtcMilliseconds()
+        )
+        val dateRangePicker = MaterialDatePicker.Builder.dateRangePicker()
+            .setTitleText(resources.getString(R.string.chose_time_interval))
+            .setSelection(dateSelectionInterval).build()
+
+        dateRangePicker.show(requireActivity().supportFragmentManager, ConstantsVariables.datePickerTag)
+        dateRangePicker.addOnPositiveButtonClickListener { dates ->
+            contractListViewModel.onDateChanged(maxDate = dates.second, minDate = dates.first)
+            setDatesTextViewsValues()
+        }
+    }
+
+    private fun setDatesTextViewsValues() {
+        filterDialogBinding.startDate.text =
+            TimeConverters.formatLongToLocaleDate(contractListViewModel.startDate)
+                ?: resources.getString(R.string.start_date_text)
+        filterDialogBinding.endDate.text =
+            TimeConverters.formatLongToLocaleDate(contractListViewModel.endDate)
+                ?: resources.getString(R.string.end_date_text)
+    }
+
+    private fun deactivateAllSearchChips() {
+        binding.searchView.findViewById<TextView>(com.google.android.material.R.id.search_src_text).text = ""
+        binding.chipGroupSearch.isActivated = false
+        binding.chipGroupSearch.clearCheck()
+        binding.chipGroupSearch.removeAllViews()
+        contractListViewModel.deactivateAllSearchChips()
+        updateContractsList()
+    }
+
+    private fun searchChipsChecked() {
+        binding.chipGroupSearch.setOnCheckedStateChangeListener { _, checkedIds ->
+            contractListViewModel.onSearchChipCheckChanged(checkedIds.getOrNull(0))
+        }
+    }
+
+    private fun showChips(chipGroup: ChipGroup, searchChipGroupTitles: List<String>, chipGroupStyle: Int) {
+        searchChipGroupTitles.forEachIndexed { index, chipName ->
+            val chip = Chip(requireContext(), null, chipGroupStyle).apply {
+                id = index
+                isCheckable = true
+                text = chipName
+                isClickable = true
+                setChipBackgroundColorResource(R.color.chip_background_color)
+                setChipStrokeColorResource(R.color.chip_stroke_color)
+                setTextColor(ContextCompat.getColorStateList(context, R.color.chip_text_color))
+                chipStrokeWidth = 10f
+                setCheckedIconTintResource(R.color.chip_text_color)
+            }
+            chipGroup.isActivated = true
+            chipGroup.addView(chip)
+        }
     }
 
     private fun openAddExcelFilePage() {
@@ -108,16 +362,16 @@ class ContractListFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.action_exp_contracts) {
-            shortSnack(resources.getString(R.string.to_be_implemented_text))
+            shortToast(resources.getString(R.string.to_be_implemented_text))
         } else if (item.itemId == R.id.action_settings) {
-            shortSnack(resources.getString(R.string.to_be_implemented_text))
+            shortToast(resources.getString(R.string.to_be_implemented_text))
         }
         return true
     }
 
 
-    private fun shortSnack(message: String) {
-        Snackbar.make(requireView(), message, Snackbar.LENGTH_SHORT).show()
+    private fun shortToast(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 
     private fun swipeToRefreshAfterChipCollapse() {
@@ -129,8 +383,10 @@ class ContractListFragment : Fragment() {
         binding.swipeToRefresh.setOnRefreshListener {
             if (!binding.chipGroupSearch.isActivated) {
                 dbViewModel.apply {
-                    executeFunWithoutAnimation { fetchAllContracts() }
+                    executeFunWithoutAnimation { contractListViewModel.fetchAllContracts() }
                 }
+            } else {
+                this.onQueryTextChange(contractListViewModel.searchText)
             }
             binding.swipeToRefresh.isRefreshing = false
         }
@@ -172,18 +428,34 @@ class ContractListFragment : Fragment() {
                 toast(resources.getString(R.string.non_valid_option))
                 return@setOnClickListener
             }
-            shortSnack(resources.getString(R.string.to_be_implemented_text))
+            shortToast(resources.getString(R.string.to_be_implemented_text))
             dialogTouchContract?.dismiss()
         }
     }
 
     private fun updateContractsList() {
-        dbViewModel.apply {
-            executeFunWithAnimation { fetchAllContracts() }
+        contractListViewModel.apply {
+            executeFunctionWithAnimation {
+                fetchAllContracts()
+            }
         }
     }
 
     private fun toast(message: String) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onQueryTextSubmit(query: String?): Boolean {
+        if (query != null) {
+            contractListViewModel.onSearchText(query)
+        }
+        return true
+    }
+
+    override fun onQueryTextChange(newText: String?): Boolean {
+        if (newText != null) {
+            contractListViewModel.onSearchText(newText)
+        }
+        return true
     }
 }

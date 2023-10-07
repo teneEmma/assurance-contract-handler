@@ -30,7 +30,7 @@ class ExcelDocumentsViewModel : BaseViewModel() {
         get() = _isSuccessful
 
     private val _messageResourceId = MutableLiveData<Int>()
-    override val messageResourceId: LiveData<Int>
+    val messageResourceId: LiveData<Int>
         get() = _messageResourceId
 
     private val _progression = MutableLiveData<Int>()
@@ -234,7 +234,7 @@ class ExcelDocumentsViewModel : BaseViewModel() {
     }
 
     fun readDocumentWithAnimation(inputStream: FileInputStream) {
-        executeFunWithAnimation {
+        executeFunctionWithAnimation {
             try {
                 _isLoading.postValue(true)
                 _isSuccessful.postValue(ProcessState.Init)

@@ -194,7 +194,7 @@ class SelectFileFragment : Fragment() {
     }
 
     private fun addContracts(contracts: List<BaseContract>) = databaseViewModel.apply {
-        executeFunWithAnimation { addContracts(contracts) }
+        executeFunctionWithAnimation { addContracts(contracts) }
     }
 
     private fun readDocument(inputStream: FileInputStream) {
