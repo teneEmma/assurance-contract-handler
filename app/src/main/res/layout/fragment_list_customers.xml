@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="match_parent" xmlns:app="http://schemas.android.com/apk/res-auto"
                 tools:context=".views.main.fragmentListCustomers.ListCustomersFragment">
 
     <androidx.appcompat.widget.SearchView
@@ -10,9 +10,23 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:layout_toStartOf="@+id/btn_dismiss_search"
             android:inputType="text"
             android:background="@drawable/elevated_zone"
             android:layout_margin="5dp" />
+
+    <ImageButton
+            android:id="@+id/btn_dismiss_search"
+            android:layout_height="50dp"
+            android:layout_width="50dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:foreground="@drawable/elevated_zone"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:tint="?android:colorPrimary"
+            android:backgroundTint="?android:colorPrimary"
+            android:src="@drawable/ic_close" android:layout_marginTop="5dp" android:layout_marginStart="5dp" android:layout_marginEnd="5dp" android:layout_marginBottom="5dp"/>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipeToRefresh"
@@ -21,7 +35,7 @@
             android:layout_marginVertical="2dp"
             android:layout_marginHorizontal="5dp"
             android:layout_alignParentStart="true"
-            android:layout_alignParentBottom="true"
+            android:layout_above="@+id/customer_details"
             android:layout_below="@id/searchView_client">
 
         <androidx.recyclerview.widget.RecyclerView
@@ -55,7 +69,9 @@
             android:text="@string/empty_database"
             android:textAlignment="center"
             android:textColor="@color/design_default_color_error"
+            android:textSize="22sp"
             android:textStyle="bold"
+            android:textAppearance="@style/Headers.header_2"
             android:layout_below="@id/iv_empty_database"
             android:visibility="gone"/>
 
@@ -81,7 +97,9 @@
                     android:layout_marginStart="5dp"
                     android:textColor="@color/white"
                     android:text="@string/number_0"
-                    android:textStyle="bold"/>
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:textAppearance="@style/normal"/>
 
             <TextView
                     android:id="@+id/total_active"
@@ -90,7 +108,9 @@
                     android:layout_marginStart="5dp"
                     android:text="@string/number_0"
                     android:textColor="@color/bright_green"
-                    android:textStyle="bold"/>
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:textAppearance="@style/normal"/>
 
             <TextView
                     android:id="@+id/total_has_numbers"
@@ -99,7 +119,9 @@
                     android:layout_marginStart="5dp"
                     android:text="@string/number_0"
                     android:textColor="@color/yellow"
-                    android:textStyle="bold"/>
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:textAppearance="@style/normal"/>
 
         </LinearLayout>
 
