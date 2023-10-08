@@ -77,6 +77,12 @@
     <string name="price_min" translatable="false">1000XAF</string>
     <string name="price_max" translatable="false">500000XAF</string>
     <string name="priceSeperator" translatable="false">-</string>
+    <string name="sort_applied">Sort applied</string>
+    <string name="numbers_text">PHONE NUMB</string>
+    <string name="total_text">TOTAL</string>
+    <string name="active_text">ACTIVE</string>
+    <string name="customer_details_cardview">ACTIVE customers,
+        customers WITH NUMBERS et TOTAL NUMBERS of customers</string>
 
     <string name="content_description_loading_progress">Loading Progress</string>
     <string name="content_description_fab_add_document">Add a document</string>
@@ -84,6 +90,7 @@
 
     <string name="action_settings">Settings</string>
     <string name="action_exp_contracts">Contracts reaching due date</string>
+    <string name="action_sort">Sort</string>
 
     <string-array name="expandable_group_titles_list">
         <item>FILTER PRICES</item>
