@@ -102,7 +102,7 @@ class ListCustomersFragment : Fragment(), SearchView.OnQueryTextListener {
                 binding.rvListCustomers.visibility = View.VISIBLE
                 rvAdapter.setCustomerList(list)
             } else {
-                if(!customerListViewModel.noResultFound){
+                if (!customerListViewModel.noResultFound) {
                     rvAdapter.setCustomerList(emptyList())
                     shortSnack(resources.getString(R.string.no_result_found))
                     return@observe
