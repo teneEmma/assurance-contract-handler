@@ -1,6 +1,6 @@
 package com.kod.assurancecontracthandler.repository
 
-import com.kod.assurancecontracthandler.Dao.CustomerDAO
+import com.kod.assurancecontracthandler.dao.CustomerDAO
 
 class CustomerRepository(private val customerDAO: CustomerDAO) {
 
@@ -12,7 +12,7 @@ class CustomerRepository(private val customerDAO: CustomerDAO) {
 
     fun numberCustomersWithTelephone() = customerDAO.getNumberOfCustomersWithPhones()
 
-    fun getActiveContracts(today: Long) = customerDAO.getActiveContracts(today)
+    fun getActiveContracts(today: String) = customerDAO.getActiveContracts(today)
 
-    fun getAllCustomers(name: String) = customerDAO.getAllCustomers(name)
+    fun getAllCustomers(concatenatedName: String) = customerDAO.getAllCustomers(concatenatedName)
 }
