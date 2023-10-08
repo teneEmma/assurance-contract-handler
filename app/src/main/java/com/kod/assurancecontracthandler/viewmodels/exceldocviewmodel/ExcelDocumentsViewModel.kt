@@ -9,7 +9,6 @@ import com.kod.assurancecontracthandler.common.usecases.ProcessState
 import com.kod.assurancecontracthandler.common.utilities.TimeConverters
 import com.kod.assurancecontracthandler.model.BaseContract
 import com.kod.assurancecontracthandler.model.Contract
-import com.kod.assurancecontracthandler.repository.ContractRepository
 import com.kod.assurancecontracthandler.viewmodels.baseviewmodel.BaseViewModel
 import org.apache.poi.ss.usermodel.*
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
@@ -17,10 +16,10 @@ import java.io.FileInputStream
 import java.io.IOException
 import kotlin.math.roundToInt
 
-class SelectFileViewModel(private val contractRepository: ContractRepository) : BaseViewModel() {
+class ExcelDocumentsViewModel : BaseViewModel() {
     private val _listOfContracts = MutableLiveData<List<BaseContract>?>()
-    val listOfContracts: List<BaseContract>?
-        get() = _listOfContracts.value
+    val listOfContracts: LiveData<List<BaseContract>?>
+        get() = _listOfContracts
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean>
@@ -282,6 +281,4 @@ class SelectFileViewModel(private val contractRepository: ContractRepository) : 
             else -> null
         }
     }
-
-    suspend fun addContracts() = _listOfContracts.value?.let { contractRepository.addContracts(it) }
 }
