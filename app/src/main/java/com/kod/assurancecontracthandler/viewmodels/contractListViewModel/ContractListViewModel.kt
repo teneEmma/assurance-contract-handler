@@ -94,7 +94,7 @@ class ContractListViewModel(
     }
 
     fun onSearchText(newText: String?) {
-        if (newText == null) {
+        if (newText.isNullOrEmpty()) {
             return
         }
         _searchText = newText

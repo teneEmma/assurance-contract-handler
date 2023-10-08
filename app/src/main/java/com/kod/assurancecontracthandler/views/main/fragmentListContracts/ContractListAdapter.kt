@@ -13,19 +13,21 @@ import com.kod.assurancecontracthandler.databinding.RvContractItemBinding
 import com.kod.assurancecontracthandler.model.BaseContract
 import java.util.*
 
-class ContractListAdapter(private val clickFunction: (BaseContract) -> Unit,
-                          private val touchFunction: ()-> Unit):
+class ContractListAdapter(
+    private val clickFunction: (BaseContract) -> Unit,
+    private val touchFunction: () -> Unit
+) :
     RecyclerView.Adapter<ContractListAdapter.ContractViewHolder>() {
     private var contractList: List<BaseContract> = emptyList()
     var isExpiringActivity = false
 
-    inner class ContractViewHolder(view: View): RecyclerView.ViewHolder(view){
+    inner class ContractViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private var itemBinding = RvContractItemBinding.bind(itemView)
 
         fun bindItems(contract: BaseContract, position: Int) {
             itemBinding.apply {
-                val nextPosition = position+1
-                columnId.text = (nextPosition).toString()
+                val actualPosition = position + 1
+                columnId.text = (actualPosition).toString()
 
                 val grandTotal = "${contract.contract?.DTA.toString()}XAF"
 
@@ -44,16 +46,17 @@ class ContractListAdapter(private val clickFunction: (BaseContract) -> Unit,
             }
         }
     }
+
     override fun getItemCount(): Int = contractList.size
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContractViewHolder
-            = ContractViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.rv_contract_item, parent,false))
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContractViewHolder =
+        ContractViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.rv_contract_item, parent, false))
 
-    fun setContractList(contractList: List<BaseContract>){
-        if (this.contractList.isEmpty()){
+    fun setContractList(contractList: List<BaseContract>) {
+        if (this.contractList.isEmpty()) {
             this.contractList = contractList
             notifyDataSetChanged()
-        }else{
+        } else {
             val diffCallback = ContractsCallback(this.contractList, contractList)
             val diffContracts = DiffUtil.calculateDiff(diffCallback)
 
@@ -67,12 +70,12 @@ class ContractListAdapter(private val clickFunction: (BaseContract) -> Unit,
         val currentHabit = contractList[position]
 
         holder.bindItems(currentHabit, position)
-        holder.itemView.setOnLongClickListener{
+        holder.itemView.setOnLongClickListener {
             clickFunction(currentHabit)
             true
         }
 
-        holder.itemView.setOnClickListener{
+        holder.itemView.setOnClickListener {
             clickFunction(currentHabit)
         }
 
