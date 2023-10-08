@@ -33,8 +33,6 @@ import com.kod.assurancecontracthandler.model.database.ContractDatabase
 import com.kod.assurancecontracthandler.repository.ContractRepository
 import com.kod.assurancecontracthandler.viewmodels.contractListViewModel.ContractListViewModel
 import com.kod.assurancecontracthandler.viewmodels.contractListViewModel.ContractListViewModelFactory
-import com.kod.assurancecontracthandler.viewmodels.databaseviewmodel.DatabaseViewModel
-import com.kod.assurancecontracthandler.viewmodels.databaseviewmodel.DatabaseViewModelFactory
 
 class ContractListFragment : Fragment(), SearchView.OnQueryTextListener {
 
@@ -42,12 +40,6 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener {
     private lateinit var filterDialogBinding: FilterDialogBinding
     private lateinit var dialog: Dialog
     private lateinit var expandableAdapter: ExpandableSliderAdapter
-
-    private val dbViewModel by viewModels<DatabaseViewModel> {
-        val contractDao = ContractDatabase.getDatabase(requireContext()).contractDao()
-        val contractRepository = ContractRepository(contractDao)
-        DatabaseViewModelFactory(contractRepository)
-    }
     private val contractListViewModel by viewModels<ContractListViewModel> {
         val contractDao = ContractDatabase.getDatabase(requireContext()).contractDao()
         val contractRepository = ContractRepository(contractDao)
@@ -91,7 +83,7 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener {
         }
 
         lifecycleScope.launchWhenStarted {
-            dbViewModel.allContracts.observe(viewLifecycleOwner) { listContracts ->
+            contractListViewModel.allContracts.observe(viewLifecycleOwner) { listContracts ->
                 if (listContracts.isNullOrEmpty() && contractListViewModel.searchText.isEmpty() &&
                     contractListViewModel.selectedSearchChip == null
                 ) {
@@ -109,7 +101,7 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener {
             }
         }
 
-        dbViewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+        contractListViewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
             if (isLoading) {
                 binding.progressBar.show()
             } else {
@@ -381,7 +373,7 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener {
         binding.swipeToRefresh.setColorSchemeColors(arrowColor)
         binding.swipeToRefresh.setOnRefreshListener {
             if (!binding.chipGroupSearch.isActivated) {
-                dbViewModel.apply {
+                contractListViewModel.apply {
                     executeFunWithoutAnimation { contractListViewModel.fetchAllContracts() }
                 }
             } else {
