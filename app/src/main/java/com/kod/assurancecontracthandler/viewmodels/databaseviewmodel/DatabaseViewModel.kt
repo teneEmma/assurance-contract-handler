@@ -7,11 +7,6 @@ import com.kod.assurancecontracthandler.repository.ContractRepository
 import com.kod.assurancecontracthandler.viewmodels.baseviewmodel.BaseViewModel
 
 class DatabaseViewModel(private val repository: ContractRepository) : BaseViewModel() {
-
-    val allContracts: LiveData<List<BaseContract>?>
-        get() = _allContracts
-    val isLoading: LiveData<Boolean>
-        get() = _isLoading
     suspend fun addContracts(contracts: List<BaseContract>) = repository.addContracts(contracts)
 
     suspend fun addContract(contract: BaseContract) = repository.addContract(contract)
