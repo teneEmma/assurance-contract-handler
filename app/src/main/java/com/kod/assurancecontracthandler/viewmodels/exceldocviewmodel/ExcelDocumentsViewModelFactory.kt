@@ -2,11 +2,10 @@ package com.kod.assurancecontracthandler.viewmodels.exceldocviewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.kod.assurancecontracthandler.repository.ContractRepository
 
-class SelectFileViewModelFactory(private val contractRepository: ContractRepository): ViewModelProvider.Factory {
+class ExcelDocumentsViewModelFactory(): ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if(modelClass.isAssignableFrom(SelectFileViewModel::class.java)) return SelectFileViewModel(contractRepository) as T
+        if(modelClass.isAssignableFrom(ExcelDocumentsViewModel::class.java)) return ExcelDocumentsViewModel() as T
         throw java.lang.IllegalArgumentException("Unknown ViewModel Class")
     }
 }
