@@ -7,30 +7,45 @@
                 android:padding="5dp"
                 android:paddingHorizontal="5dp">
 
+        <TextView
+                android:id="@+id/column_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:textColor="@color/title_color"
+                android:backgroundTint="@color/id_background"
+                android:background="@drawable/edit_text_round"
+                android:text="@string/column_id"
+                android:textAppearance="@style/normal"
+                android:textSize="24sp"/>
+
         <ImageView
                 android:id="@+id/iv_customer_profile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@id/column_id"
                 android:layout_gravity="center_vertical"
-                android:layout_marginStart="2dp"
+                android:layout_marginStart="20dp"
                 android:scaleType="centerCrop"
                 android:src="@mipmap/ic_launcher_round"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
                 android:contentDescription="@string/profile_picture"/>
 
         <TextView
             android:id="@+id/tv_item_customer_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
             android:text="@string/customer_name"
-            android:textAlignment="viewStart"
+            android:textAlignment="inherit"
             android:textAllCaps="true"
             android:textSize="18sp"
             android:textStyle="bold"
             android:textAppearance="@style/Headers.header_2"
             android:layout_toEndOf="@+id/iv_customer_profile"
+            android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"/>
 
 </RelativeLayout>
