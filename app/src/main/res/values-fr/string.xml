@@ -66,6 +66,12 @@
     <string name="start_date_text">effet</string>
     <string name="end_date_text">echéance</string>
     <string name="no_result_found">No result was found</string>
+    <string name="sort_applied">Tri appliqué</string>
+    <string name="numbers_text">NUMEROS TEL</string>
+    <string name="total_text">TOTALE</string>
+    <string name="active_text">ACTIFS</string>
+    <string name="customer_details_cardview">clients ACTIFS,
+        clients AVEC NUMEROS et TOTAL des Clients</string>
 
     <string name="content_description_loading_progress">Niveau De Progression</string>
     <string name="content_description_fab_add_document">Ajouter un document</string>
@@ -73,6 +79,7 @@
 
     <string name="action_settings">Parametres</string>
     <string name="action_exp_contracts">Contrats qui vont expirer</string>
+    <string name="action_sort">Trier</string>
 
     <string-array name="expandable_group_titles_list">
         <item>FILTRER LES PRIX</item>
