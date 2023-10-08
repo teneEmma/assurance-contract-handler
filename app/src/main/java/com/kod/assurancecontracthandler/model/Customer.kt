@@ -51,10 +51,5 @@ data class Customer(
             customer.echeance = echeance
             return customer
         }
-
-        override fun newArray(size: Int): Array<Customer> {
-            val custo = Customer("TESTE NAME", phoneNumber = "133456")
-            return arrayOf(custo)
-        }
     }
 }
