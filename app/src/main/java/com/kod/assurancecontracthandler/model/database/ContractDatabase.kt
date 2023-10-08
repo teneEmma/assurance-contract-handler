@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.kod.assurancecontracthandler.dao.CustomerDAO
 import com.kod.assurancecontracthandler.dao.ContractDAO
 import com.kod.assurancecontracthandler.model.BaseContract
 
@@ -11,6 +12,8 @@ import com.kod.assurancecontracthandler.model.BaseContract
 abstract class ContractDatabase: RoomDatabase() {
 
     abstract fun contractDao(): ContractDAO
+
+    abstract fun customerDao(): CustomerDAO
     companion object{
         @Volatile
         private var INSTANCE: ContractDatabase? = null
