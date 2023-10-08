@@ -369,7 +369,6 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener {
         return true
     }
 
-
     private fun shortToast(message: String) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }

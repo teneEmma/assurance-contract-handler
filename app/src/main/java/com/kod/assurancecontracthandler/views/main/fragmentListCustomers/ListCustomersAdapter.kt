@@ -1,51 +1,54 @@
-package com.kod.assurancecontracthandler.views.fragments.home.listcustomers
+package com.kod.assurancecontracthandler.views.main.fragmentListCustomers
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.kod.assurancecontracthandler.R
 import com.kod.assurancecontracthandler.common.utilities.CustomerCallback
-import com.kod.assurancecontracthandler.databinding.RvItemCustomerBinding
+import com.kod.assurancecontracthandler.databinding.RvCustomerItemBinding
 import com.kod.assurancecontracthandler.model.Customer
-import org.apache.xmlbeans.impl.tool.Diff
 
-class ListCustomersAdapter(private val listener: (Customer)-> Unit) :
+class ListCustomersAdapter(private val listener: (Customer) -> Unit) :
     RecyclerView.Adapter<ListCustomersAdapter.MyViewHolder>() {
 
-    var listCustomers: List<Customer> = emptyList()
+    private var listCustomers: List<Customer> = emptyList()
 
-    class MyViewHolder(view: View): RecyclerView.ViewHolder(view){
-        private val binding = RvItemCustomerBinding.bind(view)
+    class MyViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        private val binding = RvCustomerItemBinding.bind(view)
 
-        fun bindItems(customer: Customer, ){
-            itemView.setBackgroundColor(itemView.context.getColor(R.color.dialog_background))
+        fun bindItems(position: Int, customer: Customer) {
+            val actualPosition = position + 1
             binding.tvItemCustomerName.text = customer.customerName
+            binding.columnId.text = (actualPosition).toString()
         }
     }
 
-    fun setCustomerList(newCustomerList: List<Customer>){
-        if (listCustomers.isEmpty()){
+    fun setCustomerList(newCustomerList: List<Customer>) {
+        if (listCustomers.isEmpty()) {
             listCustomers = newCustomerList
             notifyDataSetChanged()
-        }else{
+        } else {
             val diffCallback = CustomerCallback(listCustomers, newCustomerList)
             val diffOfCustomers = DiffUtil.calculateDiff(diffCallback, true)
             listCustomers = newCustomerList
             diffOfCustomers.dispatchUpdatesTo(this)
         }
     }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder =
-        MyViewHolder(LayoutInflater.from(parent.context)
-            .inflate(R.layout.rv_item_customer, parent, false))
+        MyViewHolder(
+            LayoutInflater.from(parent.context)
+                .inflate(R.layout.rv_customer_item, parent, false)
+        )
 
     override fun getItemCount(): Int = listCustomers.size
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val currentCustomer = listCustomers[position]
-        holder.bindItems(currentCustomer)
+        holder.bindItems(position, currentCustomer)
         holder.itemView.setOnClickListener { listener(currentCustomer) }
     }
 }
