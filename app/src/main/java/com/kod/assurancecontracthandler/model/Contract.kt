@@ -1,7 +1,9 @@
 package com.kod.assurancecontracthandler.model
 
 import android.os.Parcelable
+import com.kod.assurancecontracthandler.common.utilities.TimeConverters
 import kotlinx.parcelize.Parcelize
+import java.util.*
 
 @Parcelize
 data class Contract(
@@ -34,4 +36,16 @@ data class Contract(
     var COMM_LIMBE: Int? = null,
     var COMM_APPORT: Int? = null,
     var APPORTEUR: String? = null
-): Parcelable
+): Parcelable{
+    @Throws(IllegalArgumentException::class)
+    fun isContractActive(): Boolean {
+        val timeInLong = Calendar.getInstance().time.time
+        val today = TimeConverters.formatLongToLocaleDate(timeInLong)
+            ?: throw IllegalArgumentException("Today was found to be null")
+        return effet?.let { effet ->
+            today >= effet
+        } == true && echeance?.let { value ->
+            today <= value
+        } == true
+    }
+}
