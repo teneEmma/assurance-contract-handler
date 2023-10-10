@@ -43,6 +43,19 @@ object ConstantsVariables {
     const val maxPowerText = "30.0 $powerUnit"
     const val minPowerValue = 1.0F
     const val maxPowerValue = 30.0F
+    const val customerNameKey = "customer_name"
+    const val relatedContractIdKey = "related_contract_id_key"
+    const val smsURIPrefix = "smsto:"
+    const val calURIPrefix = "tel:"
+    const val phoneIndex = "+237"
+    const val predefinedMsgVehicleId = "VEHICLE_ID"
+    const val predefinedMsgDateId = "DATE_ID"
+    const val predefinedImmatricualtionId = "PLATE_NUMBER_ID"
+    const val sharedPreferenceMsg = "ASSURANCE_PREDEFINED_MSG"
+    const val futureTenseExpire = "will expire"
+    const val pastTenseExpire = "expired"
+
+    val whatsappPackages = listOf("com.whatsapp", "com.gbwhatsapp", "com.whatsapp.w4b")
 
     enum class ExcelDateStringHeaderSuffix(val value: String) {
         WeekString("SEMAINE DU"),
