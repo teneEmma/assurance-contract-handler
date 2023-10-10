@@ -1,102 +1,116 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@drawable/dialog_round"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/dialog_round"
+                xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <TextView
-        android:id="@+id/tv_assure_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="5dp"
-        android:layout_marginBottom="5dp"
-        android:background="@drawable/edit_text_round"
-        android:clickable="true"
-        android:focusable="true"
-        android:text="@string/column_assure"
-        android:textAlignment="center"
-        android:textSize="26sp"
-        android:textStyle="bold" />
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/il_customer_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        app:hintEnabled="true"
-        app:helperText="Obligatoire *"
-        app:endIconMode="clear_text"
-        app:helperTextTextColor="@color/design_default_color_error"
-        app:startIconDrawable="@drawable/ic_profile"
-        android:layout_below="@id/tv_assure_name"
-        android:layout_alignParentStart="true">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/et_username"
+            android:id="@+id/tv_assure_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:maxLength="15"
-            android:hint="@string/new_name"
-            android:inputType="textPersonName"/>
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:textAppearance="@style/Headers.header_2"
+            android:background="@drawable/edit_text_round"
+            android:clickable="true"
+            android:focusable="true"
+            android:text="@string/column_assure"
+            android:textAlignment="center"
+            android:textSize="26sp"
+            android:textStyle="bold" android:layout_marginTop="5dp" android:layout_marginStart="5dp" android:layout_marginEnd="5dp" android:layout_marginBottom="5dp"/>
+
+    <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/il_customer_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            style="@style/SelectFile_text_input"
+            app:hintEnabled="true"
+            app:hintTextAppearance="@style/small"
+            app:hintTextColor="@color/purple_500"
+            app:helperText="@string/obligatory_field_text"
+            app:helperTextTextAppearance="@style/small"
+            app:helperTextTextColor="@color/design_default_color_error"
+            app:endIconMode="clear_text"
+            app:endIconTint="?android:colorPrimary"
+            app:startIconDrawable="@drawable/ic_profile"
+            app:startIconTint="?android:colorPrimary"
+            android:layout_below="@id/tv_assure_name"
+            android:layout_alignParentStart="true">
+
+        <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_username"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLength="15"
+                android:hint="@string/new_name"
+                android:textAppearance="@style/normal"
+                android:textSize="16sp"
+                android:inputType="textPersonName"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/il_phoneNumber"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:padding="10dp"
-        app:prefixText="+237"
-        app:hintEnabled="true"
-        app:helperTextEnabled="true"
-        app:helperText="optionel"
-        app:counterEnabled="true"
-        app:counterMaxLength="9"
-        app:endIconMode="clear_text"
-        app:helperTextTextColor="@color/design_default_color_error"
-        app:startIconDrawable="@drawable/ic_phone"
-        android:layout_below="@id/il_customer_name">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/et_phoneNumber"
-            android:maxLength="9"
+            android:id="@+id/il_phoneNumber"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/new_number"
-            android:inputType="phone"/>
+            style="@style/SelectFile_text_input"
+            android:padding="5dp"
+            app:prefixText="+237"
+            app:hintEnabled="true"
+            app:hintTextAppearance="@style/small"
+            app:hintTextColor="@color/purple_500"
+            app:helperTextEnabled="true"
+            app:helperText="@string/optional_field_text"
+            app:helperTextTextAppearance="@style/small"
+            app:helperTextTextColor="@color/design_default_color_error"
+            app:counterEnabled="true"
+            app:counterMaxLength="9"
+            app:endIconMode="clear_text"
+            app:endIconTint="?android:colorPrimary"
+            app:startIconDrawable="@drawable/ic_phone"
+            app:startIconTint="?android:colorPrimary"
+            android:layout_below="@id/il_customer_name">
+
+        <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_phoneNumber"
+                android:maxLength="9"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/new_number"
+                android:textAppearance="@style/normal"
+                android:textSize="16sp"
+                android:inputType="phone"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/il_phoneNumber"
-        android:orientation="horizontal"
-        android:gravity="center">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:layout_below="@id/il_phoneNumber"
+            android:orientation="horizontal"
+            android:gravity="center"
+            app:layout_constraintStart_toStartOf="parent">
 
         <Button
-            android:id="@+id/btn_cancel"
-            style="@style/btn_negative_style"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/cancel"
-            android:textAlignment="center" />
+                android:id="@+id/btn_cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/AppButton.Secondary"
+                android:layout_marginEnd="20dp"
+                android:text="@string/cancel_text"
+                android:textAlignment="center"/>
 
         <Button
-            android:id="@+id/btn_modify"
-            style="@style/btn_positive_style"
-            android:enabled="false"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/modify"
-            android:textAlignment="center"/>
+                android:id="@+id/btn_modify"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/AppButton.Primary"
+                android:enabled="false"
+                android:text="@string/modify_text"
+                android:textAlignment="center"/>
 
     </LinearLayout>
 
