@@ -374,7 +374,7 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener {
         binding.swipeToRefresh.setOnRefreshListener {
             if (!binding.chipGroupSearch.isActivated) {
                 contractListViewModel.apply {
-                    executeFunWithoutAnimation { contractListViewModel.fetchAllContracts() }
+                    executeFunctionWithoutAnimation { contractListViewModel.fetchAllContracts() }
                 }
             } else {
                 this.onQueryTextChange(contractListViewModel.searchText)

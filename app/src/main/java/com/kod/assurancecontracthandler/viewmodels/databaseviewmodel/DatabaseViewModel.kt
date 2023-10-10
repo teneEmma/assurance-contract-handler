@@ -25,9 +25,6 @@ class DatabaseViewModel(private val repository: ContractRepository) : BaseViewMo
     suspend fun fetchCustomerContracts(customerName: String) =
         _listContracts.postValue(repository.fetchCustomerContract(customerName))
 
-    suspend fun updateCustomer(oldName: String, customerName: String, phoneNumber: String) =
-        repository.updateCustomer(oldName = oldName, customerName, phoneNumber)
-
     fun fetchExpiringContractsIn(today: Long, expDate: Long): List<BaseContract>? {
         return repository.getExpiringContractsIn(today, expDate)
     }
