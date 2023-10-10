@@ -11,4 +11,6 @@
     <color name="chip_stroke_color_unchecked">@color/transparent_elevated</color>
     <color name="chip_text_color_unchecked">@color/light_green</color>
     <color name="chip_text_color_checked">@color/light_green</color>
+
+    <color name="ic_edit_color">@color/light_green</color>
 </resources>
