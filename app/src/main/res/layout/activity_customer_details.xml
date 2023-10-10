@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+                                       xmlns:tools="http://schemas.android.com/tools"
+                                       android:layout_width="match_parent"
+                                       android:layout_height="match_parent"
+                                       android:orientation="vertical"
+                                       android:animateLayoutChanges="true"
+                                       xmlns:app="http://schemas.android.com/apk/res-auto"
+                                       tools:context=".views.customerdetails.CustomerDetailsActivity">
+
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <TextView
+                android:id="@+id/iv_customer_profile"
+                android:background="@drawable/background_gradient"
+                android:gravity="center"
+                android:text="@string/user_initials"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                style="@style/Headers.header_1"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="80dp"
+                android:layout_width="120dp"
+                android:layout_height="120dp"/>
+
+        <TextView
+                android:id="@+id/tv_customerName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/iv_customer_profile"
+                android:layout_centerHorizontal="true"
+                android:text="@string/customer_name"
+                android:textAppearance="@style/Headers.header_1"
+                android:textAlignment="center"
+                android:textSize="20sp"
+                android:textStyle="bold" android:layout_marginTop="10dp" android:layout_marginStart="10dp" android:layout_marginEnd="10dp" android:layout_marginBottom="10dp"/>
+
+        <ImageView
+                android:id="@+id/iv_modify"
+                android:layout_width="40dp"
+                android:layout_height="50dp"
+                android:layout_marginBottom="-10dp"
+                android:src="@drawable/outline_edit_24"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:layout_alignEnd="@id/iv_customer_profile"
+                android:layout_alignBottom="@id/iv_customer_profile"
+                android:contentDescription="@string/modify_customer_details"/>
+
+<!--        <TextView-->
+<!--                android:id="@+id/tv_current_contract_info"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_toStartOf="@+id/iv_current_contract_info"-->
+<!--                android:layout_alignParentTop="true"-->
+<!--                android:layout_marginTop="5dp"-->
+<!--                android:text="@string/more_info_current_contract"-->
+<!--                android:textColor="@color/white"-->
+<!--                android:background="@drawable/elevated_zone"-->
+<!--                android:backgroundTint="@color/green"-->
+<!--                android:backgroundTintMode="screen"-->
+<!--                android:padding="10dp"-->
+<!--                android:textAppearance="@style/Headers.header_1"-->
+<!--                android:textSize="18sp"/>-->
+
+<!--        <ImageView-->
+<!--                android:id="@+id/iv_current_contract_info"-->
+<!--                android:layout_width="50dp"-->
+<!--                android:layout_height="50dp"-->
+<!--                android:layout_alignParentEnd="true"-->
+<!--                android:layout_alignParentTop="true"-->
+<!--                android:layout_marginTop="5dp"-->
+<!--                android:layout_marginEnd="5dp"-->
+<!--                android:padding="5dp"-->
+<!--                android:layout_marginStart="2dp"-->
+<!--                android:src="@drawable/ic_help"-->
+<!--                app:tint="@color/white"-->
+<!--                android:background="@drawable/elevated_zone"-->
+<!--                android:backgroundTint="@color/green"-->
+<!--                android:backgroundTintMode="screen"-->
+<!--                android:clickable="true"-->
+<!--                android:contentDescription="@string/modify_customer_details"/>-->
+
+        <TextView
+                android:id="@+id/tv_contact_customer_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_below="@id/tv_customerName"
+                android:text="@string/contact_customer"
+                android:textAppearance="@style/Headers.header_2"
+                android:textSize="15sp"
+                android:layout_marginTop="40dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="10dp"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_contact"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_contact_customer_text"
+                android:background="@drawable/elevated_zone"
+                android:paddingHorizontal="10dp"
+                tools:listitem="@layout/contact_list_item"
+                android:layout_marginTop="5dp" android:layout_marginStart="5dp" android:layout_marginEnd="5dp" android:layout_marginBottom="5dp"/>
+
+        <LinearLayout
+                android:id="@+id/ll_enter_message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="true"
+                android:layout_margin="5dp"
+                android:orientation="vertical"
+                android:layout_below="@id/recycler_contact"
+                android:visibility="gone">
+
+            <com.google.android.material.divider.MaterialDivider
+                    android:id="@+id/divider_contact_message"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    app:dividerInsetStart="10dp"
+                    app:dividerInsetEnd="10dp"/>
+
+            <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/il_message_to_send"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/SelectFile_text_input"
+                    app:counterEnabled="true"
+                    app:counterMaxLength="500"
+                    app:hintEnabled="true"
+                    app:endIconMode="clear_text"
+                    app:endIconTint="?android:colorPrimary"
+                    android:hint="@string/enter_message"
+                    app:hintTextAppearance="@style/small"
+                    app:hintTextColor="@color/purple_500"
+                    android:background="@drawable/elevated_zone"
+                    android:padding="5dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_message_to_send"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:inputType="textCapSentences|textMultiLine"
+                        android:textStyle="italic"
+                        android:textAppearance="@style/normal"
+                        android:textSize="16sp"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="20dp"
+                    android:gravity="end">
+
+                <Button
+                        android:id="@+id/btn_cancel_message"
+                        style="@style/AppButton.Secondary"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="20dp"
+                        android:text="@string/cancel_text"
+                        android:textAppearance="@style/normal"
+                        android:textAlignment="center"/>
+
+                <Button
+                        android:id="@+id/btn_send_message"
+                        style="@style/AppButton.Primary"
+                        android:enabled="false"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="20dp"
+                        android:drawableLeft="@drawable/ic_send"
+                        android:text="@string/send_text"
+                        android:textAppearance="@style/normal"
+                        android:textAlignment="center"/>
+
+            </LinearLayout>
+
+            <com.google.android.material.divider.MaterialDivider
+                    android:id="@+id/divider_message_list_contract"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:dividerInsetStart="5dp"
+                    app:dividerInsetEnd="5dp"/>
+
+        </LinearLayout>
+
+        <TextView
+                android:id="@+id/tv_active_contract_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/ll_enter_message"
+                android:layout_alignParentStart="true"
+                android:text="@string/active_contract_text"
+                android:textAppearance="@style/Headers.header_2"
+                android:textSize="15sp"
+                android:layout_margin="10dp"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_active_contracts"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_active_contract_text"
+                android:background="@drawable/elevated_zone"
+                tools:listitem="@layout/contract_list_item" android:layout_marginTop="5dp" android:layout_marginStart="5dp" android:layout_marginEnd="5dp" android:layout_marginBottom="5dp"/>
+
+    </RelativeLayout>
+
+</androidx.core.widget.NestedScrollView>
