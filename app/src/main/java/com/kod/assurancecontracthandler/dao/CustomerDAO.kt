@@ -20,6 +20,15 @@ interface CustomerDAO {
     @Query("SELECT telephone FROM contract WHERE assure like :name AND telephone is NOT NULL")
     fun getCustomersPhoneNumbers(name: String): List<String?>
 
+    @Query("SELECT assure,telephone FROM contract WHERE assure like :name")
+    fun getCustomerWithName(name: String): Customer?
+
+    @Query("SELECT assure,telephone FROM contract WHERE assure like :name")
+    fun getContractsForCustomerWithName(name: String): Customer?
+
+    @Query("UPDATE contract set assure = :newCustomerName, telephone = :phoneNumber WHERE assure = :oldCustomerName")
+    suspend fun updateCustomer(oldCustomerName: String, newCustomerName: String, phoneNumber: String?)
+
     @Query("SELECT count(DISTINCT assure) from contract WHERE telephone is not NULL")
     fun getNumberOfCustomersWithPhones(): Int
 
