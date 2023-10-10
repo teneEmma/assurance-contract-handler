@@ -1,6 +1,5 @@
 package com.kod.assurancecontracthandler.viewmodels.baseviewmodel
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -13,7 +12,7 @@ import kotlinx.coroutines.launch
  *  @param hasQueried A live value which indicates the state of the execution of a function through the
  *  [executeFunctionWithAnimation].
  *  @property executeFunctionWithAnimation Executes concurrently a given function while updating a live value.
- *  @property executeFunWithoutAnimation Just concurrently execute a function.
+ *  @property executeFunctionWithoutAnimation Just concurrently execute a function.
  */
 abstract class BaseViewModel : ViewModel() {
     companion object {
@@ -24,7 +23,7 @@ abstract class BaseViewModel : ViewModel() {
         protected val _isLoading = MutableLiveData<Boolean>()
 
         @JvmStatic
-        protected val messageResourceId: LiveData<Int>? = null
+        protected val _messageResourceId = MutableLiveData<Int?>(null)
     }
 
     open fun executeFunctionWithAnimation(execute: suspend () -> Unit) {
@@ -36,7 +35,7 @@ abstract class BaseViewModel : ViewModel() {
     }
 
 
-    fun executeFunWithoutAnimation(execute: suspend () -> Unit) {
+    fun executeFunctionWithoutAnimation(execute: suspend () -> Unit) {
         viewModelScope.launch(Dispatchers.IO) {
             execute()
         }
