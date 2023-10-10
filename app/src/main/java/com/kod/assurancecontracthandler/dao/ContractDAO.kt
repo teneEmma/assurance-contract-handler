@@ -16,9 +16,6 @@ sealed interface ContractDAO{
     @Update
     suspend fun updateContract(contract: BaseContract)
 
-    @Query("UPDATE contract set assure = :customerName, telephone = :phoneNumber WHERE assure = :oldName")
-    suspend fun updateContract(oldName: String, customerName: String, phoneNumber: String)
-
     @Query("SELECT * FROM contract WHERE assure = :customerName")
     suspend fun fetchCustomerContract(customerName: String): List<BaseContract>
 
@@ -33,4 +30,6 @@ sealed interface ContractDAO{
 
     @Query("SELECT  count(*) FROM contract WHERE echeance BETWEEN  :today AND :maxTime  ORDER BY echeance")
     fun numberOfContractsExpiring(today: Long,  maxTime: Long): Int
+    @Query("SELECT * FROM contract WHERE id == :id")
+    fun getContractWithId(id: Int): BaseContract?
 }
