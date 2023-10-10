@@ -18,6 +18,7 @@
     <string name="contract_file_name">contracts_file_name.xls</string>
     <string name="cancel_text">Cancel</string>
     <string name="save">Save</string>
+    <string name="modify_text">Modify</string>
     <string name="empty_database">Empty Database</string>
     <string name="column_assure">CLIENT NAME</string>
     <string name="carte_rose_title">CARTE ROSE:</string>
@@ -64,11 +65,32 @@
     <string name="start_date_text">start date</string>
     <string name="end_date_text">end date</string>
     <string name="no_result_found">No result was found</string>
+    <string name="sort_applied">Sort applied</string>
+    <string name="numbers_text">PHONE NUMB</string>
+    <string name="total_text">TOTAL</string>
+    <string name="active_text">ACTIVE</string>
+    <string name="customer_details_cardview">ACTIVE customers,
+        customers WITH NUMBERS et TOTAL NUMBERS of customers</string>
+    <string name="modify_customer_details">Modifier customer\'s details</string>
+    <string name="contact_customer">Contact him</string>
+    <string name="enter_message">Enter message</string>
+    <string name="send_text">Send</string>
+    <string name="active_contract_text">Active contracts</string>
+    <string name="contract_state">The state of this contract</string>
+    <string name="contract_state_active">This contract is active</string>
+    <string name="contract_state_inactive">This contract has expired</string>
+    <string name="user_exist_not">User does not exist</string>
+    <string name="no_contact_text">No number found in database</string>
+    <string name="whatsapp_not_installed">Whatsapp is not installed</string>
+    <string name="invalid_customer_name">Shouldn\'t be empty</string>
+    <string name="invalid_phone_number">Wrong phone format</string>
+    <string name="modification_successful">Modified successfully</string>
+    <string name="more_info_current_contract">More info</string>
 
     <string name="column_attestation" translatable="false">000*Z*0112233</string>
     <string name="column_carteRose" translatable="false">00011333</string>
-    <string name="column_start_date" translatable="false">2000/01/01</string>
-    <string name="column_echeance" translatable="false">2000/01/01</string>
+    <string name="column_start_date" translatable="false">01/12/1999</string>
+    <string name="column_echeance" translatable="false">01/12/2000</string>
     <string name="column_id" translatable="false">01</string>
     <string name="plate_number_value" translatable="false">RR 000 XX</string>
     <string name="grand_total" translatable="false">- XAF</string>
@@ -77,16 +99,33 @@
     <string name="price_min" translatable="false">1000XAF</string>
     <string name="price_max" translatable="false">500000XAF</string>
     <string name="priceSeperator" translatable="false">-</string>
-    <string name="sort_applied">Sort applied</string>
-    <string name="numbers_text">PHONE NUMB</string>
-    <string name="total_text">TOTAL</string>
-    <string name="active_text">ACTIVE</string>
-    <string name="customer_details_cardview">ACTIVE customers,
-        customers WITH NUMBERS et TOTAL NUMBERS of customers</string>
+    <string name="user_initials" translatable="false">\?</string>
+    <string name="contract_number" translatable="false">000–A–1234567-12345678</string>
+    <string name="phone_number" translatable="false">650123456</string>
+    <string name="predefined_message" translatable="false">
+        Good Day Dear Client. Just to inform you that, the insurance of your vehicle
+        VEHICLE_ID registered PLATE_NUMBER_ID will expire on the DATE_ID.\n
+        According to the financial law 2023, here are the new prices of vignettes:\n
+        01CV to 07CV 30,000frs\n
+        08CV to 13CV 50,000frs\n
+        14CV to 20CV 75,000frs\n
+        More than 21CV 200,000frs\n
+
+        YOUR INSURANCE COMPANY ORION INSURANCE-LIMBE BRANCH-OPPOSITE CNPS GARDENS.\n
+        THANKS
+    </string>
+    <string name="new_number">Mew number</string>
+    <string name="new_name">New name</string>
+    <string name="obligatory_field_text">Obligatory *</string>
+    <string name="optional_field_text">Optional</string>
+    <string name="activity_customer_details_label">Client\'s Details</string>
 
     <string name="content_description_loading_progress">Loading Progress</string>
     <string name="content_description_fab_add_document">Add a document</string>
     <string name="content_description_fab_filter">Filter</string>
+    <string name="content_description_make_a_call">Make a call</string>
+    <string name="content_description_use_whatsapp">Use whatsapp</string>
+    <string name="content_description_write_an_sms">Write a message</string>
 
     <string name="action_settings">Settings</string>
     <string name="action_exp_contracts">Contracts reaching due date</string>
