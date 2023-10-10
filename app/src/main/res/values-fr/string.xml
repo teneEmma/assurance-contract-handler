@@ -19,6 +19,7 @@
     <string name="contract_file_name">non_du_fichier_des_contrats.xls</string>
     <string name="cancel_text">Annuler</string>
     <string name="save">Sauvegarder</string>
+    <string name="modify_text">Modifer</string>
     <string name="empty_database">Base De Données Vide</string>
     <string name="column_assure">NOM DU CLIENT</string>
     <string name="carte_rose_title">CARTE ROSE:</string>
@@ -72,6 +73,29 @@
     <string name="active_text">ACTIFS</string>
     <string name="customer_details_cardview">clients ACTIFS,
         clients AVEC NUMEROS et TOTAL des Clients</string>
+    <string name="modify_customer_details">Modifier les données du client</string>
+    <string name="contact_customer">Contactez le</string>
+    <string name="enter_message">Entrer le message</string>
+    <string name="send_text">Envoyer</string>
+    <string name="active_contract_text">Contrats actifs</string>
+    <string name="contract_state">L\'état du Contract</string>
+    <string name="content_description_make_a_call">Passer un appel</string>
+    <string name="content_description_use_whatsapp">Utiliser whatsapp</string>
+    <string name="content_description_write_an_sms">Ecrire un sms</string>
+    <string name="contract_state_active">Ce Contract Est Active</string>
+    <string name="contract_state_inactive">Ce Contract A Expiré</string>
+    <string name="user_exist_not">L\'utilisateur n\'existe pas</string>
+    <string name="no_contact_text">Aucun Numéro Dans La Base De Donné</string>
+    <string name="whatsapp_not_installed">Whatsapp n\'est pas Installé</string>
+    <string name="invalid_customer_name">Ne doit pas être vide</string>
+    <string name="invalid_phone_number">Numéro incorrect</string>
+    <string name="modification_successful">Modifié avec success</string>
+    <string name="new_number">Nouveau Numéro</string>
+    <string name="new_name">Nouveau Nom</string>
+    <string name="obligatory_field_text">Obligatoire *</string>
+    <string name="optional_field_text">Optionel</string>
+    <string name="activity_customer_details_label">Details Client</string>
+    <string name="more_info_current_contract">Plus d\'information</string>
 
     <string name="content_description_loading_progress">Niveau De Progression</string>
     <string name="content_description_fab_add_document">Ajouter un document</string>
