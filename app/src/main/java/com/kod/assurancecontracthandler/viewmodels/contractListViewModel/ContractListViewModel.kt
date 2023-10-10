@@ -111,7 +111,7 @@ class ContractListViewModel(
     }
 
     private fun makeQueryToDB(str: String) {
-        _allContracts.postValue(formatContractIds(repository.searchForClient(generateQuery(str))))
+        _allContracts.postValue(repository.searchForClient(generateQuery(str)))
     }
 
     @Throws(IndexOutOfBoundsException::class)
@@ -126,16 +126,16 @@ class ContractListViewModel(
         return SimpleSQLiteQuery(initialQuery)
     }
 
-    private fun formatContractIds(list: List<BaseContract>?): List<BaseContract>? {
-        if (list == null) {
-            return null
-        }
-        list.forEachIndexed { index, baseContract ->
-            baseContract.id = index + 1
-        }
-
-        return list
-    }
+//    private fun formatContractIds(list: List<BaseContract>?): List<BaseContract>? {
+//        if (list == null) {
+//            return null
+//        }
+////        list.forEachIndexed { index, baseContract ->
+////            baseContract.id = index + 1
+////        }
+//
+//        return list
+//    }
 
     fun deactivateAllSearchChips() {
         _selectedSearchChip = null
