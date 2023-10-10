@@ -1,9 +1,11 @@
 package com.kod.assurancecontracthandler.views.main.fragmentListContracts
 
 import android.app.Dialog
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
@@ -33,6 +35,7 @@ import com.kod.assurancecontracthandler.model.database.ContractDatabase
 import com.kod.assurancecontracthandler.repository.ContractRepository
 import com.kod.assurancecontracthandler.viewmodels.contractListViewModel.ContractListViewModel
 import com.kod.assurancecontracthandler.viewmodels.contractListViewModel.ContractListViewModelFactory
+import com.kod.assurancecontracthandler.views.customerdetails.CustomerDetailsActivity
 
 class ContractListFragment : Fragment(), SearchView.OnQueryTextListener {
 
@@ -374,7 +377,7 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener {
         binding.swipeToRefresh.setOnRefreshListener {
             if (!binding.chipGroupSearch.isActivated) {
                 contractListViewModel.apply {
-                    executeFunWithoutAnimation { contractListViewModel.fetchAllContracts() }
+                    executeFunctionWithoutAnimation { contractListViewModel.fetchAllContracts() }
                 }
             } else {
                 this.onQueryTextChange(contractListViewModel.searchText)
@@ -419,9 +422,19 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener {
                 toast(resources.getString(R.string.non_valid_option))
                 return@setOnClickListener
             }
-            shortToast(resources.getString(R.string.to_be_implemented_text))
+            openCustomerDetailsActivity(c?.assure, baseContract.id)
             dialogTouchContract?.dismiss()
         }
+    }
+
+    private fun openCustomerDetailsActivity(assurerName: String?, contractId: Int) {
+        Log.e("SENDING...", "-> $assurerName | $contractId")
+        val intent = Intent(activity, CustomerDetailsActivity::class.java)
+        intent.putExtra(ConstantsVariables.customerNameKey, assurerName)
+        intent.putExtra(ConstantsVariables.relatedContractIdKey, contractId)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        startActivity(intent)
+        dialogTouchContract?.dismiss()
     }
 
     private fun updateContractsList() {

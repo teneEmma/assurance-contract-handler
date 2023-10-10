@@ -1,49 +1,70 @@
 package com.kod.assurancecontracthandler.views.customerdetails
 
+import android.content.Context
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import androidx.recyclerview.widget.RecyclerView
 import com.kod.assurancecontracthandler.R
 import com.kod.assurancecontracthandler.databinding.ContractListItemBinding
+import com.kod.assurancecontracthandler.model.BaseContract
 import com.kod.assurancecontracthandler.model.Contract
-import com.kod.assurancecontracthandler.model.ContractDbDto
-import java.util.*
 
-class CustomerContractsAdapter(private val listContracts: List<ContractDbDto>,private val itemClicked: (Contract) -> Unit, private val activeStateTouched: (Boolean) -> Unit):
+class CustomerContractsAdapter(
+    private val listContracts: List<BaseContract>,
+    private val itemClicked: (Contract) -> Unit,
+    private val activeStateTouched: (Boolean) -> Unit,
+    private val copyBtnTouched: (Contract?) -> Unit,
+    private val actualContract: Contract?,
+    private val colorForChosenContract: Int
+) :
     RecyclerView.Adapter<CustomerContractsAdapter.ContractViewHolder>() {
 
-
-    class ContractViewHolder(view: View): RecyclerView.ViewHolder(view){
+    class ContractViewHolder(
+        view: View,
+        private val actualContract: Contract?,
+        private val colorForChosenContract: Int,
+        private val context: Context,
+    ) : RecyclerView.ViewHolder(view) {
         val binding = ContractListItemBinding.bind(view)
 
-        fun bindView(contract: ContractDbDto){
-            val attestation = contract.contract?.attestation?.replace('*', '-', false)
-            val contractNumberStr = "$attestation-${contract.contract?.carteRose}"
+        fun bindView(baseContract: BaseContract) {
+            val attestation = baseContract.contract?.attestation?.replace('*', '-', false)
+            val contractNumberStr = "$attestation-${baseContract.contract?.carteRose}"
+            if (baseContract.contract == actualContract) {
+                binding.contractListItem.setBackgroundResource(colorForChosenContract)
+                animateMoreInfoBtn()
+            }
             binding.tvContractNumber.text = contractNumberStr
-            val myContract = contract.contract
-            if(myContract?.let { isContractActive(it) } == true)
+            binding.tvPoliceNumber.text = baseContract.contract?.numeroPolice
+            binding.tvStartDate.text = baseContract.contract?.effet
+            binding.tvDueDate.text = baseContract.contract?.echeance
+            val myContract = baseContract.contract
+            if (myContract?.isContractActive() == true)
                 binding.ivContractActiveState.setColorFilter(Color.GREEN)
             else
                 binding.ivContractActiveState.setColorFilter(Color.RED)
         }
 
-        fun isContractActive(contract: Contract): Boolean{
-            val today = Calendar.getInstance().time
-            return contract.effet?.let { value ->
-                today >= value  } == true && contract.echeance?.let { value ->
-                today  <= value  } == true
+        private fun animateMoreInfoBtn() {
+            val animationImageView = AnimationUtils.loadAnimation(context, R.anim.zoom_in_and_out)
+            binding.contractListItem.startAnimation(animationImageView)
         }
+
     }
 
     override fun onBindViewHolder(holder: ContractViewHolder, position: Int) {
         val currentContract = listContracts[position]
 
         holder.bindView(currentContract)
-        holder.binding.ivContractActiveState.setOnClickListener{
-            currentContract.contract?.let { it1 ->
-                activeStateTouched.invoke(holder.isContractActive(it1)) }
+        holder.binding.ivContractActiveState.setOnClickListener {
+            activeStateTouched.invoke(currentContract.contract?.isContractActive() == true)
+
+        }
+        holder.binding.ivCopyContractDetails.setOnClickListener {
+            copyBtnTouched.invoke(currentContract.contract)
         }
         holder.itemView.setOnClickListener {
             currentContract.contract?.let { it1 -> itemClicked.invoke(it1) }
@@ -51,7 +72,12 @@ class CustomerContractsAdapter(private val listContracts: List<ContractDbDto>,pr
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContractViewHolder =
-        ContractViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.contract_list_item, parent, false))
+        ContractViewHolder(
+            LayoutInflater.from(parent.context).inflate(R.layout.contract_list_item, parent, false),
+            actualContract,
+            colorForChosenContract,
+            parent.context
+        )
 
-    override fun getItemCount(): Int  = listContracts.size
+    override fun getItemCount(): Int = listContracts.size
 }

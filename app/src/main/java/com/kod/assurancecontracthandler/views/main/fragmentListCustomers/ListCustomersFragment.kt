@@ -1,5 +1,6 @@
 package com.kod.assurancecontracthandler.views.main.fragmentListCustomers
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.text.Html
@@ -17,11 +18,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.color.MaterialColors
 import com.google.android.material.snackbar.Snackbar
 import com.kod.assurancecontracthandler.R
+import com.kod.assurancecontracthandler.common.constants.ConstantsVariables
 import com.kod.assurancecontracthandler.databinding.FragmentListCustomersBinding
+import com.kod.assurancecontracthandler.model.Customer
 import com.kod.assurancecontracthandler.model.database.ContractDatabase
 import com.kod.assurancecontracthandler.repository.CustomerRepository
 import com.kod.assurancecontracthandler.viewmodels.customerlistviewmodel.CustomerListViewModel
 import com.kod.assurancecontracthandler.viewmodels.customerlistviewmodel.CustomerListViewModelFactory
+import com.kod.assurancecontracthandler.views.customerdetails.CustomerDetailsActivity
 
 class ListCustomersFragment : Fragment(), SearchView.OnQueryTextListener {
 
@@ -165,8 +169,8 @@ class ListCustomersFragment : Fragment(), SearchView.OnQueryTextListener {
     }
 
     private fun setupRecyclerView() {
-        rvAdapter = ListCustomersAdapter { _ ->
-            shortToast(resources.getString(R.string.to_be_implemented_text))
+        rvAdapter = ListCustomersAdapter { customer ->
+            openCustomerDetailsPage(customer)
         }
         binding.rvListCustomers.adapter = rvAdapter
         binding.rvListCustomers.addItemDecoration(
@@ -177,6 +181,13 @@ class ListCustomersFragment : Fragment(), SearchView.OnQueryTextListener {
         )
         binding.rvListCustomers.layoutManager = LinearLayoutManager(context)
         binding.rvListCustomers.setHasFixedSize(true)
+    }
+
+    private fun openCustomerDetailsPage(customer: Customer) {
+        val intent = Intent(activity, CustomerDetailsActivity::class.java)
+        intent.putExtra(ConstantsVariables.customerNameKey, customer.customerName)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        startActivity(intent)
     }
 
     private fun setupSearchView() {
