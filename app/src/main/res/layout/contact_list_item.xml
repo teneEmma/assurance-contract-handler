@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="60dp">
+
+    <TextView
+        android:id="@+id/tv_phone_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:layout_margin="10dp"
+        android:padding="2dp"
+        android:text="@string/phone_number"
+        android:textAppearance="@style/Headers.header_2"
+        android:textSize="20sp" />
+
+    <ImageView
+        android:id="@+id/iv_phone_number"
+        android:layout_width="40dp"
+        android:layout_height="50dp"
+        android:src="@drawable/ic_phone"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:foreground="@drawable/elevated_zone"
+        android:clickable="true"
+        android:layout_toStartOf="@id/iv_message"
+        android:padding="4dp"
+        android:layout_marginVertical="10dp"
+        android:layout_marginEnd="5dp"
+        app:tint="?attr/colorPrimary"
+        android:contentDescription="@string/content_description_make_a_call" />
+
+    <ImageView
+        android:id="@+id/iv_whatsapp"
+        android:layout_width="40dp"
+        android:layout_height="50dp"
+        android:src="@drawable/ic_whatsapp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:foreground="@drawable/elevated_zone"
+        android:clickable="true"
+        android:layout_alignParentEnd="true"
+        android:padding="4dp"
+        android:layout_marginVertical="10dp"
+        android:layout_marginEnd="5dp"
+        android:contentDescription="@string/content_description_use_whatsapp" />
+
+    <ImageView
+        android:id="@+id/iv_message"
+        android:layout_width="40dp"
+        android:layout_height="50dp"
+        android:src="@drawable/ic_message"
+        app:tint="?attr/colorPrimary"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:foreground="@drawable/elevated_zone"
+        android:clickable="true"
+        android:padding="4dp"
+        android:layout_marginEnd="5dp"
+        android:layout_toStartOf="@id/iv_whatsapp"
+        android:layout_marginVertical="10dp"
+        android:contentDescription="@string/content_description_write_an_sms" />
+
+    <com.google.android.material.divider.MaterialDivider
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:dividerInsetStart="10dp"
+        app:dividerInsetEnd="10dp"
+        android:layout_alignParentBottom="true"/>
+
+</RelativeLayout>
