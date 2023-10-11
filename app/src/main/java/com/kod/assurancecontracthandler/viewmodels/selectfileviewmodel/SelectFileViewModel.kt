@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import com.kod.assurancecontracthandler.R
 import com.kod.assurancecontracthandler.common.constants.ConstantsVariables
 import com.kod.assurancecontracthandler.common.usecases.ProcessState
+import com.kod.assurancecontracthandler.common.utilities.DataTypesConversionAndFormattingUtils
 import com.kod.assurancecontracthandler.common.utilities.TimeConverters
 import com.kod.assurancecontracthandler.model.BaseContract
 import com.kod.assurancecontracthandler.model.Contract
@@ -132,47 +133,45 @@ class SelectFileViewModel(private val contractRepository: ContractRepository) : 
         return headerMap
     }
 
-    private fun notStringifyingNull(value: Any?): String? {
-        return value?.toString()
-    }
-
     private fun setContractObj2(row: Map<String, Any?>): BaseContract {
         val contract = Contract()
 
         contract.apply {
-            attestation = notStringifyingNull(row[ExcelSheetHeadersKeys.keyAttestation])
-            compagnie = notStringifyingNull(row[ExcelSheetHeadersKeys.keyCompany])
-            assure = notStringifyingNull(row[ExcelSheetHeadersKeys.keyAssurer])
-            effet = notStringifyingNull(row[ExcelSheetHeadersKeys.keyStartDate])
-            echeance = notStringifyingNull(row[ExcelSheetHeadersKeys.keyDueDate])
-            puissanceVehicule = notStringifyingNull(row[ExcelSheetHeadersKeys.keyPower])
-            mark = notStringifyingNull(row[ExcelSheetHeadersKeys.keyMark])
-            immatriculation = notStringifyingNull(row[ExcelSheetHeadersKeys.keyRegistration])
-            zone = notStringifyingNull(row[ExcelSheetHeadersKeys.keyZone])
-            APPORTEUR = notStringifyingNull(row[ExcelSheetHeadersKeys.keyPROVIDER])
-            numeroPolice = notStringifyingNull(row[ExcelSheetHeadersKeys.keyPoliceNumber])?.let {
-                policeNumberValidation(
-                    it
-                )
+            DataTypesConversionAndFormattingUtils.apply {
+                attestation = notStringifyingNull(row[ExcelSheetHeadersKeys.keyAttestation])
+                compagnie = notStringifyingNull(row[ExcelSheetHeadersKeys.keyCompany])
+                assure = notStringifyingNull(row[ExcelSheetHeadersKeys.keyAssurer])
+                effet = notStringifyingNull(row[ExcelSheetHeadersKeys.keyStartDate])
+                echeance = notStringifyingNull(row[ExcelSheetHeadersKeys.keyDueDate])
+                puissanceVehicule = notStringifyingNull(row[ExcelSheetHeadersKeys.keyPower])
+                mark = notStringifyingNull(row[ExcelSheetHeadersKeys.keyMark])
+                immatriculation = notStringifyingNull(row[ExcelSheetHeadersKeys.keyRegistration])
+                zone = notStringifyingNull(row[ExcelSheetHeadersKeys.keyZone])
+                APPORTEUR = notStringifyingNull(row[ExcelSheetHeadersKeys.keyPROVIDER])
+                numeroPolice = notStringifyingNull(row[ExcelSheetHeadersKeys.keyPoliceNumber])?.let {
+                    policeNumberValidation(
+                        it
+                    )
+                }
+                telephone = phoneNumbValidation(row[ExcelSheetHeadersKeys.keyPhoneNumber])
+                categorie = doubleToInt(row[ExcelSheetHeadersKeys.keyCategory])
+                carteRose = notStringifyingNull(doubleToInt(row[ExcelSheetHeadersKeys.keyPinkCard]))
+                duree = doubleToInt(notStringifyingNull(row[ExcelSheetHeadersKeys.keyDuration]))
+                DTA = doubleToInt(row[ExcelSheetHeadersKeys.keyDta])
+                PN = doubleToInt(row[ExcelSheetHeadersKeys.keyPn])
+                ACC = doubleToInt(row[ExcelSheetHeadersKeys.keyAcc])
+                FC = doubleToInt(row[ExcelSheetHeadersKeys.keyFC])
+                TVA = doubleToInt(row[ExcelSheetHeadersKeys.keyTVA])
+                CR = doubleToInt(row[ExcelSheetHeadersKeys.keyCR])
+                PTTC = doubleToInt(row[ExcelSheetHeadersKeys.keyPTTC])
+                COM_PN = doubleToInt(row[ExcelSheetHeadersKeys.keyCOM_PN])
+                COM_ACC = doubleToInt(row[ExcelSheetHeadersKeys.keyCOM_ACC])
+                TOTAL_COM = doubleToInt(row[ExcelSheetHeadersKeys.keyTOTAL_COM])
+                NET_A_REVERSER = doubleToInt(row[ExcelSheetHeadersKeys.keyTOTAL_TO_GIVE])
+                ENCAIS = doubleToInt(row[ExcelSheetHeadersKeys.keyCASH_IN])
+                COMM_LIMBE = doubleToInt(row[ExcelSheetHeadersKeys.keyCOMM_LIMBE])
+                COMM_APPORT = doubleToInt(row[ExcelSheetHeadersKeys.keyCOMM_PROVIDER])
             }
-            telephone = phoneNumbValidation(row[ExcelSheetHeadersKeys.keyPhoneNumber])
-            categorie = doubleToInt(row[ExcelSheetHeadersKeys.keyCategory])
-            carteRose = notStringifyingNull(doubleToInt(row[ExcelSheetHeadersKeys.keyPinkCard]))
-            duree = doubleToInt(notStringifyingNull(row[ExcelSheetHeadersKeys.keyDuration]))
-            DTA = doubleToInt(row[ExcelSheetHeadersKeys.keyDta])
-            PN = doubleToInt(row[ExcelSheetHeadersKeys.keyPn])
-            ACC = doubleToInt(row[ExcelSheetHeadersKeys.keyAcc])
-            FC = doubleToInt(row[ExcelSheetHeadersKeys.keyFC])
-            TVA = doubleToInt(row[ExcelSheetHeadersKeys.keyTVA])
-            CR = doubleToInt(row[ExcelSheetHeadersKeys.keyCR])
-            PTTC = doubleToInt(row[ExcelSheetHeadersKeys.keyPTTC])
-            COM_PN = doubleToInt(row[ExcelSheetHeadersKeys.keyCOM_PN])
-            COM_ACC = doubleToInt(row[ExcelSheetHeadersKeys.keyCOM_ACC])
-            TOTAL_COM = doubleToInt(row[ExcelSheetHeadersKeys.keyTOTAL_COM])
-            NET_A_REVERSER = doubleToInt(row[ExcelSheetHeadersKeys.keyTOTAL_TO_GIVE])
-            ENCAIS = doubleToInt(row[ExcelSheetHeadersKeys.keyCASH_IN])
-            COMM_LIMBE = doubleToInt(row[ExcelSheetHeadersKeys.keyCOMM_LIMBE])
-            COMM_APPORT = doubleToInt(row[ExcelSheetHeadersKeys.keyCOMM_PROVIDER])
         }
 
         val hashCode = contractWithoutIrrelevantFieldsHashCode(contract)
