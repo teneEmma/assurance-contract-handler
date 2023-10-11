@@ -23,6 +23,7 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.google.android.material.color.MaterialColors
 import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.android.material.textfield.TextInputEditText
 import com.kod.assurancecontracthandler.R
 import com.kod.assurancecontracthandler.common.constants.ConstantsVariables
 import com.kod.assurancecontracthandler.common.utilities.BottomDialogView
@@ -184,6 +185,13 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener {
             filterDialogBinding.ilFilterImmatriculation, filterDialogBinding.ilFilterMark,
             filterDialogBinding.ilFilterNumeroPolice
         )
+        val listEditTextViews = listOf(
+            filterDialogBinding.etFilterApporteur,
+            filterDialogBinding.etFilterAssurer, filterDialogBinding.etFilterAttestation,
+            filterDialogBinding.etFilterCarteRose, filterDialogBinding.etFilterCompagnie,
+            filterDialogBinding.etFilterImmatriculation, filterDialogBinding.etFilterMark,
+            filterDialogBinding.etFilterPolice
+        )
 
         if (filterDialogBinding.chipGroupFilter.checkedChipIds.isNotEmpty()) {
             filterDialogBinding.chipGroupFilter.checkedChipIds.let { checkedChips ->
@@ -202,40 +210,27 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener {
             }
         }
         filterDialogBinding.btnReset.setOnClickListener {
-            onResetBtnClicked()
+            onResetBtnClicked(listEditTextViews)
         }
-        applyBtnListener()
+        applyBtnListener(listEditTextViews)
     }
 
-    private fun applyBtnListener() {
+    private fun applyBtnListener(listEditText: List<TextInputEditText>) {
+
         filterDialogBinding.btnApplyFilter.setOnClickListener {
-            contractListViewModel.setEditTextValues(
-                filterDialogBinding.etFilterApporteur.text.toString().trim(),
-                filterDialogBinding.etFilterimmatriculation.text.toString().trim(),
-                filterDialogBinding.etFilterAttestation.text.toString().trim(),
-                filterDialogBinding.etFilterCarteRose.text.toString().trim(),
-                filterDialogBinding.etFilterCompagnie.text.toString().trim(),
-                filterDialogBinding.etFilterAssurer.text.toString().trim(),
-                filterDialogBinding.etFilterMark.text.toString().trim(),
-                filterDialogBinding.etFilterPolice.text.toString().trim(),
-            )
+            contractListViewModel.setEditTextValues(listEditText)
 
             contractListViewModel.filterContracts()
-            onResetBtnClicked()
+            onResetBtnClicked(listEditText)
             dialog.cancel()
         }
     }
 
-    private fun onResetBtnClicked() {
+    private fun onResetBtnClicked(listEditText: List<TextInputEditText>) {
         contractListViewModel.clearData()
-        filterDialogBinding.etFilterAttestation.text?.clear()
-        filterDialogBinding.etFilterApporteur.text?.clear()
-        filterDialogBinding.etFilterimmatriculation.text?.clear()
-        filterDialogBinding.etFilterCarteRose.text?.clear()
-        filterDialogBinding.etFilterCompagnie.text?.clear()
-        filterDialogBinding.etFilterAssurer.text?.clear()
-        filterDialogBinding.etFilterMark.text?.clear()
-        filterDialogBinding.etFilterPolice.text?.clear()
+        listEditText.forEach {
+            it.text?.clear()
+        }
         filterDialogBinding.chipGroupFilter.clearCheck()
         filterDialogBinding.expandableLvSliders.clearChoices()
         filterDialogBinding.expandableLvSliders.invalidate()

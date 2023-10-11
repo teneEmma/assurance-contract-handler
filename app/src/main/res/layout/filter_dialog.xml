@@ -240,7 +240,7 @@
                 android:visibility="gone">
 
             <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_filterimmatriculation"
+                    android:id="@+id/et_filter_immatriculation"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
@@ -290,7 +290,7 @@
                 android:visibility="gone">
 
             <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_filterPolice"
+                    android:id="@+id/et_filter_police"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"

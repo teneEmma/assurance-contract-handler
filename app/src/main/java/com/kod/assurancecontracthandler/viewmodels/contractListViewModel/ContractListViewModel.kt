@@ -1,8 +1,10 @@
 package com.kod.assurancecontracthandler.viewmodels.contractListViewModel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.sqlite.db.SimpleSQLiteQuery
+import com.google.android.material.textfield.TextInputEditText
 import com.kod.assurancecontracthandler.R
 import com.kod.assurancecontracthandler.common.constants.ConstantsVariables
 import com.kod.assurancecontracthandler.common.utilities.DataTypesConversionAndFormattingUtils
@@ -24,22 +26,28 @@ class ContractListViewModel(
     private var _maxDate: Long? = null
     private var _slidersValues: MutableMap<String, MutableMap<String, Pair<Float, Float>?>> = initializeSlidersMap()
     private var _selectedFilteredChips: List<Int> = emptyList()
-    private var providerTextViewContent: String = ""
-        private set
-    private var matriculationTextViewContent: String = ""
-        private set
-    private var registrationTextViewContent: String = ""
-        private set
-    private var pinkCardTextViewContent: String = ""
-        private set
-    private var companyTextViewContent: String = ""
-        private set
-    private var assurerTextViewContent: String = ""
-        private set
-    private var markTextViewContent: String = ""
-        private set
-    private var policeNumberTextViewContent: String = ""
-        private set
+
+    /**
+     * Here is the structure of this map and what each index represent
+     * {
+     *   0=Apporteur,
+     *   1=Assure,
+     *   2=Attestation,
+     *   3=Carte rose,
+     *   4=Compagnie,
+     *   5=Immatriculation,
+     *   6=Mark,
+     *   7=Numero police
+     *  }
+     */
+    private var _filterChipsAndTextFieldsValues: MutableMap<Int, String?> = initializeChipsAndTextFieldsValues()
+
+    private fun initializeChipsAndTextFieldsValues(): MutableMap<Int, String?>{
+        var key = 0
+        return ConstantsVariables.filterDialogChips.associate {
+            key++ to null as String?
+        }.toMutableMap()
+    }
 
     private fun initializeSlidersMap(): MutableMap<String, MutableMap<String, Pair<Float, Float>?>> {
         val nullPair: Pair<Float, Float>? = null
@@ -126,17 +134,6 @@ class ContractListViewModel(
         return SimpleSQLiteQuery(initialQuery)
     }
 
-//    private fun formatContractIds(list: List<BaseContract>?): List<BaseContract>? {
-//        if (list == null) {
-//            return null
-//        }
-////        list.forEachIndexed { index, baseContract ->
-////            baseContract.id = index + 1
-////        }
-//
-//        return list
-//    }
-
     fun deactivateAllSearchChips() {
         _selectedSearchChip = null
         _shouldDisplayFabFilter.postValue(false)
@@ -163,26 +160,14 @@ class ContractListViewModel(
         _minDate = null
         _maxDate = null
         _slidersValues = initializeSlidersMap()
+        _filterChipsAndTextFieldsValues = initializeChipsAndTextFieldsValues()
     }
 
-    fun setEditTextValues(
-        provider: String,
-        matriculation: String,
-        attestation: String,
-        pinkCard: String,
-        company: String,
-        assurer: String,
-        mark: String,
-        policeNumber: String
-    ) {
-        providerTextViewContent = provider
-        matriculationTextViewContent = matriculation
-        registrationTextViewContent = attestation
-        pinkCardTextViewContent = pinkCard
-        companyTextViewContent = company
-        assurerTextViewContent = assurer
-        markTextViewContent = mark
-        policeNumberTextViewContent = policeNumber
+    fun setEditTextValues(listEditTexts: List<TextInputEditText>) {
+        _selectedFilteredChips.forEach { index->
+            _filterChipsAndTextFieldsValues[index] = listEditTexts[index].text?.toString()?.trim()
+        }
+        Log.e("APPLIED", "______APPLIED____: ${_filterChipsAndTextFieldsValues}")
     }
 
     fun filterContracts() {
@@ -203,7 +188,7 @@ class ContractListViewModel(
 
     private fun filterContractsUsingDates(contracts: List<BaseContract>): List<BaseContract> {
         var filteredValues: List<BaseContract> = contracts
-        if (checkField(this._minDate) && checkField(this._maxDate)) {
+        if (shouldFilterField(this._minDate) && shouldFilterField(this._maxDate)) {
             val timeConverterUtil = TimeConverters
             val minDate = timeConverterUtil.formatLongToLocaleDate(_minDate) ?: ""
             val maxDate = timeConverterUtil.formatLongToLocaleDate(_maxDate) ?: ""
@@ -217,44 +202,44 @@ class ContractListViewModel(
 
     private fun filterContractsUsingTextInputFields(contracts: List<BaseContract>): List<BaseContract> {
         var filteredValues: List<BaseContract> = contracts
-        if (checkField(providerTextViewContent)) {
+        if (shouldFilterField(_filterChipsAndTextFieldsValues[0])) {
             filteredValues = filteredValues.filter {
-                it.contract?.APPORTEUR?.contains(providerTextViewContent, ignoreCase = true) == true
+                it.contract?.APPORTEUR?.contains(_filterChipsAndTextFieldsValues[0] ?: "", ignoreCase = true) == true
             }
         }
-        if (checkField(matriculationTextViewContent)) {
+        if (shouldFilterField(_filterChipsAndTextFieldsValues[5])) {
             filteredValues = filteredValues.filter {
-                it.contract?.immatriculation?.contains(matriculationTextViewContent, ignoreCase = true) == true
+                it.contract?.immatriculation?.contains(_filterChipsAndTextFieldsValues[5] ?: "", ignoreCase = true) == true
             }
         }
-        if (checkField(registrationTextViewContent)) {
+        if (shouldFilterField(_filterChipsAndTextFieldsValues[2])) {
             filteredValues = filteredValues.filter {
-                it.contract?.attestation?.contains(registrationTextViewContent, ignoreCase = true) == true
+                it.contract?.attestation?.contains(_filterChipsAndTextFieldsValues[2] ?: "", ignoreCase = true) == true
             }
         }
-        if (checkField(pinkCardTextViewContent)) {
+        if (shouldFilterField(_filterChipsAndTextFieldsValues[3])) {
             filteredValues = filteredValues.filter {
-                it.contract?.carteRose?.contains(pinkCardTextViewContent, ignoreCase = true) == true
+                it.contract?.carteRose?.contains(_filterChipsAndTextFieldsValues[3] ?: "", ignoreCase = true) == true
             }
         }
-        if (checkField(companyTextViewContent)) {
+        if (shouldFilterField(_filterChipsAndTextFieldsValues[4])) {
             filteredValues = filteredValues.filter {
-                it.contract?.compagnie?.contains(companyTextViewContent, ignoreCase = true) == true
+                it.contract?.compagnie?.contains(_filterChipsAndTextFieldsValues[4] ?: "", ignoreCase = true) == true
             }
         }
-        if (checkField(assurerTextViewContent)) {
+        if (shouldFilterField(_filterChipsAndTextFieldsValues[1])) {
             filteredValues = filteredValues.filter {
-                it.contract?.assure?.contains(assurerTextViewContent, ignoreCase = true) == true
+                it.contract?.assure?.contains(_filterChipsAndTextFieldsValues[1] ?: "", ignoreCase = true) == true
             }
         }
-        if (checkField(markTextViewContent)) {
+        if (shouldFilterField(_filterChipsAndTextFieldsValues[6])) {
             filteredValues = filteredValues.filter {
-                it.contract?.mark?.contains(markTextViewContent, ignoreCase = true) == true
+                it.contract?.mark?.contains(_filterChipsAndTextFieldsValues[6] ?: "", ignoreCase = true) == true
             }
         }
-        if (checkField(policeNumberTextViewContent)) {
+        if (shouldFilterField(_filterChipsAndTextFieldsValues[7])) {
             filteredValues = filteredValues.filter {
-                it.contract?.numeroPolice?.contains(policeNumberTextViewContent, ignoreCase = true) == true
+                it.contract?.numeroPolice?.contains(_filterChipsAndTextFieldsValues[7] ?: "", ignoreCase = true) == true
             }
         }
         return filteredValues
@@ -314,8 +299,8 @@ class ContractListViewModel(
         return filteredValues
     }
 
-    private fun checkField(field: String?): Boolean = !field.isNullOrEmpty()
-    private fun checkField(field: Long?): Boolean = field != null && field != 0L
+    private fun shouldFilterField(field: String?): Boolean = !field.isNullOrEmpty()
+    private fun shouldFilterField(field: Long?): Boolean = field != null && field != 0L
 }
 
 private fun <A, B> Pair<A, B>?.isNotNull(): Boolean {
