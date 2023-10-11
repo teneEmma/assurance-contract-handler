@@ -301,7 +301,9 @@ class CustomerDetailsActivity : AppCompatActivity() {
             setContentView(contractItemBinding.root)
         }
 
-        BottomDialogView().manageContractDetailViews(contractItemBinding, contract, this)
+        val carDetailsListTitles = resources.getStringArray(R.array.car_details_title).toList()
+        val priceDetailsListTitles = resources.getStringArray(R.array.price_details_title).toList()
+        BottomDialogView(carDetailsListTitles, priceDetailsListTitles).manageContractDetailViews(contractItemBinding, contract, this)
 
         val width = (resources.displayMetrics.widthPixels * 0.90).toInt()
         val height = (resources.displayMetrics.heightPixels * 0.80).toInt()
