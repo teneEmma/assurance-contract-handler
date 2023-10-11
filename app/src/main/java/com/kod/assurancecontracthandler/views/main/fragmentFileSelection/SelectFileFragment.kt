@@ -26,8 +26,8 @@ import com.kod.assurancecontracthandler.databinding.PermissionDialogBinding
 import com.kod.assurancecontracthandler.model.MimeTypes
 import com.kod.assurancecontracthandler.model.database.ContractDatabase
 import com.kod.assurancecontracthandler.repository.ContractRepository
-import com.kod.assurancecontracthandler.viewmodels.exceldocviewmodel.SelectFileViewModel
-import com.kod.assurancecontracthandler.viewmodels.exceldocviewmodel.SelectFileViewModelFactory
+import com.kod.assurancecontracthandler.viewmodels.selectfileviewmodel.SelectFileViewModel
+import com.kod.assurancecontracthandler.viewmodels.selectfileviewmodel.SelectFileViewModelFactory
 import java.io.FileInputStream
 
 
