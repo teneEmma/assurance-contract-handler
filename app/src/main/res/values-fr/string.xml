@@ -58,6 +58,8 @@
     <string name="police_number_text">N° de police</string>
     <string name="attestation_number_text">N° attestation</string>
     <string name="pink_card_text">Carte rose</string>
+    <string name="category_text">Categorie</string>
+    <string name="duration_text">Durée</string>
     <string name="reset">Réinitialiser</string>
     <string name="apply">Appliquer</string>
     <string name="main_group_slider_title">Filtrer les prix</string>
@@ -108,6 +110,7 @@
     <string-array name="expandable_group_titles_list">
         <item>FILTRER LES PRIX</item>
         <item>FILTRER LA PUISSANCE</item>
+        <item>FILTRER LA DUREE</item>
     </string-array>
 
     <string-array name="expandable_children_titles_list_1">
@@ -125,6 +128,40 @@
 
     <string-array name="expandable_children_titles_list_2">
         <item>POWER</item>
+    </string-array>
+
+    <string-array name="expandable_children_titles_list_3">
+        <item>DUREE</item>
+    </string-array>
+
+    <string-array name="car_details_title">
+        <item>ATTESTATION</item>
+        <item>N° POLICE</item>
+        <item>COMPAGNIE</item>
+        <item>MARK</item>
+        <item>IMMATRICULATION</item>
+        <item>PUISS / ENERGIE</item>
+        <item>CARTE ROSE</item>
+        <item>CATEGORIE</item>
+        <item>ZONE</item>
+        <item>DUREE</item>
+    </string-array>
+
+    <string-array name="price_details_title">
+        <item>DTA</item>
+        <item>PN</item>
+        <item>ACC</item>
+        <item>ACC</item>
+        <item>TVA</item>
+        <item>CR</item>
+        <item>PTTC</item>
+        <item>COM PN</item>
+        <item>COM ACC</item>
+        <item>TOTAL COM</item>
+        <item>NET A REVERSER</item>
+        <item>ENCAIS</item>
+        <item>COM LIMBE</item>
+        <item>COM PROVIDER</item>
     </string-array>
 
 </resources>

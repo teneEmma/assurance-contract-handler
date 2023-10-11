@@ -5,29 +5,13 @@ object ConstantsVariables {
         "JANVIER", "FEVRIER", "MARS", "AVRIL", "MAI", "JUIN", "JUILLET", "AOUT",
         "SEPTEMBRE", "OCTOBRE", "NOVEMBRE", "DECEMBRE"
     )
-    val possibleBeginningSheetValues = listOf("SEMAINE", "MOIS DE")
     val possibleHeaderValues = listOf("ATTESTATION", "CARTE ROSE", "ASSURE", "N°")
-    val carDetailsTitle = listOf(
-        "ATTESTATION",
-        "N° POLICE",
-        "COMPAGNIE",
-        "MARK",
-        "IMMATRICULATION",
-        "PUISS / ENERGIE",
-        "CARTE ROSE",
-        "CATEGORIE",
-        "ZONE"
-    )
-    val pricesTitle = listOf(
-        "DTA", "PN", "ACC", "FC", "TVA", "CR", "PTTC", "COM PN",
-        "COM ACC", "TOTAL COM", "NET A REVERSER", "ENCAIS", "C LIMBE", "C APPORT"
-    )
     val searchBarChipsTitles = listOf(
         "APPORTEUR", "assure", "attestation", "compagnie", "telephone",
         "immatriculation", "mark", "numeroPolice"
     ).sorted()
     val filterDialogChips: List<String> = mutableListOf(
-        "Apporteur", "Assure", "Attestation", "Carte rose",
+        "Apporteur", "Assure", "Attestation", "Carte rose", "Categorie",
         "Compagnie", "Immatriculation", "Mark", "Numero police"
     ).sorted()
     const val isoDatePattern = "yyyy-MM-dd'T'HH:mm"
@@ -35,14 +19,13 @@ object ConstantsVariables {
     const val datePickerTag = "DATE_RANGE_PICKER"
     const val priceUnit = "XAF"
     const val powerUnit = "CV-ESS"
+    const val timeUnit = "Jours"
     const val minPriceText = "1000.0 $priceUnit"
     const val maxPriceText = "500000.0 $priceUnit"
-    const val minPriceValue = 1000.0F
-    const val maxPriceValue = 500000.0F
     const val minPowerText = "1.0 $powerUnit"
     const val maxPowerText = "30.0 $powerUnit"
-    const val minPowerValue = 1.0F
-    const val maxPowerValue = 30.0F
+    const val minDurationText = "0.0 $timeUnit"
+    const val maxDurationText = "365.0 $timeUnit"
     const val customerNameKey = "customer_name"
     const val relatedContractIdKey = "related_contract_id_key"
     const val smsURIPrefix = "smsto:"

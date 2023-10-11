@@ -4,6 +4,10 @@ import com.kod.assurancecontracthandler.common.constants.ConstantsVariables
 
 object DataTypesConversionAndFormattingUtils {
 
+    fun notStringifyingNull(value: Any?): String? {
+        return value?.toString()
+    }
+
     fun convertPowerFieldStringToFloat(powerFieldString: String?): Float? {
         if(powerFieldString == null){
             return null

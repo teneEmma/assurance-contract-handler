@@ -34,15 +34,16 @@ class ContractListViewModel(
      *   1=Assure,
      *   2=Attestation,
      *   3=Carte rose,
-     *   4=Compagnie,
-     *   5=Immatriculation,
-     *   6=Mark,
-     *   7=Numero police
+     *   4=Categorie,
+     *   5=Compagnie,
+     *   6=Immatriculation,
+     *   7=Mark,
+     *   8=Numero police,
      *  }
      */
     private var _filterChipsAndTextFieldsValues: MutableMap<Int, String?> = initializeChipsAndTextFieldsValues()
 
-    private fun initializeChipsAndTextFieldsValues(): MutableMap<Int, String?>{
+    private fun initializeChipsAndTextFieldsValues(): MutableMap<Int, String?> {
         var key = 0
         return ConstantsVariables.filterDialogChips.associate {
             key++ to null as String?
@@ -139,7 +140,7 @@ class ContractListViewModel(
         _shouldDisplayFabFilter.postValue(false)
     }
 
-    suspend fun fetchAllContracts() = _allContracts.postValue(repository.readAllContracts())
+    fun fetchAllContracts() = _allContracts.postValue(repository.readAllContracts())
     fun onDateChanged(maxDate: Long?, minDate: Long?) {
         _minDate = minDate
         _maxDate = maxDate
@@ -164,7 +165,7 @@ class ContractListViewModel(
     }
 
     fun setEditTextValues(listEditTexts: List<TextInputEditText>) {
-        _selectedFilteredChips.forEach { index->
+        _selectedFilteredChips.forEach { index ->
             _filterChipsAndTextFieldsValues[index] = listEditTexts[index].text?.toString()?.trim()
         }
         Log.e("APPLIED", "______APPLIED____: ${_filterChipsAndTextFieldsValues}")
@@ -207,9 +208,9 @@ class ContractListViewModel(
                 it.contract?.APPORTEUR?.contains(_filterChipsAndTextFieldsValues[0] ?: "", ignoreCase = true) == true
             }
         }
-        if (shouldFilterField(_filterChipsAndTextFieldsValues[5])) {
+        if (shouldFilterField(_filterChipsAndTextFieldsValues[1])) {
             filteredValues = filteredValues.filter {
-                it.contract?.immatriculation?.contains(_filterChipsAndTextFieldsValues[5] ?: "", ignoreCase = true) == true
+                it.contract?.assure?.contains(_filterChipsAndTextFieldsValues[1] ?: "", ignoreCase = true) == true
             }
         }
         if (shouldFilterField(_filterChipsAndTextFieldsValues[2])) {
@@ -224,22 +225,30 @@ class ContractListViewModel(
         }
         if (shouldFilterField(_filterChipsAndTextFieldsValues[4])) {
             filteredValues = filteredValues.filter {
-                it.contract?.compagnie?.contains(_filterChipsAndTextFieldsValues[4] ?: "", ignoreCase = true) == true
+                it.contract?.categorie == _filterChipsAndTextFieldsValues[4]?.toInt()
             }
         }
-        if (shouldFilterField(_filterChipsAndTextFieldsValues[1])) {
+        if (shouldFilterField(_filterChipsAndTextFieldsValues[5])) {
             filteredValues = filteredValues.filter {
-                it.contract?.assure?.contains(_filterChipsAndTextFieldsValues[1] ?: "", ignoreCase = true) == true
+                it.contract?.compagnie?.contains(_filterChipsAndTextFieldsValues[4] ?: "", ignoreCase = true) == true
             }
         }
         if (shouldFilterField(_filterChipsAndTextFieldsValues[6])) {
             filteredValues = filteredValues.filter {
-                it.contract?.mark?.contains(_filterChipsAndTextFieldsValues[6] ?: "", ignoreCase = true) == true
+                it.contract?.immatriculation?.contains(
+                    _filterChipsAndTextFieldsValues[6] ?: "",
+                    ignoreCase = true
+                ) == true
             }
         }
         if (shouldFilterField(_filterChipsAndTextFieldsValues[7])) {
             filteredValues = filteredValues.filter {
-                it.contract?.numeroPolice?.contains(_filterChipsAndTextFieldsValues[7] ?: "", ignoreCase = true) == true
+                it.contract?.mark?.contains(_filterChipsAndTextFieldsValues[7] ?: "", ignoreCase = true) == true
+            }
+        }
+        if (shouldFilterField(_filterChipsAndTextFieldsValues[8])) {
+            filteredValues = filteredValues.filter {
+                it.contract?.numeroPolice?.contains(_filterChipsAndTextFieldsValues[8] ?: "", ignoreCase = true) == true
             }
         }
         return filteredValues
@@ -293,6 +302,9 @@ class ContractListViewModel(
                             vehiclePower >= childValue!!.first && vehiclePower <= childValue.second
 
                         }
+
+                    expandableChildrenTitlesList[2][0] to true -> filteredValues =
+                        filteredValues.filter { c-> c.contract?.duree?.let { it >= childValue!!.first && it <= childValue.second } == true }
                 }
             }
         }

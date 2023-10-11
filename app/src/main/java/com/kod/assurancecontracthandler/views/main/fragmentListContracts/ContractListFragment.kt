@@ -50,7 +50,8 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener {
         val groupTitleList = resources.getStringArray(R.array.expandable_group_titles_list).toList()
         val childrenTitleList = listOf(
             resources.getStringArray(R.array.expandable_children_titles_list_1).toList(),
-            resources.getStringArray(R.array.expandable_children_titles_list_2).toList()
+            resources.getStringArray(R.array.expandable_children_titles_list_2).toList(),
+            resources.getStringArray(R.array.expandable_children_titles_list_3).toList()
         )
         ContractListViewModelFactory(contractRepository, groupTitleList, childrenTitleList)
     }
@@ -178,30 +179,30 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener {
     private fun filterChipsChecked() {
         // This order of appearance of textInputLayouts in this list has been order with respect to
         // ConstantsVariables.filterDialogChips
-        val listTextViews = listOf(
-            filterDialogBinding.ilFilterApporteur,
-            filterDialogBinding.ilFilterAssurer, filterDialogBinding.ilFilterAttestation,
-            filterDialogBinding.ilFilterCarteRose, filterDialogBinding.ilFilterCompagnie,
+        val listTextInputLayoutsViews = listOf(
+            filterDialogBinding.ilFilterApporteur, filterDialogBinding.ilFilterAssurer,
+            filterDialogBinding.ilFilterAttestation, filterDialogBinding.ilFilterCarteRose,
+            filterDialogBinding.ilFilterCategory, filterDialogBinding.ilFilterCompagnie,
             filterDialogBinding.ilFilterImmatriculation, filterDialogBinding.ilFilterMark,
             filterDialogBinding.ilFilterNumeroPolice
         )
         val listEditTextViews = listOf(
-            filterDialogBinding.etFilterApporteur,
-            filterDialogBinding.etFilterAssurer, filterDialogBinding.etFilterAttestation,
-            filterDialogBinding.etFilterCarteRose, filterDialogBinding.etFilterCompagnie,
+            filterDialogBinding.etFilterApporteur, filterDialogBinding.etFilterAssurer,
+            filterDialogBinding.etFilterAttestation, filterDialogBinding.etFilterCarteRose,
+            filterDialogBinding.etFilterCategory, filterDialogBinding.etFilterCompagnie,
             filterDialogBinding.etFilterImmatriculation, filterDialogBinding.etFilterMark,
             filterDialogBinding.etFilterPolice
         )
 
         if (filterDialogBinding.chipGroupFilter.checkedChipIds.isNotEmpty()) {
             filterDialogBinding.chipGroupFilter.checkedChipIds.let { checkedChips ->
-                listTextViews[checkedChips[0] - 1].visibility = View.VISIBLE
+                listTextInputLayoutsViews[checkedChips[0] - 1].visibility = View.VISIBLE
             }
         }
 
         filterDialogBinding.chipGroupFilter.setOnCheckedStateChangeListener { _, checkedIds ->
             contractListViewModel.onFilterChipCheckChanged(checkedIds)
-            listTextViews.forEachIndexed { index, v ->
+            listTextInputLayoutsViews.forEachIndexed { index, v ->
                 if (!checkedIds.contains(index)) {
                     v.visibility = View.GONE
                     return@forEachIndexed
@@ -242,7 +243,8 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener {
         val groupTitleList = resources.getStringArray(R.array.expandable_group_titles_list).toList()
         val childrenTitleList = listOf(
             resources.getStringArray(R.array.expandable_children_titles_list_1).toList(),
-            resources.getStringArray(R.array.expandable_children_titles_list_2).toList()
+            resources.getStringArray(R.array.expandable_children_titles_list_2).toList(),
+            resources.getStringArray(R.array.expandable_children_titles_list_3).toList()
         )
         expandableAdapter = ExpandableSliderAdapter(
             requireContext(),
@@ -404,7 +406,9 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener {
         }
 
         val c = baseContract.contract
-        BottomDialogView().manageContractDetailViews(contractItemBinding, c, requireContext())
+        val carDetailsListTitles = resources.getStringArray(R.array.car_details_title).toList()
+        val priceDetailsListTitles = resources.getStringArray(R.array.price_details_title).toList()
+        BottomDialogView(carDetailsListTitles, priceDetailsListTitles).manageContractDetailViews(contractItemBinding, c, requireContext())
 
         val width = (resources.displayMetrics.widthPixels * 0.90).toInt()
         val height = (resources.displayMetrics.heightPixels * 0.80).toInt()

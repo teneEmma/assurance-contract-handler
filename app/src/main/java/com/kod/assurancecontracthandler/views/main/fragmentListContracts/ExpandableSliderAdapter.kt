@@ -22,7 +22,8 @@ class ExpandableSliderAdapter(
     private val sliderListenerCallback: (Pair<Int, Int>, Pair<Float, Float>) -> Unit
 ) : BaseExpandableListAdapter() {
 
-    private val childrenSelected: MutableList<MutableList<Int>> = mutableListOf(mutableListOf(), mutableListOf())
+    private val childrenSelected: MutableList<MutableList<Int>> =
+        mutableListOf(mutableListOf(), mutableListOf(), mutableListOf())
 
     private fun setSliderValues(
         groupPosition: Int,
@@ -31,30 +32,48 @@ class ExpandableSliderAdapter(
     ) {
         val groupKey = groupTitleList[groupPosition]
         val childKey = childrenTitleList[groupPosition][childPosition]
-        if (groupPosition == 0) {
-            val minValue = slidersValues[groupKey]?.get(childKey)?.first ?: 1000.0F
-            val maxValue = slidersValues[groupKey]?.get(childKey)?.second ?: 500000.0F
-            expandableSBinding.priceSlider.valueFrom = 1000.0F
-            expandableSBinding.priceSlider.valueTo = 500000.0F
-            expandableSBinding.priceSlider.stepSize = 1000.0F
-            expandableSBinding.priceSlider.values = mutableListOf(minValue, maxValue)
-            expandableSBinding.priceSlider.setLabelFormatter { value ->
-                "$value${ConstantsVariables.priceUnit}"
+        when (groupPosition) {
+            0 -> {
+                val minValue = slidersValues[groupKey]?.get(childKey)?.first ?: 1000.0F
+                val maxValue = slidersValues[groupKey]?.get(childKey)?.second ?: 500000.0F
+                expandableSBinding.priceSlider.valueFrom = 1000.0F
+                expandableSBinding.priceSlider.valueTo = 500000.0F
+                expandableSBinding.priceSlider.stepSize = 1000.0F
+                expandableSBinding.priceSlider.values = mutableListOf(minValue, maxValue)
+                expandableSBinding.priceSlider.setLabelFormatter { value ->
+                    "$value${ConstantsVariables.priceUnit}"
+                }
+                expandableSBinding.etPriceRangeMax.text = ConstantsVariables.maxPriceText
+                expandableSBinding.etPriceRangeMin.text = ConstantsVariables.minPriceText
             }
-            expandableSBinding.etPriceRangeMax.text = ConstantsVariables.maxPriceText
-            expandableSBinding.etPriceRangeMin.text = ConstantsVariables.minPriceText
-        } else {
-            val minValue = slidersValues[groupKey]?.get(childKey)?.first ?: 1.0F
-            val maxValue = slidersValues[groupKey]?.get(childKey)?.second ?: 30.0F
-            expandableSBinding.priceSlider.valueFrom = 1.0F
-            expandableSBinding.priceSlider.valueTo = 30.0F
-            expandableSBinding.priceSlider.stepSize = 1.0F
-            expandableSBinding.priceSlider.values = mutableListOf(minValue, maxValue)
-            expandableSBinding.priceSlider.setLabelFormatter { value ->
-                "$value${ConstantsVariables.powerUnit}"
+
+            1 -> {
+                val minValue = slidersValues[groupKey]?.get(childKey)?.first ?: 1.0F
+                val maxValue = slidersValues[groupKey]?.get(childKey)?.second ?: 30.0F
+                expandableSBinding.priceSlider.valueFrom = 1.0F
+                expandableSBinding.priceSlider.valueTo = 30.0F
+                expandableSBinding.priceSlider.stepSize = 1.0F
+                expandableSBinding.priceSlider.values = mutableListOf(minValue, maxValue)
+                expandableSBinding.priceSlider.setLabelFormatter { value ->
+                    "$value${ConstantsVariables.powerUnit}"
+                }
+                expandableSBinding.etPriceRangeMax.text = ConstantsVariables.maxPowerText
+                expandableSBinding.etPriceRangeMin.text = ConstantsVariables.minPowerText
             }
-            expandableSBinding.etPriceRangeMax.text = ConstantsVariables.maxPowerText
-            expandableSBinding.etPriceRangeMin.text = ConstantsVariables.minPowerText
+
+            2 -> {
+                val minValue = slidersValues[groupKey]?.get(childKey)?.first ?: 0.0F
+                val maxValue = slidersValues[groupKey]?.get(childKey)?.second ?: 365.0F
+                expandableSBinding.priceSlider.valueFrom = 0.0F
+                expandableSBinding.priceSlider.valueTo = 365.0F
+                expandableSBinding.priceSlider.stepSize = 1.0F
+                expandableSBinding.priceSlider.values = mutableListOf(minValue, maxValue)
+                expandableSBinding.priceSlider.setLabelFormatter { value ->
+                    "$value${ConstantsVariables.timeUnit}"
+                }
+                expandableSBinding.etPriceRangeMax.text = ConstantsVariables.maxDurationText
+                expandableSBinding.etPriceRangeMin.text = ConstantsVariables.minDurationText
+            }
         }
 
     }
@@ -81,8 +100,10 @@ class ExpandableSliderAdapter(
             Log.e("CRASH_SLIDERS", e.stackTraceToString())
         }
 
+        Log.e("WTF", "OOOOOOOO  $groupTitleList | $childrenTitleList")
+        Log.e("WTF", "XXXXXXXXX  $groupPosition | $childPosition")
         expandableSBinding.llEtPriceRange.visibility =
-            if (!childrenSelected[groupPosition].contains(childPosition)) {
+            if (!childrenSelected.get(groupPosition).contains(childPosition)) {
                 View.GONE
             } else {
                 View.VISIBLE
