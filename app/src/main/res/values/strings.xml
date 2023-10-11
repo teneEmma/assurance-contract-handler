@@ -56,6 +56,8 @@
     <string name="police_number_text">Police number</string>
     <string name="attestation_number_text">Attestation number</string>
     <string name="pink_card_text">Pink card</string>
+    <string name="category_text">Category</string>
+    <string name="duration_text">Duration</string>
     <string name="reset">Reset</string>
     <string name="apply">Apply</string>
     <string name="main_group_slider_title">Filter prices</string>
@@ -134,6 +136,7 @@
     <string-array name="expandable_group_titles_list">
         <item>FILTER PRICES</item>
         <item>FILTER POWER</item>
+        <item>FILTER DURATION</item>
     </string-array>
 
     <string-array name="expandable_children_titles_list_1">
@@ -151,6 +154,40 @@
 
     <string-array name="expandable_children_titles_list_2">
         <item>POWER</item>
+    </string-array>
+
+    <string-array name="expandable_children_titles_list_3">
+        <item>DURATION</item>
+    </string-array>
+
+    <string-array name="car_details_title">
+        <item>REGISTRATION N°</item>
+        <item>POLICE N°</item>
+        <item>COMPANY</item>
+        <item>MARK</item>
+        <item>PLATE NUMBER</item>
+        <item>PINK CARD</item>
+        <item>POWER</item>
+        <item>CATEGORY</item>
+        <item>ZONE</item>
+        <item>DURATION</item>
+    </string-array>
+
+    <string-array name="price_details_title">
+        <item>DTA</item>
+        <item>PN</item>
+        <item>ACC</item>
+        <item>ACC</item>
+        <item>VAT</item>
+        <item>CR</item>
+        <item>PTTC</item>
+        <item>COM PN</item>
+        <item>COM ACC</item>
+        <item>TOTAL COM</item>
+        <item>TOTAL TO HAND OVER</item>
+        <item>CASHING</item>
+        <item>COM LIMBE</item>
+        <item>COM PROVIDER</item>
     </string-array>
 
 </resources>
