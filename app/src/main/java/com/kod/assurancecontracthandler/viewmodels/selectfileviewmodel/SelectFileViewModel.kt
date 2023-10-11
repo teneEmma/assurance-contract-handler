@@ -1,4 +1,4 @@
-package com.kod.assurancecontracthandler.viewmodels.exceldocviewmodel
+package com.kod.assurancecontracthandler.viewmodels.selectfileviewmodel
 
 import ExcelSheetHeadersKeys
 import androidx.lifecycle.LiveData
