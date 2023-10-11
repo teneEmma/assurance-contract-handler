@@ -43,7 +43,7 @@
                 android:textSize="18sp"/>
 
         <LinearLayout
-                android:id="@+id/attestationCarte"
+                android:id="@+id/plate_number_and_attestation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
@@ -57,7 +57,7 @@
                     android:orientation="vertical">
 
                 <TextView
-                        android:id="@+id/title_attestion"
+                        android:id="@+id/title_plate_number"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -67,7 +67,7 @@
                         android:textAppearance="@style/normal"/>
 
                 <TextView
-                        android:id="@+id/column_immatriculation"
+                        android:id="@+id/column_plate_number"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:maxWidth="100dp"
@@ -75,7 +75,7 @@
                         android:textSize="14sp"
                         android:textStyle="italic|bold"
                         android:textAlignment="center"
-                        android:text="string/plate_number_value"
+                        android:text="@string/plate_number_value"
                         android:textAppearance="@style/Headers.header_2"/>
             </LinearLayout>
 
@@ -86,23 +86,23 @@
                     android:orientation="vertical">
 
                 <TextView
-                        android:id="@+id/title_carteRose"
+                        android:id="@+id/title_attestation"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:textSize="11sp"
                         android:textColor="@color/title_color"
-                        android:text="@string/carte_rose_title"
+                        android:text="@string/attestation_title"
                         android:textAppearance="@style/normal"/>
 
                 <TextView
-                        android:id="@+id/column_carteRose"
+                        android:id="@+id/column_attestation"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal|start"
                         android:textStyle="italic|bold"
                         android:textSize="14sp"
-                        android:text="@string/column_carteRose"
+                        android:text="@string/column_attestation"
                         android:textAppearance="@style/Headers.header_2"/>
             </LinearLayout>
 

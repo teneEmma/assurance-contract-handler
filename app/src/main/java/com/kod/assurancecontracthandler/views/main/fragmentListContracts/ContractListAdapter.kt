@@ -29,19 +29,19 @@ class ContractListAdapter(
                 val actualPosition = position + 1
                 columnId.text = (actualPosition).toString()
 
-                val grandTotal = "${contract.contract?.DTA.toString()}XAF"
+                val grandTotal = "${contract.contract?.DTA}XAF"
 
-                columnAssure.text = contract.contract!!.assure.toString()
+                columnAssure.text = contract.contract!!.assure
                 columnStartDate.text = contract.contract.effet
                 columnDueDate.text = contract.contract.echeance
-                columnImmatriculation.text = contract.contract.immatriculation.toString()
-                columnCarteRose.text = contract.contract.carteRose.toString()
+                columnPlateNumber.text = contract.contract.immatriculation
+                columnAttestation.text = contract.contract.attestation
                 tvTotal.text = grandTotal
                 if (isExpiringActivity) {
                     columnStartDate.visibility = View.GONE
-                    columnCarteRose.visibility = View.GONE
+                    columnAttestation.visibility = View.GONE
                     titleStartDate.visibility = View.GONE
-                    titleCarteRose.visibility = View.GONE
+                    titleAttestation.visibility = View.GONE
                 }
             }
         }
