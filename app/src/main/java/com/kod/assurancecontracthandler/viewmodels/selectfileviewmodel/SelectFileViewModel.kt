@@ -115,11 +115,11 @@ class SelectFileViewModel(private val contractRepository: ContractRepository) : 
     }
 
     private fun contractWithoutIrrelevantFieldsHashCode(contract: Contract?): Int {
-        val newContract = contract?.apply {
-            telephone = null
-            ENCAIS = null
-            APPORTEUR = null
-        }
+        val newContract = contract?.copy()
+        newContract?.telephone = null
+        newContract?.ENCAIS = null
+        newContract?.APPORTEUR = null
+
         return newContract.hashCode()
     }
 
@@ -173,8 +173,8 @@ class SelectFileViewModel(private val contractRepository: ContractRepository) : 
                 COMM_APPORT = doubleToInt(row[ExcelSheetHeadersKeys.keyCOMM_PROVIDER])
             }
         }
-
         val hashCode = contractWithoutIrrelevantFieldsHashCode(contract)
+
         return BaseContract(id = hashCode, contract)
     }
 
