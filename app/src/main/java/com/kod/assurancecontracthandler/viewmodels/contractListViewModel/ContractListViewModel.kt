@@ -72,22 +72,24 @@ class ContractListViewModel(
         get() = _shouldDisplayFabFilter
     val messageResourceId: LiveData<Int>
         get() = _messageResourceId
-
     val isLoading: LiveData<Boolean>
         get() = _isLoading
-
     val filterChipsToShow: List<String>
         get() = ConstantsVariables.filterDialogChips
     val slidersValues: Map<String, Map<String, Pair<Float, Float>?>>
         get() = _slidersValues
-
     val startDate: Long?
         get() = _minDate
     val endDate: Long?
         get() = _maxDate
-
     val selectedFilteredChips: List<Int>
         get() = _selectedFilteredChips
+//    val stepSizeForPrices: Float
+//        get() = _stepSizeForPrices
+//    val stepSizeForPower: Float
+//        get() = _stepSizeForPower
+//    val stepSizeForTime: Float
+//        get() = _stepSizeForTime
 
     @Throws(IndexOutOfBoundsException::class)
     fun onSearchChipCheckChanged(searchChipId: Int?) {
@@ -129,8 +131,8 @@ class ContractListViewModel(
         if (indexQueryTitle > ConstantsVariables.searchBarChipsTitles.size) {
             throw IndexOutOfBoundsException("chip index is greater than title's indices")
         }
-        val initialQuery = "SELECT * FROM contract WHERE" +
-                """ ${ConstantsVariables.searchBarChipsTitles[indexQueryTitle]} LIKE "%$str%" """
+        val initialQuery =
+            "SELECT * FROM contract WHERE" + """ ${ConstantsVariables.searchBarChipsTitles[indexQueryTitle]} LIKE "%$str%" """
 
         return SimpleSQLiteQuery(initialQuery)
     }
@@ -194,8 +196,7 @@ class ContractListViewModel(
             val minDate = timeConverterUtil.formatLongToLocaleDate(_minDate) ?: ""
             val maxDate = timeConverterUtil.formatLongToLocaleDate(_maxDate) ?: ""
             filteredValues = filteredValues.filter {
-                it.contract?.effet?.let { startDate -> startDate >= minDate } == true &&
-                        it.contract.echeance?.let { endDate -> endDate <= maxDate } == true
+                it.contract?.effet?.let { startDate -> startDate >= minDate } == true && it.contract.echeance?.let { endDate -> endDate <= maxDate } == true
             }
         }
         return filteredValues
@@ -236,8 +237,7 @@ class ContractListViewModel(
         if (shouldFilterField(_filterChipsAndTextFieldsValues[6])) {
             filteredValues = filteredValues.filter {
                 it.contract?.immatriculation?.contains(
-                    _filterChipsAndTextFieldsValues[6] ?: "",
-                    ignoreCase = true
+                    _filterChipsAndTextFieldsValues[6] ?: "", ignoreCase = true
                 ) == true
             }
         }
@@ -292,19 +292,18 @@ class ContractListViewModel(
                     expandableChildrenTitlesList[0][9] to true -> filteredValues =
                         filteredValues.filter { c -> c.contract?.TVA?.let { it >= childValue!!.first && it <= childValue.second } == true }
 
-                    expandableChildrenTitlesList[1][0] to true -> filteredValues =
-                        filteredValues.filter { c ->
+                    expandableChildrenTitlesList[1][0] to true -> filteredValues = filteredValues.filter { c ->
 
-                            val vehiclePower =
-                                DataTypesConversionAndFormattingUtils.convertPowerFieldStringToFloat(c.contract?.puissanceVehicule)
-                                    ?: return@filter false
+                        val vehiclePower =
+                            DataTypesConversionAndFormattingUtils.convertPowerFieldStringToFloat(c.contract?.puissanceVehicule)
+                                ?: return@filter false
 
-                            vehiclePower >= childValue!!.first && vehiclePower <= childValue.second
+                        vehiclePower >= childValue!!.first && vehiclePower <= childValue.second
 
-                        }
+                    }
 
                     expandableChildrenTitlesList[2][0] to true -> filteredValues =
-                        filteredValues.filter { c-> c.contract?.duree?.let { it >= childValue!!.first && it <= childValue.second } == true }
+                        filteredValues.filter { c -> c.contract?.duree?.let { it >= childValue!!.first && it <= childValue.second } == true }
                 }
             }
         }
@@ -312,6 +311,7 @@ class ContractListViewModel(
     }
 
     private fun shouldFilterField(field: String?): Boolean = !field.isNullOrEmpty()
+
     private fun shouldFilterField(field: Long?): Boolean = field != null && field != 0L
 }
 
