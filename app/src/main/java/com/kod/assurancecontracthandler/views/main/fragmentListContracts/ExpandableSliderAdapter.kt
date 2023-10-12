@@ -11,7 +11,6 @@ import androidx.core.view.isVisible
 import com.google.android.material.slider.RangeSlider
 import com.kod.assurancecontracthandler.R
 import com.kod.assurancecontracthandler.common.constants.ConstantsVariables
-import com.kod.assurancecontracthandler.common.utilities.DataTypesConversionAndFormattingUtils
 import com.kod.assurancecontracthandler.databinding.ExpandableSliderItemBinding
 
 class ExpandableSliderAdapter(
@@ -124,23 +123,7 @@ class ExpandableSliderAdapter(
 
                     }
 
-                    override fun onStopTrackingTouch(slider: RangeSlider) {
-                        values = mutableListOf(slider.values[0], slider.values[1])
-                        val minValueString = DataTypesConversionAndFormattingUtils.addPowerOrPriceUnitToAttribute(
-                            slider.values[0].toString(),
-                            groupPosition
-                        )
-                        val maxValueString = DataTypesConversionAndFormattingUtils.addPowerOrPriceUnitToAttribute(
-                            slider.values[1].toString(),
-                            groupPosition
-                        )
-                        expandableSBinding.etPriceRangeMin.text = minValueString
-                        expandableSBinding.etPriceRangeMax.text = maxValueString
-                        sliderListenerCallback(
-                            Pair(groupPosition, childPosition),
-                            Pair(slider.values[0], slider.values[1])
-                        )
-                    }
+                    override fun onStopTrackingTouch(slider: RangeSlider) {}
                 })
             }
 
