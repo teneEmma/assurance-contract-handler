@@ -250,10 +250,12 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener {
             requireContext(),
             groupTitleList,
             childrenTitleList,
-            contractListViewModel.slidersValues
-        ) { groupChildPositions, minMaxValues ->
-            contractListViewModel.onSliderTouched(groupChildPositions, minMaxValues)
-        }
+            contractListViewModel.slidersValues,
+            sliderListenerCallback =
+            { groupChildPositions, minMaxValues ->
+                contractListViewModel.onSliderTouched(groupChildPositions, minMaxValues)
+            },
+        )
 
         filterDialogBinding.expandableLvSliders.setAdapter(expandableAdapter)
     }
@@ -408,7 +410,11 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener {
         val c = baseContract.contract
         val carDetailsListTitles = resources.getStringArray(R.array.car_details_title).toList()
         val priceDetailsListTitles = resources.getStringArray(R.array.price_details_title).toList()
-        BottomDialogView(carDetailsListTitles, priceDetailsListTitles).manageContractDetailViews(contractItemBinding, c, requireContext())
+        BottomDialogView(carDetailsListTitles, priceDetailsListTitles).manageContractDetailViews(
+            contractItemBinding,
+            c,
+            requireContext()
+        )
 
         val width = (resources.displayMetrics.widthPixels * 0.90).toInt()
         val height = (resources.displayMetrics.heightPixels * 0.80).toInt()

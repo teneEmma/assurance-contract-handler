@@ -12,7 +12,7 @@ class BottomDialogView(private val carDetailsTitle: List<String>, private val pr
     fun manageContractDetailViews(contractItemBinding: ContractDetailsBinding, c: Contract?, context: Context) {
         contractItemBinding.assurerName.text = c?.assure
         if (c?.numeroPolice.isNullOrEmpty() || c?.attestation.isNullOrEmpty()) {
-            val price = "${c?.DTA} XAF"
+            val price = c?.DTA?.let { DataTypesConversionAndFormattingUtils.formatCurrencyPrices(it) }
             contractItemBinding.tvGrandTotal.visibility = View.VISIBLE
             contractItemBinding.llCarStuff.visibility = View.GONE
             contractItemBinding.tvProvider.visibility = View.GONE
@@ -33,20 +33,20 @@ class BottomDialogView(private val carDetailsTitle: List<String>, private val pr
         val carTitles = carDetailsTitle
         val pricesTitles = pricesTitle
         val pricesValues = listOf(
-            c?.DTA.toString(),
-            c?.PN.toString(),
-            c?.ACC.toString(),
-            c?.FC.toString(),
-            c?.TVA?.toString(),
-            c?.CR.toString(),
-            c?.PTTC?.toString(),
-            c?.COM_PN.toString(),
-            c?.COM_ACC.toString(),
-            c?.TOTAL_COM?.toString(),
-            c?.NET_A_REVERSER.toString(),
-            c?.ENCAIS.toString(),
-            c?.COMM_LIMBE?.toString(),
-            c?.COMM_APPORT.toString()
+            c?.DTA?.let { DataTypesConversionAndFormattingUtils.formatIntegerPrice(it) },
+            c?.PN?.let { DataTypesConversionAndFormattingUtils.formatIntegerPrice(it) },
+            c?.ACC?.let { DataTypesConversionAndFormattingUtils.formatIntegerPrice(it) },
+            c?.FC?.let { DataTypesConversionAndFormattingUtils.formatIntegerPrice(it) },
+            c?.TVA?.let { DataTypesConversionAndFormattingUtils.formatIntegerPrice(it)},
+            c?.CR?.let { DataTypesConversionAndFormattingUtils.formatIntegerPrice(it) },
+            c?.PTTC?.let { DataTypesConversionAndFormattingUtils.formatIntegerPrice(it) },
+            c?.COM_PN?.let { DataTypesConversionAndFormattingUtils.formatIntegerPrice(it) },
+            c?.COM_ACC?.let { DataTypesConversionAndFormattingUtils.formatIntegerPrice(it) },
+            c?.TOTAL_COM?.let { DataTypesConversionAndFormattingUtils.formatIntegerPrice(it) },
+            c?.NET_A_REVERSER?.let { DataTypesConversionAndFormattingUtils.formatIntegerPrice(it) },
+            c?.ENCAIS?.let { DataTypesConversionAndFormattingUtils.formatIntegerPrice(it) },
+            c?.COMM_LIMBE?.let { DataTypesConversionAndFormattingUtils.formatIntegerPrice(it) },
+            c?.COMM_APPORT?.let { DataTypesConversionAndFormattingUtils.formatIntegerPrice(it) }
         )
         val carValues: List<String?> = listOf(
             c?.attestation,

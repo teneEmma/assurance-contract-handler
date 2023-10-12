@@ -1,6 +1,8 @@
 package com.kod.assurancecontracthandler.common.utilities
 
 import com.kod.assurancecontracthandler.common.constants.ConstantsVariables
+import java.text.NumberFormat
+import java.util.*
 
 object DataTypesConversionAndFormattingUtils {
 
@@ -9,7 +11,7 @@ object DataTypesConversionAndFormattingUtils {
     }
 
     fun convertPowerFieldStringToFloat(powerFieldString: String?): Float? {
-        if(powerFieldString == null){
+        if (powerFieldString == null) {
             return null
         }
         return try {
@@ -23,7 +25,7 @@ object DataTypesConversionAndFormattingUtils {
     }
 
     fun setNameInitials(customerName: String?): String {
-        if(customerName == null){
+        if (customerName == null) {
             return "??"
         }
         val initialsList = try {
@@ -47,11 +49,27 @@ object DataTypesConversionAndFormattingUtils {
         return initials
     }
 
-    fun addPowerOrPriceUnitToAttribute(value: String, groupPosition: Int): String{
-        return if(groupPosition == 0){
-            "${value}${ConstantsVariables.priceUnit}"
-        }else{
-            "${value}${ConstantsVariables.powerUnit}"
+    fun formatCurrencyPrices(price: Int): String {
+        val value2: NumberFormat = NumberFormat.getCurrencyInstance(Locale("fr", "CM")).apply {
+            maximumFractionDigits = 0
+            currency = Currency.getInstance("XAF")
+        }
+        return value2.format(price)
+    }
+
+    fun formatIntegerPrice(price: Int): String {
+        val value2: NumberFormat = NumberFormat.getIntegerInstance(Locale("fr", "CM")).apply {
+            maximumFractionDigits = 0
+            currency = Currency.getInstance("XAF")
+        }
+        return value2.format(price)
+    }
+
+    fun addPowerOrPriceUnitToAttribute(price: Int, groupPosition: Int): String {
+        return when (groupPosition) {
+            0 -> formatCurrencyPrices(price)
+            1 -> "${price}${ConstantsVariables.powerUnit}"
+            else -> "$price"
         }
     }
 }
