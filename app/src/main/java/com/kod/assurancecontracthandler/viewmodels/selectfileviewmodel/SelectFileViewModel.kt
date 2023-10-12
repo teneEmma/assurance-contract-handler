@@ -118,7 +118,7 @@ class SelectFileViewModel(private val contractRepository: ContractRepository) : 
         val newContract = contract?.copy()
         newContract?.telephone = null
         newContract?.ENCAIS = null
-        newContract?.assure = null
+        newContract?.APPORTEUR = null
 
         return newContract.hashCode()
     }
