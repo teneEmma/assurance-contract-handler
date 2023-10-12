@@ -32,5 +32,6 @@
 
     <color name="ic_edit_color">#0037FF</color>
     <color name="highlighted_actual_contract">#36FEAA0C</color>
+    <color name="btn_modify_step_size">@color/white</color>
 
 </resources>
