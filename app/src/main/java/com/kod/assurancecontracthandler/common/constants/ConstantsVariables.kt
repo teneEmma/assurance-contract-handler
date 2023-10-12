@@ -20,12 +20,12 @@ object ConstantsVariables {
     const val priceUnit = "XAF"
     const val powerUnit = "CV-ESS"
     const val timeUnit = "Jours"
-    const val minPriceText = "1000.0 $priceUnit"
-    const val maxPriceText = "500000.0 $priceUnit"
-    const val minPowerText = "1.0 $powerUnit"
-    const val maxPowerText = "30.0 $powerUnit"
-    const val minDurationText = "0.0 $timeUnit"
-    const val maxDurationText = "365.0 $timeUnit"
+    const val minPriceText = "1 000 $priceUnit"
+    const val maxPriceText = "10 000 000 $priceUnit"
+    const val minPowerText = "1 $powerUnit"
+    const val maxPowerText = "100 $powerUnit"
+    const val minDurationText = "0 $timeUnit"
+    const val maxDurationText = "365 $timeUnit"
     const val customerNameKey = "customer_name"
     const val relatedContractIdKey = "related_contract_id_key"
     const val smsURIPrefix = "smsto:"
@@ -37,6 +37,13 @@ object ConstantsVariables {
     const val sharedPreferenceMsg = "ASSURANCE_PREDEFINED_MSG"
     const val futureTenseExpire = "will expire"
     const val pastTenseExpire = "expired"
+
+    const val minPriceValue = 0
+    const val maxPriceValue = 10000000
+    const val minPowerValue = 0
+    const val maxPowerValue = 100
+    const val minTimeValue = 0
+    const val maxTimeValue = 365
 
     val whatsappPackages = listOf("com.whatsapp", "com.gbwhatsapp", "com.whatsapp.w4b")
 
