@@ -11,6 +11,7 @@ import android.widget.TextView
 import androidx.core.view.isVisible
 import com.kod.assurancecontracthandler.R
 import com.kod.assurancecontracthandler.common.constants.ConstantsVariables
+import com.kod.assurancecontracthandler.common.utilities.DataTypesConversionAndFormattingUtils
 import com.kod.assurancecontracthandler.databinding.ExpandableSliderItemBinding
 import kotlin.math.roundToInt
 
