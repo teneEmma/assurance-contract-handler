@@ -192,11 +192,11 @@ class ContractListViewModel(
     private fun filterContractsUsingDates(contracts: List<BaseContract>): List<BaseContract> {
         var filteredValues: List<BaseContract> = contracts
         if (shouldFilterField(this._minDate) && shouldFilterField(this._maxDate)) {
-            val timeConverterUtil = TimeConverters
-            val minDate = timeConverterUtil.formatLongToLocaleDate(_minDate) ?: ""
-            val maxDate = timeConverterUtil.formatLongToLocaleDate(_maxDate) ?: ""
+            val minDate = TimeConverters.formatLongToLocaleDate(_minDate) ?: ""
+            val maxDate = TimeConverters.formatLongToLocaleDate(_maxDate) ?: ""
             filteredValues = filteredValues.filter {
-                it.contract?.effet?.let { startDate -> startDate >= minDate } == true && it.contract.echeance?.let { endDate -> endDate <= maxDate } == true
+                it.contract?.effet?.let { startDate -> startDate >= minDate } == true &&
+                        it.contract.echeance?.let { endDate -> endDate <= maxDate } == true
             }
         }
         return filteredValues

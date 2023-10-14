@@ -1,6 +1,9 @@
 package com.kod.assurancecontracthandler.common.constants
 
+import java.util.*
+
 object ConstantsVariables {
+    val appLocal = Locale("fr", "CM")
     val months = listOf(
         "JANVIER", "FEVRIER", "MARS", "AVRIL", "MAI", "JUIN", "JUILLET", "AOUT",
         "SEPTEMBRE", "OCTOBRE", "NOVEMBRE", "DECEMBRE"
