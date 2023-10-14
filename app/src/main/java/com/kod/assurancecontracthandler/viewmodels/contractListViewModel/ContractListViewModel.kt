@@ -1,6 +1,5 @@
 package com.kod.assurancecontracthandler.viewmodels.contractListViewModel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.sqlite.db.SimpleSQLiteQuery
@@ -170,7 +169,6 @@ class ContractListViewModel(
         _selectedFilteredChips.forEach { index ->
             _filterChipsAndTextFieldsValues[index] = listEditTexts[index].text?.toString()?.trim()
         }
-        Log.e("APPLIED", "______APPLIED____: ${_filterChipsAndTextFieldsValues}")
     }
 
     fun filterContracts() {
@@ -194,9 +192,11 @@ class ContractListViewModel(
         if (shouldFilterField(this._minDate) && shouldFilterField(this._maxDate)) {
             val minDate = TimeConverters.formatLongToLocaleDate(_minDate) ?: ""
             val maxDate = TimeConverters.formatLongToLocaleDate(_maxDate) ?: ""
-            filteredValues = filteredValues.filter {
-                it.contract?.effet?.let { startDate -> startDate >= minDate } == true &&
-                        it.contract.echeance?.let { endDate -> endDate <= maxDate } == true
+            filteredValues = filteredValues.filter { baseContract ->
+                (TimeConverters.formatLocaleDateToLong(baseContract.contract?.effet) ?: 0) >=
+                        (TimeConverters.formatLocaleDateToLong(minDate) ?: 0) &&
+                        (TimeConverters.formatLocaleDateToLong(baseContract.contract?.echeance) ?: 0) <=
+                        (TimeConverters.formatLocaleDateToLong(maxDate) ?: 0)
             }
         }
         return filteredValues

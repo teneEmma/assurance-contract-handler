@@ -72,6 +72,12 @@ object TimeConverters {
         return isoDate?.let { formattedDate.format(it) }
     }
 
+    fun formatLocaleDateToLong(localeDate: String?): Long? {
+        val dateToFormatFormatter = SimpleDateFormat(ConstantsVariables.desiredDatePattern, Locale("fr", "CM"))
+        val formattedDate = dateToFormatFormatter.parse(localeDate)
+        return formattedDate?.time
+    }
+
     fun formatLongToLocaleDate(dateInLong: Long?): String? {
         if (dateInLong == null) {
             return null
