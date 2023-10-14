@@ -14,7 +14,7 @@ data class Contract(
     var telephone: String? = null,
     var assure: String? = null,
     var effet: String? = null,
-    var echeance: String?= null,
+    var echeance: String? = null,
     var puissanceVehicule: String? = null,
     var mark: String? = null,
     var immatriculation: String? = null,
@@ -36,16 +36,13 @@ data class Contract(
     var COMM_LIMBE: Int? = null,
     var COMM_APPORT: Int? = null,
     var APPORTEUR: String? = null
-): Parcelable{
+) : Parcelable {
     @Throws(IllegalArgumentException::class)
     fun isContractActive(): Boolean {
         val timeInLong = Calendar.getInstance().time.time
         val today = TimeConverters.formatLongToLocaleDate(timeInLong)
             ?: throw IllegalArgumentException("Today was found to be null")
-        return effet?.let { effet ->
-            today >= effet
-        } == true && echeance?.let { value ->
-            today <= value
-        } == true
+        return (TimeConverters.formatLocaleDateToLong(today) ?: 0) <= (TimeConverters.formatLocaleDateToLong(echeance)
+            ?: 0)
     }
 }
