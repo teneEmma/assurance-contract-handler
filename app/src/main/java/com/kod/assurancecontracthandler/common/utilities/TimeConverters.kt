@@ -64,19 +64,21 @@ object TimeConverters {
     }
 
     fun formatISODateToLocaleDate(dateToFormat: String): String? {
-        val isoFormat = SimpleDateFormat(ConstantsVariables.isoDatePattern, Locale("en"))
+        val isoFormat = SimpleDateFormat(ConstantsVariables.isoDatePattern, ConstantsVariables.appLocal)
         val isoDate = isoFormat.parse(dateToFormat)
-        val formattedDate = SimpleDateFormat(ConstantsVariables.desiredDatePattern, Locale("en"))
+        val formattedDate =
+            SimpleDateFormat(ConstantsVariables.desiredDatePattern, ConstantsVariables.appLocal)
 
         return isoDate?.let { formattedDate.format(it) }
     }
 
     fun formatLongToLocaleDate(dateInLong: Long?): String? {
-        if(dateInLong == null){
+        if (dateInLong == null) {
             return null
         }
         val date = Date(dateInLong)
-        val formattedDate= SimpleDateFormat(ConstantsVariables.desiredDatePattern, Locale("en"))
+        val formattedDate =
+            SimpleDateFormat(ConstantsVariables.desiredDatePattern, ConstantsVariables.appLocal)
         return formattedDate.format(date)
     }
 }

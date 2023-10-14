@@ -50,7 +50,7 @@ object DataTypesConversionAndFormattingUtils {
     }
 
     fun formatCurrencyPrices(price: Int): String {
-        val value2: NumberFormat = NumberFormat.getCurrencyInstance(Locale("fr", "CM")).apply {
+        val value2: NumberFormat = NumberFormat.getCurrencyInstance(ConstantsVariables.appLocal).apply {
             maximumFractionDigits = 0
             currency = Currency.getInstance("XAF")
         }
@@ -58,7 +58,7 @@ object DataTypesConversionAndFormattingUtils {
     }
 
     fun formatIntegerPrice(price: Int): String {
-        val value2: NumberFormat = NumberFormat.getIntegerInstance(Locale("fr", "CM")).apply {
+        val value2: NumberFormat = NumberFormat.getIntegerInstance(ConstantsVariables.appLocal).apply {
             maximumFractionDigits = 0
             currency = Currency.getInstance("XAF")
         }
