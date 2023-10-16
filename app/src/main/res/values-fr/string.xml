@@ -2,6 +2,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_name">Assurance Contract Handler</string>
     <string name="welcome">Bienvenue</string>
+    <string name="expiring_contracts">Contrats arrivant à échéance</string>
 
     <!--   Example on how to exclude a line from being translated -->
     <string name="exclude_string_from_translation">
@@ -98,13 +99,15 @@
     <string name="optional_field_text">Optionel</string>
     <string name="activity_customer_details_label">Details Client</string>
     <string name="more_info_current_contract">Plus d\'information</string>
+    <string name="no_expiring_contracts">Aucun contract arrivant à échéance</string>
 
     <string name="content_description_loading_progress">Niveau De Progression</string>
     <string name="content_description_fab_add_document">Ajouter un document</string>
     <string name="content_description_fab_filter">Filter</string>
 
     <string name="action_settings">Parametres</string>
-    <string name="action_exp_contracts">Contrats qui vont expirer</string>
+    <string name="action_exp_contracts">Contrats arrivant à échéance</string>
+
     <string name="action_sort">Trier</string>
 
     <string-array name="expandable_group_titles_list">
