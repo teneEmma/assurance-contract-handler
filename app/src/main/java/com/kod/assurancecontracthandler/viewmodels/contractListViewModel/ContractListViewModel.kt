@@ -1,6 +1,5 @@
 package com.kod.assurancecontracthandler.viewmodels.contractListViewModel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.sqlite.db.SimpleSQLiteQuery
@@ -170,7 +169,6 @@ class ContractListViewModel(
         _selectedFilteredChips.forEach { index ->
             _filterChipsAndTextFieldsValues[index] = listEditTexts[index].text?.toString()?.trim()
         }
-        Log.e("APPLIED", "______APPLIED____: ${_filterChipsAndTextFieldsValues}")
     }
 
     fun filterContracts() {
