@@ -26,10 +26,17 @@ sealed interface ContractDAO{
     fun searchForAClient(query: SimpleSQLiteQuery): List<BaseContract>
 
     @Query("SELECT * FROM contract WHERE echeance BETWEEN  :today AND :maxTime  ORDER BY echeance")
-    fun getExpiringContractsIn(today: Long,  maxTime: Long): List<BaseContract>?
+    fun getExpiringContractsForGivenDate(today: String, maxTime: String): List<BaseContract>?
 
     @Query("SELECT  count(*) FROM contract WHERE echeance BETWEEN  :today AND :maxTime  ORDER BY echeance")
     fun numberOfContractsExpiring(today: Long,  maxTime: Long): Int
     @Query("SELECT * FROM contract WHERE id == :id")
     fun getContractWithId(id: Int): BaseContract?
+
+    @Query("SELECT * FROM contract WHERE assure LIKE :customerName AND echeance BETWEEN :todayString AND :maxDateString")
+    fun fetchExpiringContractForCustomerWithName(
+        customerName: String,
+        todayString: String?,
+        maxDateString: String?
+    ): List<BaseContract>?
 }
