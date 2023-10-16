@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools">
+
+    <RelativeLayout
+            android:id="@+id/search_view_ll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:orientation="horizontal">
+
+        <androidx.appcompat.widget.SearchView
+                android:id="@+id/searchView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true"
+                android:layout_toStartOf="@+id/btn_dismiss_search"
+                app:queryHint="@string/search_bar_query_hint"
+                android:inputType="text"
+                android:background="@drawable/elevated_zone"
+                android:layout_marginTop="5dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginBottom="5dp"/>
+
+        <ImageButton
+                android:id="@+id/btn_dismiss_search"
+                android:layout_height="50dp"
+                android:layout_width="50dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentTop="true"
+                android:foreground="@drawable/elevated_zone"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                app:tint="?android:colorPrimary"
+                android:backgroundTint="?android:colorPrimary"
+                android:src="@drawable/ic_close" android:layout_marginTop="5dp" android:layout_marginStart="5dp" android:layout_marginEnd="5dp" android:layout_marginBottom="5dp"/>
+
+    </RelativeLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_expiring_contracts"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/search_view_ll"
+            android:scrollbars="none"
+            tools:listitem="@layout/rv_contract_item"
+            android:background="@drawable/elevated_zone"/>
+
+    <ImageView
+            android:id="@+id/iv_no_expiring_contract"
+            android:layout_width="150dp"
+            android:layout_height="200dp"
+            android:src="@drawable/ic_no_expiring_contracts"
+            android:clickable="true"
+            android:tooltipText="No expiring contract"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:contentDescription="@string/no_expiring_contracts"
+            android:visibility="gone"/>
+
+    <TextView
+            android:id="@+id/tv_no_expiring_contract"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/no_expiring_contracts"
+            android:textAlignment="center"
+            android:textColor="@color/design_default_color_error"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:textAppearance="@style/Headers.header_2"
+            android:layout_below="@id/iv_no_expiring_contract"
+            android:visibility="gone"/>
+
+</RelativeLayout>
