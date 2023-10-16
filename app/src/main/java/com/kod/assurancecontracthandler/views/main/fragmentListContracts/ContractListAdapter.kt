@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.kod.assurancecontrac.ContractsCallback
 import com.kod.assurancecontracthandler.R
+import com.kod.assurancecontracthandler.common.utilities.DataTypesConversionAndFormattingUtils
 import com.kod.assurancecontracthandler.databinding.RvContractItemBinding
 import com.kod.assurancecontracthandler.model.BaseContract
 import java.util.*
@@ -19,7 +20,6 @@ class ContractListAdapter(
 ) :
     RecyclerView.Adapter<ContractListAdapter.ContractViewHolder>() {
     private var contractList: List<BaseContract> = emptyList()
-    var isExpiringActivity = false
 
     inner class ContractViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private var itemBinding = RvContractItemBinding.bind(itemView)
@@ -29,7 +29,11 @@ class ContractListAdapter(
                 val actualPosition = position + 1
                 columnId.text = (actualPosition).toString()
 
-                val grandTotal = "${contract.contract?.DTA}XAF"
+                val grandTotal = contract.contract?.DTA?.let {
+                    DataTypesConversionAndFormattingUtils.formatCurrencyPrices(
+                        it
+                    )
+                }
 
                 columnAssure.text = contract.contract!!.assure
                 columnStartDate.text = contract.contract.effet
@@ -37,12 +41,6 @@ class ContractListAdapter(
                 columnPlateNumber.text = contract.contract.immatriculation
                 columnAttestation.text = contract.contract.attestation
                 tvTotal.text = grandTotal
-                if (isExpiringActivity) {
-                    columnStartDate.visibility = View.GONE
-                    columnAttestation.visibility = View.GONE
-                    titleStartDate.visibility = View.GONE
-                    titleAttestation.visibility = View.GONE
-                }
             }
         }
     }
