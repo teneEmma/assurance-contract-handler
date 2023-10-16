@@ -39,6 +39,10 @@
             android:name=".views.customerdetails.CustomerDetailsActivity"
             android:label="@string/optional_field_text"
             android:theme="@style/AppTheme.AssuranceContractHandler.NoActionBar" />
+        <activity
+                android:name=".views.expiringactivity.ExpiringContractsActivity"
+                android:exported="false"
+                android:label="@string/expiring_contracts" />
     </application>
 
 </manifest>
