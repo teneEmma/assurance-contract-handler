@@ -130,8 +130,6 @@ class CustomerDetailsViewModel(
     fun updateCustomerDetails() {
         executeFunctionWithoutAnimation {
             val oldName = _actualCustomer.value?.customerName
-            Log.e("NAMES_XXXXXXX", "old: $oldName new: $_newCustomerName")
-            Log.e("NAMES_XXXXXXX", "old: ${_actualCustomer.value?.phoneNumber} new: $_newCustomerPhoneNumber")
             if (_newCustomerName == null || oldName == null) {
                 return@executeFunctionWithoutAnimation
             }

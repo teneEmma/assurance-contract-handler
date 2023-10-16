@@ -37,6 +37,7 @@ import com.kod.assurancecontracthandler.repository.ContractRepository
 import com.kod.assurancecontracthandler.viewmodels.contractListViewModel.ContractListViewModel
 import com.kod.assurancecontracthandler.viewmodels.contractListViewModel.ContractListViewModelFactory
 import com.kod.assurancecontracthandler.views.customerdetails.CustomerDetailsActivity
+import com.kod.assurancecontracthandler.views.expiringactivity.ExpiringContractsActivity
 
 class ContractListFragment : Fragment(), SearchView.OnQueryTextListener {
 
@@ -356,7 +357,9 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.action_exp_contracts) {
-            shortToast(resources.getString(R.string.to_be_implemented_text))
+            val intent = Intent(activity, ExpiringContractsActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS
+            startActivity(intent)
         } else if (item.itemId == R.id.action_settings) {
             shortToast(resources.getString(R.string.to_be_implemented_text))
         }
