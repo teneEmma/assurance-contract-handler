@@ -24,7 +24,7 @@ class ContractRepository(private val contractDao: ContractDAO) {
     fun getExpiringContractsForGivenDate(today: String, maxTime: String): List<BaseContract>? =
         contractDao.getExpiringContractsForGivenDate(today, maxTime)
 
-    fun numberOfContractsExpiring(today: Long, maxTime: Long): Int =
+    fun numberOfContractsExpiring(today: String, maxTime: String): Int =
         contractDao.numberOfContractsExpiring(today, maxTime)
 
     fun fetchExpiringContractForCustomerWithName(

@@ -29,7 +29,7 @@ sealed interface ContractDAO{
     fun getExpiringContractsForGivenDate(today: String, maxTime: String): List<BaseContract>?
 
     @Query("SELECT  count(*) FROM contract WHERE echeance BETWEEN  :today AND :maxTime  ORDER BY echeance")
-    fun numberOfContractsExpiring(today: Long,  maxTime: Long): Int
+    fun numberOfContractsExpiring(today: String,  maxTime: String): Int
     @Query("SELECT * FROM contract WHERE id == :id")
     fun getContractWithId(id: Int): BaseContract?
 
