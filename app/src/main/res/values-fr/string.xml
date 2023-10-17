@@ -69,7 +69,7 @@
     <string name="and_text">et</string>
     <string name="start_date_text">effet</string>
     <string name="end_date_text">echéance</string>
-    <string name="no_result_found">No result was found</string>
+    <string name="no_result_found">Aucun resultat trouvé</string>
     <string name="sort_applied">Tri appliqué</string>
     <string name="numbers_text">NUMEROS TEL</string>
     <string name="total_text">TOTALE</string>

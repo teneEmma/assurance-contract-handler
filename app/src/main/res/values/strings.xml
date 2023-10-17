@@ -67,7 +67,7 @@
     <string name="and_text">and</string>
     <string name="start_date_text">start date</string>
     <string name="end_date_text">end date</string>
-    <string name="no_result_found">No result was found</string>
+    <string name="no_result_found">No result found</string>
     <string name="sort_applied">Sort applied</string>
     <string name="numbers_text">PHONE NUMB</string>
     <string name="total_text">TOTAL</string>
