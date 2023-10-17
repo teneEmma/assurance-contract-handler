@@ -21,7 +21,7 @@ object ConstantsVariables {
     const val desiredDatePattern = "yyyy-MM-dd"
     const val datePickerTag = "DATE_RANGE_PICKER"
     const val priceUnit = "XAF"
-    const val powerUnit = "CV-ESS"
+    const val powerUnit = "CV"
     const val timeUnit = "Jours"
     const val customerNameKey = "customer_name"
     const val relatedContractIdKey = "related_contract_id_key"

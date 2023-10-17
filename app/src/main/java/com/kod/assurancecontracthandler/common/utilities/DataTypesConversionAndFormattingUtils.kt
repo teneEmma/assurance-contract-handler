@@ -41,10 +41,10 @@ object DataTypesConversionAndFormattingUtils {
 
         var initials = ""
         for (name in initialsList) {
-            initials += name.first()
+            initials += name.first().uppercase()
         }
         if (initials.length > 3)
-            initials = initials.substring(0, 2)
+            initials = initials.substring(0, 2).uppercase()
 
         return initials
     }

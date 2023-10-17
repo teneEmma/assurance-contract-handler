@@ -77,7 +77,7 @@ class AppApplication : Application() {
             .setRequiresBatteryNotLow(false)
             .build()
         val workManager = WorkManager.getInstance(this)
-        val workRequest = PeriodicWorkRequestBuilder<ExpirationWorker>(5, TimeUnit.MINUTES)
+        val workRequest = PeriodicWorkRequestBuilder<ExpirationWorker>(12, TimeUnit.HOURS)
             .setConstraints(constraints)
             .build()
         workManager.enqueueUniquePeriodicWork(

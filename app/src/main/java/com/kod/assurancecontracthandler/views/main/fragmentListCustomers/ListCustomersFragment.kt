@@ -58,7 +58,9 @@ class ListCustomersFragment : Fragment(), SearchView.OnQueryTextListener {
         super.onResume()
         if (!customerListViewModel.searchViewState && !customerListViewModel.isSortIconSelected) {
             updateAllData()
+            return
         }
+        this.onQueryTextSubmit(customerListViewModel.searchText)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

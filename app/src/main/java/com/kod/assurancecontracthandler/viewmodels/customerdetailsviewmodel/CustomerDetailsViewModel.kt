@@ -51,13 +51,13 @@ class CustomerDetailsViewModel(
             return
         }
         executeFunctionWithoutAnimation {
-            val customer = getActualContract(customerName)
+            val customer = getActualCustomer(customerName)
             _newCustomerName = customer?.customerName
             _newCustomerPhoneNumber = customer?.phoneNumber
         }
     }
 
-    private fun getActualContract(customerName: String): Customer? {
+    private fun getActualCustomer(customerName: String): Customer? {
         val concatenatedString = "%$customerName%"
         val customer = customerRepository.getCustomerWithName(concatenatedString)
         if (customer == null) {
@@ -89,7 +89,7 @@ class CustomerDetailsViewModel(
         }
         executeFunctionWithoutAnimation {
             val result = contractRepository.getContractWithId(_relatedContractId)
-            if(result == null){
+            if (result == null) {
                 _shouldShowRelatedContractBtn.postValue(false)
                 return@executeFunctionWithoutAnimation
             }
@@ -130,15 +130,16 @@ class CustomerDetailsViewModel(
     fun updateCustomerDetails() {
         executeFunctionWithoutAnimation {
             val oldName = _actualCustomer.value?.customerName
-            if (_newCustomerName == null || oldName == null) {
+            if (oldName == null) {
                 return@executeFunctionWithoutAnimation
             }
             customerRepository.updateCustomer(
                 oldName = oldName,
-                customerName = _newCustomerName!!.uppercase(),
+                customerName = _newCustomerName?.uppercase() ?: oldName,
                 phoneNumber = _newCustomerPhoneNumber
             )
-            _actualCustomer.postValue(Customer(_newCustomerName, _newCustomerPhoneNumber))
+            getActualCustomer(_newCustomerName ?: oldName)
+            getContractRelatedToCustomer()
         }
     }
 

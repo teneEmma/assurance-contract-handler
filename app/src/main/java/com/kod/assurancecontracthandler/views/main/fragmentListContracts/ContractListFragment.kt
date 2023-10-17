@@ -23,6 +23,7 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.google.android.material.color.MaterialColors
 import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import com.kod.assurancecontracthandler.R
 import com.kod.assurancecontracthandler.common.constants.ConstantsVariables
@@ -76,6 +77,16 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener {
         return binding.root
     }
 
+    override fun onResume() {
+        super.onResume()
+        if (contractListViewModel.selectedSearchChip == null) {
+            updateContractsList()
+            return
+        }
+
+        this.onQueryTextSubmit(contractListViewModel.searchText)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setRecyclerView()
         setupSearchBarView()
@@ -115,13 +126,12 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener {
             }
         }
         contractListViewModel.messageResourceId.observe(viewLifecycleOwner) { resourceId ->
-            shortToast(resources.getString(resourceId))
+            shortSnack(resources.getString(resourceId))
         }
 
         updateContractsList()
         swipeToRefreshAfterChipCollapse()
     }
-
 
     private fun setupSearchBarView() {
         binding.searchView.isSubmitButtonEnabled = false
@@ -361,13 +371,13 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener {
             intent.flags = Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS
             startActivity(intent)
         } else if (item.itemId == R.id.action_settings) {
-            shortToast(resources.getString(R.string.to_be_implemented_text))
+            shortSnack(resources.getString(R.string.to_be_implemented_text))
         }
         return true
     }
 
-    private fun shortToast(message: String) {
-        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+    private fun shortSnack(message: String) {
+        Snackbar.make(requireView(), message, Snackbar.LENGTH_SHORT).show()
     }
 
     private fun swipeToRefreshAfterChipCollapse() {
@@ -382,7 +392,7 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener {
                     executeFunctionWithoutAnimation { contractListViewModel.fetchAllContracts() }
                 }
             } else {
-                this.onQueryTextChange(contractListViewModel.searchText)
+                this.onQueryTextSubmit(contractListViewModel.searchText)
             }
             binding.swipeToRefresh.isRefreshing = false
         }
@@ -458,14 +468,14 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener {
     }
 
     override fun onQueryTextSubmit(query: String?): Boolean {
-        if (query != null) {
+        if (!query.isNullOrEmpty()) {
             contractListViewModel.onSearchText(query)
         }
         return true
     }
 
     override fun onQueryTextChange(newText: String?): Boolean {
-        if (newText != null) {
+        if (!newText.isNullOrEmpty()) {
             contractListViewModel.onSearchText(newText)
         }
         return true
