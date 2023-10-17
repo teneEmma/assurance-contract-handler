@@ -92,17 +92,6 @@ class CustomerDetailsActivity : AppCompatActivity() {
             showModificationDialog()
         }
 
-//        customerDetailsViewModel.shouldShowRelatedContractBtn.observe(this) { isBeenShown ->
-//            if (isBeenShown == false) {
-//                binding.ivCurrentContractInfo.visibility = View.GONE
-//                return@observe
-//            }
-//            binding.ivCurrentContractInfo.visibility = View.VISIBLE
-//        }
-//        binding.ivCurrentContractInfo.setOnClickListener {
-//            customerDetailsViewModel.relatedContract?.contract?.let { it1 -> contractItemSelected(it1) }
-//        }
-
         customerDetailsViewModel.getActualCustomerDetails(intent)
     }
 
@@ -115,13 +104,13 @@ class CustomerDetailsActivity : AppCompatActivity() {
 
         val customer = customerDetailsViewModel.actualCustomer.value
         customer?.apply {
-            editCustomerBinding.tvAssureName.text = customerName
-            editCustomerBinding.ilCustomerName.hint = customerName
+            editCustomerBinding.tvAssureName.text = customerName?.uppercase()
+            editCustomerBinding.ilCustomerName.hint = customerName?.uppercase()
             editCustomerBinding.ilPhoneNumber.hint = phoneNumber
         }
 
         editCustomerBinding.etUsername.doOnTextChanged { text, _, _, _ ->
-            val stringResourceId = customerDetailsViewModel.onCustomerNameChanging(text.toString())
+            val stringResourceId = customerDetailsViewModel.onCustomerNameChanging(text.toString().trim().uppercase())
             editCustomerBinding.btnModify.isEnabled = customerDetailsViewModel.btnModifyState == true
             if (stringResourceId != null) {
                 shortToast(resources.getString(stringResourceId))
@@ -129,7 +118,8 @@ class CustomerDetailsActivity : AppCompatActivity() {
         }
 
         editCustomerBinding.etPhoneNumber.doOnTextChanged { text, _, _, _ ->
-            val stringResourceId = customerDetailsViewModel.onCustomerPhoneNumberChanging(text.toString())
+            val stringResourceId =
+                customerDetailsViewModel.onCustomerPhoneNumberChanging(text.toString().trim().uppercase())
             editCustomerBinding.btnModify.isEnabled = customerDetailsViewModel.btnModifyState == true
             if (stringResourceId != null) {
                 shortToast(resources.getString(stringResourceId))
@@ -161,19 +151,21 @@ class CustomerDetailsActivity : AppCompatActivity() {
     }
 
     private fun setViews() {
-        // Underlining text.
         val customer = customerDetailsViewModel.actualCustomer.value
+
+        // Underlining text.
         val content = SpannableString(customer?.customerName)
         content.setSpan(UnderlineSpan(), 0, content.length, 0)
         binding.tvCustomerName.text = content
-        binding.ivCustomerProfile.text = DataTypesConversionAndFormattingUtils.setNameInitials(customer?.customerName)
+        binding.ivCustomerProfile.text =
+            DataTypesConversionAndFormattingUtils.setNameInitials(customer?.customerName).uppercase()
         if (customer?.phoneNumber.isNullOrEmpty() || customer?.phoneNumber == null) {
             binding.tvContactCustomerText.text = resources.getString(R.string.no_contact_text)
             binding.tvContactCustomerText.textAlignment = View.TEXT_ALIGNMENT_CENTER
             binding.tvContactCustomerText.setTextColor(Color.RED)
         } else {
             customer.phoneNumber?.let {
-                val recyclerView = CustomerContactAdapter(listOf(it)) { action, phoneNumber ->
+                val recyclerView = CustomerContactAdapter(listOf(it)) { action, _ ->
                     when (action) {
                         ContactAction.CALL.action -> makePhoneCall()
                         ContactAction.SMS.action -> showMessageLayout(customerDetailsViewModel.relatedContract?.contract) { msg ->
@@ -303,7 +295,11 @@ class CustomerDetailsActivity : AppCompatActivity() {
 
         val carDetailsListTitles = resources.getStringArray(R.array.car_details_title).toList()
         val priceDetailsListTitles = resources.getStringArray(R.array.price_details_title).toList()
-        BottomDialogView(carDetailsListTitles, priceDetailsListTitles).manageContractDetailViews(contractItemBinding, contract, this)
+        BottomDialogView(carDetailsListTitles, priceDetailsListTitles).manageContractDetailViews(
+            contractItemBinding,
+            contract,
+            this
+        )
 
         val width = (resources.displayMetrics.widthPixels * 0.90).toInt()
         val height = (resources.displayMetrics.heightPixels * 0.80).toInt()

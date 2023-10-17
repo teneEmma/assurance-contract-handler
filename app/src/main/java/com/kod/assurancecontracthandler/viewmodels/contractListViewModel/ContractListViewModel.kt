@@ -83,12 +83,6 @@ class ContractListViewModel(
         get() = _maxDate
     val selectedFilteredChips: List<Int>
         get() = _selectedFilteredChips
-//    val stepSizeForPrices: Float
-//        get() = _stepSizeForPrices
-//    val stepSizeForPower: Float
-//        get() = _stepSizeForPower
-//    val stepSizeForTime: Float
-//        get() = _stepSizeForTime
 
     @Throws(IndexOutOfBoundsException::class)
     fun onSearchChipCheckChanged(searchChipId: Int?) {
@@ -121,7 +115,11 @@ class ContractListViewModel(
     }
 
     private fun makeQueryToDB(str: String) {
-        _allContracts.postValue(repository.searchForClient(generateQuery(str)))
+        val result = repository.searchForClient(generateQuery(str))
+        if(result.isEmpty()){
+            _messageResourceId.postValue(R.string.no_result_found)
+        }
+        _allContracts.postValue(result)
     }
 
     @Throws(IndexOutOfBoundsException::class)
