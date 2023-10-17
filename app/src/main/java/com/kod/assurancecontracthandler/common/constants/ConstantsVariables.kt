@@ -32,6 +32,13 @@ object ConstantsVariables {
     const val predefinedMsgDateId = "DATE_ID"
     const val predefinedImmatricualtionId = "PLATE_NUMBER_ID"
     const val sharedPreferenceMsg = "ASSURANCE_PREDEFINED_MSG"
+    const val APP_USAGE_STATE = "APP_USAGE_STATE"
+    const val EXPIRY_CHANNEL_ID_STRING = "ASSURANCE_CONTRACT_CHANNEL_ID"
+    const val FIRST_USAGE_CHANNEL_ID_STRING = "FIRST_USAGE_CHANNEL_ID"
+    const val WELCOME_WORK_NAME = "SHOWING_WELCOME_MESSAGE"
+    const val CHECKING_EXPIRY_CONTRACTS_WORK_NAME = "CHECKING_EXPIRING_CONTRACTS"
+    const val expiryChannelID_int = 1234
+    const val firstTimeChannelID_int = 4321
     const val futureTenseExpire = "will expire"
     const val pastTenseExpire = "expired"
 
