@@ -100,6 +100,16 @@
     <string name="activity_customer_details_label">Details Client</string>
     <string name="more_info_current_contract">Plus d\'information</string>
     <string name="no_expiring_contracts">Aucun contract arrivant à échéance</string>
+    <string name="first_time_channel">Bienvenue</string>
+    <string name="first_time_channel_description">Notification De Bienvenue</string>
+    <string name="expiry_channel">Expiration des contrats</string>
+    <string name="expiry_channel_description">Les Notifications Concernant les contrats arrivant a échéance</string>
+    <string name="expiring_notification_title">@string/expiring_contracts</string>
+    <string name="welcome_notification_title">🤍BIENVENUE💚️</string>
+    <string name="expiration_notification_message">Certains contrats arrivent à échéance. Venez jeter un coup d\'oeil.</string>
+    <string name="welcome_notification_message">😃 De La part de toute l\'équipe d\'ORION. Nous
+        vous souhaitons une bonne expérience</string>
+    <string name="see_text">Jeter un coup d\'oeil</string>
 
     <string name="content_description_loading_progress">Niveau De Progression</string>
     <string name="content_description_fab_add_document">Ajouter un document</string>
