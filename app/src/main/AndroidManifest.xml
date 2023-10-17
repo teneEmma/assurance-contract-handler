@@ -15,6 +15,7 @@
     <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
 
     <application
+        android:name=".common.AppApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -42,7 +43,8 @@
         <activity
                 android:name=".views.expiringactivity.ExpiringContractsActivity"
                 android:exported="false"
-                android:label="@string/expiring_contracts" />
+                android:label="@string/expiring_contracts"
+                android:theme="@style/AppTheme.AssuranceContractHandler.NoActionBar"/>
     </application>
 
 </manifest>
