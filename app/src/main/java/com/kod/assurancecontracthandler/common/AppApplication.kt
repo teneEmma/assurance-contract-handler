@@ -8,14 +8,12 @@ import android.content.SharedPreferences
 import androidx.work.*
 import com.kod.assurancecontracthandler.R
 import com.kod.assurancecontracthandler.common.constants.ConstantsVariables
-import com.kod.assurancecontracthandler.common.constants.ConstantsVariables.CHECKING_EXPIRY_CONTRACTS_WORKNAME
-import com.kod.assurancecontracthandler.common.constants.ConstantsVariables.WELCOME_WORKNAME
 import com.kod.assurancecontracthandler.common.utilities.DataStoreRepository
 import com.kod.assurancecontracthandler.common.workmanager.ExpirationWorker
 import com.kod.assurancecontracthandler.common.workmanager.FirstUsageWorker
 import java.util.concurrent.TimeUnit
 
-class AppApplication: Application() {
+class AppApplication : Application() {
     private val sharedPrefs: SharedPreferences by lazy {
         getSharedPreferences(ConstantsVariables.APP_USAGE_STATE, Context.MODE_PRIVATE)
     }
@@ -23,9 +21,9 @@ class AppApplication: Application() {
     override fun onCreate() {
         super.onCreate()
         val dataStore = DataStoreRepository(sharedPrefs)
-        if(dataStore.isFirstTime()){
+        if (dataStore.isFirstTime()) {
             dataStore.setFirstTimeNot()
-            setupFirstTimeNotification()
+            setupAndSendFirstTimeNotification()
             firstTimeWorkManager()
         }
 
@@ -35,8 +33,9 @@ class AppApplication: Application() {
 
     private fun setupExpiryNotification() {
         val channel = NotificationChannel(
-            ConstantsVariables.expiryChannelID_str,
-            getString(R.string.expiry_channel), NotificationManager.IMPORTANCE_HIGH)
+            ConstantsVariables.EXPIRY_CHANNEL_ID_STRING,
+            getString(R.string.expiry_channel), NotificationManager.IMPORTANCE_HIGH
+        )
             .apply {
                 description = getString(R.string.expiry_channel_description)
             }
@@ -45,10 +44,11 @@ class AppApplication: Application() {
         notificationManager.createNotificationChannel(channel)
     }
 
-    private fun setupFirstTimeNotification() {
+    private fun setupAndSendFirstTimeNotification() {
         val channel = NotificationChannel(
             ConstantsVariables.FIRST_USAGE_CHANNEL_ID_STRING,
-            getString(R.string.first_time_channel), NotificationManager.IMPORTANCE_HIGH)
+            getString(R.string.first_time_channel), NotificationManager.IMPORTANCE_HIGH
+        )
             .apply {
                 description = getString(R.string.first_time_channel_description)
             }
@@ -67,19 +67,23 @@ class AppApplication: Application() {
         val workRequest = OneTimeWorkRequestBuilder<FirstUsageWorker>()
             .setConstraints(constraints)
             .build()
-        workManager.enqueueUniqueWork(WELCOME_WORKNAME, ExistingWorkPolicy.KEEP, workRequest)
+        workManager.enqueueUniqueWork(ConstantsVariables.WELCOME_WORK_NAME, ExistingWorkPolicy.KEEP, workRequest)
     }
 
-    private fun creatingWorkManager(){
+    private fun creatingWorkManager() {
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.NOT_REQUIRED)
             .setRequiresCharging(false)
             .setRequiresBatteryNotLow(false)
             .build()
         val workManager = WorkManager.getInstance(this)
-        val workRequest = PeriodicWorkRequestBuilder<ExpirationWorker>(1, TimeUnit.DAYS)
+        val workRequest = PeriodicWorkRequestBuilder<ExpirationWorker>(5, TimeUnit.MINUTES)
             .setConstraints(constraints)
             .build()
-        workManager.enqueueUniquePeriodicWork(CHECKING_EXPIRY_CONTRACTS_WORKNAME, ExistingPeriodicWorkPolicy.KEEP, workRequest)
+        workManager.enqueueUniquePeriodicWork(
+            ConstantsVariables.CHECKING_EXPIRY_CONTRACTS_WORK_NAME,
+            ExistingPeriodicWorkPolicy.KEEP,
+            workRequest
+        )
     }
 }
