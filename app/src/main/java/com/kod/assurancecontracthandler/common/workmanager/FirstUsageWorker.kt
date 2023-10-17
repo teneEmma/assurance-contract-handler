@@ -16,7 +16,7 @@ class FirstUsageWorker(context: Context, params: WorkerParameters) : ExpirationW
     override fun setupNotification() {
         val builder = NotificationCompat.Builder(context, ConstantsVariables.FIRST_USAGE_CHANNEL_ID_STRING)
             .setSmallIcon(R.mipmap.ic_launcher_round)
-            .setContentTitle(ConstantsVariables.WELCOME_NOTIFICATION_TITLE)
+            .setContentTitle(context.resources.getString(R.string.welcome_notification_title))
             .setContentText(context.getString(R.string.welcome_notification_message))
             .setStyle(NotificationCompat.BigTextStyle())
             .setPriority(NotificationCompat.PRIORITY_MAX)
