@@ -47,7 +47,7 @@
     <string name="no_result">Aucun résultat</string>
     <string name="search_bar_query_hint">Rechercher…</string>
     <string name="to_be_implemented_text">Pas encore implémenté</string>
-    <string name="provider_text">APPORTEUR: NOM APORTEUR</string>
+    <string name="provider_text">APPORTEUR:</string>
     <string name="non_valid_option">Option non valide</string>
     <string name="no_selected_chips">Aucune palette n\'a été choisie</string>
     <string name="select_date">Selectioner une date</string>
@@ -117,8 +117,21 @@
 
     <string name="action_settings">Parametres</string>
     <string name="action_exp_contracts">Contrats arrivant à échéance</string>
-
     <string name="action_sort">Trier</string>
+
+    <!-- SETTINGS -->
+    <!-- Preference Titles -->
+    <string name="General_header">GENERAL</string>
+    <string name="Notification_header">NOTIFICATION</string>
+    <string name="language_title">Langue</string>
+    <string name="language_summary">Choisir une langue</string>
+    <string name="message_summary">Le message par défaut à envoyé aux clients par whatsapp ou SMS</string>
+    <string name="default_message_title">Message par défaut</string>
+    <string name="theme_mode_title">Choisir le theme</string>
+    <string name="mode_off">Désactivé</string>
+    <string name="mode_on">Activé</string>
+    <string name="expiring_notification_summary">Montrer les notifications pour les contrats qui arrivent a échéance</string>
+    <string name="expiring_notification_display_interval_summary">La frequence d\'affichage des notification</string>
 
     <string-array name="expandable_group_titles_list">
         <item>FILTRER LES PRIX</item>
