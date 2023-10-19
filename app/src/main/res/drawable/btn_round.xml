@@ -2,4 +2,8 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
     <corners android:radius="15dp"/>
     <solid android:color="?attr/colorPrimary"/>
+    <padding android:left="@dimen/abc_button_padding_horizontal_material"
+             android:top="@dimen/abc_button_padding_vertical_material"
+             android:right="@dimen/abc_button_padding_horizontal_material"
+             android:bottom="@dimen/abc_button_padding_vertical_material" />
 </shape>
