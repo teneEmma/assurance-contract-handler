@@ -4,8 +4,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="2dp"
                 android:background="@drawable/edit_text_round"
-                android:padding="8dp"
-                android:paddingHorizontal="5dp">
+                android:padding="8dp">
 
     <TextView
             android:id="@+id/column_id"
