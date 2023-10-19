@@ -121,7 +121,7 @@ class ListCustomersFragment : Fragment(), SearchView.OnQueryTextListener {
             }
         }
 
-        var tvString = ""
+        var tvString: String
         customerListViewModel.numbCustomers.observe(viewLifecycleOwner) { value ->
             tvString = "<font color=#FFFFFF>${resources.getString(R.string.total_text)}: $value</font> "
             binding.totalCustomers.text = Html.fromHtml(
