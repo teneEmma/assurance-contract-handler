@@ -22,7 +22,7 @@
         <!-- Action bar style. -->
         <item name="android:actionBarStyle">@style/AppActionBar</item>
 
-        <item name="android:textCursorDrawable" >@drawable/cursor_drawable</item>
+        <item name="android:textCursorDrawable">@drawable/cursor_drawable</item>
 
         <!--  For bottom sheet  -->
         <item name="bottomSheetDialogTheme">@style/AppTheme.AssuranceContractHandler.BottomSheetStyle</item>
@@ -31,6 +31,12 @@
         <item name="sliderStyle">@style/AppTheme.AssuranceContractHandler.SliderStyle</item>
 
         <item name="chipStyle">@style/AppTheme.AssuranceContractHandler.ChipGroupStyle</item>
+
+        <item name="alertDialogTheme">@style/AppTheme.AssuranceContractHandler.AlertDialogTheme</item>
+
+        <item name="preferenceTheme">@style/AppTheme.AssuranceContractHandler.PreferenceTheme
+        </item>
+
     </style>
 
     <style name="AppTabLayout" parent="Widget.Design.TabLayout">
@@ -56,6 +62,47 @@
     <style name="AppTheme.AssuranceContractHandler.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.AssuranceContractHandler.PreferenceTheme" parent="PreferenceThemeOverlay">
+        <item name="switchPreferenceCompatStyle">
+            @style/AppTheme.AssuranceContractHandler.SwitchPreferenceStyle
+        </item>
+        <item name="dropdownPreferenceStyle">
+            @style/AppTheme.AssuranceContractHandler.DropDownPreferenceStyle
+        </item>
+        <item name="editTextPreferenceStyle">
+            @style/AppTheme.AssuranceContractHandler.EditTextPreferenceStyle
+        </item>
+        <item name="dialogPreferenceStyle">
+            @style/AppTheme.AssuranceContractHandler.DialogPreferenceStyle.EditTextPreference
+        </item>
+    </style>
+
+    <style name="AppTheme.AssuranceContractHandler.SwitchPreferenceStyle">
+        <item name="android:layout">@layout/root_preference_switch_preference</item>
+    </style>
+
+    <style name="AppTheme.AssuranceContractHandler.DropDownPreferenceStyle">
+        <item name="android:layout">@layout/root_preference_drop_down_preference</item>
+    </style>
+
+    <style name="AppTheme.AssuranceContractHandler.EditTextPreferenceStyle"
+           parent="@style/Preference.DialogPreference.EditTextPreference.Material">
+        <item name="android:layout">@layout/root_preference_edit_text_preference</item>
+        <item name="allowDividerBelow">false</item>
+        <item name="allowDividerAbove">false</item>
+    </style>
+
+    <style name="AppTheme.AssuranceContractHandler.AlertDialogTheme" parent="Theme.MaterialComponents.Light.Dialog.Alert">
+        <item name="android:windowBackground">@drawable/dialog_round</item>
+        <item name="buttonBarPositiveButtonStyle">@style/AppButton.Primary.AlertDialog</item>
+        <item name="buttonBarNegativeButtonStyle">@style/AppButton.Secondary</item>
+    </style>
+
+    <style name="AppTheme.AssuranceContractHandler.DialogPreferenceStyle.EditTextPreference"
+           parent="Preference.DialogPreference.EditTextPreference.Material">
+        <item name="android:dialogLayout">@layout/root_preference_edit_text_dialog_preference</item>
     </style>
 
     <style name="AppTheme.AssuranceContractHandler.BottomSheetStyle"
