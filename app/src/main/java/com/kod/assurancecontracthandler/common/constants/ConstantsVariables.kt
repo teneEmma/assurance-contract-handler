@@ -28,11 +28,14 @@ object ConstantsVariables {
     const val smsURIPrefix = "smsto:"
     const val calURIPrefix = "tel:"
     const val phoneIndex = "+237"
+    const val predefinedMsgAssurerId = "ASSURER_ID"
+    const val predefinedMsgPinkCardId = "PINK_CARD_ID"
+    const val predefinedMsgCategoryId = "CATEGORY_ID"
+    const val predefinedMsgAttestationId = "REGISTRATION_ID"
     const val predefinedMsgVehicleId = "VEHICLE_ID"
-    const val predefinedMsgDateId = "DATE_ID"
+    const val predefinedMsgEndDateId = "END_DATE_ID"
+    const val predefinedMsgStartDateId = "START_DATE_ID"
     const val predefinedImmatricualtionId = "PLATE_NUMBER_ID"
-    const val sharedPreferenceMsg = "ASSURANCE_PREDEFINED_MSG"
-    const val APP_USAGE_STATE = "APP_USAGE_STATE"
     const val EXPIRY_CHANNEL_ID_STRING = "ASSURANCE_CONTRACT_CHANNEL_ID"
     const val FIRST_USAGE_CHANNEL_ID_STRING = "FIRST_USAGE_CHANNEL_ID"
     const val WELCOME_WORK_NAME = "SHOWING_WELCOME_MESSAGE"
@@ -48,7 +51,6 @@ object ConstantsVariables {
     const val maxPowerValue = 100
     const val minTimeValue = 0
     const val maxTimeValue = 365
-    const val maxMonthForExpiringContracts = 1L
 
     val whatsappPackages = listOf("com.whatsapp", "com.gbwhatsapp", "com.whatsapp.w4b")
 
