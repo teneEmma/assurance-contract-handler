@@ -52,6 +52,12 @@
         <item name="android:gravity">center_vertical|center_horizontal</item>
     </style>
 
+    <style name="AppButton.Primary.AlertDialog" parent="AppButton.Primary">
+        <item name="android:drawableLeft">@drawable/ic_save</item>
+        <item name="backgroundTint">@color/green</item>
+        <item name="backgroundTintMode">src_over</item>
+    </style>
+
     <style name="AppButton.Secondary" parent="Widget.AppCompat.Button.Borderless">
         <item name="android:textAppearance">@style/normal</item>
         <item name="android:textSize">20sp</item>
