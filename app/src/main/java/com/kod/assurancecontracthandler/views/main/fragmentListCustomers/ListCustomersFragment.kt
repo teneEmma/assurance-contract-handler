@@ -25,6 +25,7 @@ import com.kod.assurancecontracthandler.repository.CustomerRepository
 import com.kod.assurancecontracthandler.viewmodels.customerlistviewmodel.CustomerListViewModel
 import com.kod.assurancecontracthandler.viewmodels.customerlistviewmodel.CustomerListViewModelFactory
 import com.kod.assurancecontracthandler.views.customerdetails.CustomerDetailsActivity
+import com.kod.assurancecontracthandler.views.settings.SettingsActivity
 
 class ListCustomersFragment : Fragment(), SearchView.OnQueryTextListener {
 
@@ -90,7 +91,9 @@ class ListCustomersFragment : Fragment(), SearchView.OnQueryTextListener {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.action_settings_customers) {
-            shortToast(resources.getString(R.string.to_be_implemented_text))
+            val intent = Intent(activity, SettingsActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+            startActivity(intent)
         }
         return true
     }
