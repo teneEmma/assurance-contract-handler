@@ -150,20 +150,36 @@
     <string name="Notification_header">NOTIFICATION</string>
     <string name="language_title">Language</string>
     <string name="language_summary">Chose a language</string>
-    <string name="message_summary">The default message to send to customers via whatsapp or by SMS</string>
+    <string name="predefined_message_summary">Default text message to send to customers via whatsapp or SMS</string>
+    <string name="predefined_message_edition_summary_no_colors">Put these words(in blue) to permit the app to auto replace them with actual values from the contract.VEHICLE_ID(mark of vehicle), START_DATE_ID(start date), END_DATE_ID(due date) and PLATE_NUMBER_ID(plate number).
+    </string>
+    <string name="predefined_message_edition_summary_with_colors">Put these words(in blue) to permit the app to auto replace them with values from the contract.</string>
+    <string name="predefined_message_edition_fields_1_with_colors">
+        \n<font fgcolor='#0037FF'>VEHICLE_ID</font>(mark of vehicle),
+        \n<font fgcolor='#0037FF'>START_DATE_ID</font>(start date),
+        \n<font fgcolor='#0037FF'>END_DATE_ID</font>(due date) and
+        \n<font fgcolor='#0037FF'>PLATE_NUMBER_ID</font>(plate number).
+    </string>
+    <string name="predefined_message_edition_fields_2_with_colors">
+        \n<font fgcolor='#0037FF'>ASSURER_ID</font>(assurer\'s name),
+        \n<font fgcolor='#0037FF'>PINK_CARD_ID</font>(pink card number),
+        \n<font fgcolor='#0037FF'>CATEGORY_ID</font>(category) and
+        \n<font fgcolor='#0037FF'>REGISTRATION_ID</font>(registration number).
+    </string>
     <string name="default_message_title">Default message</string>
     <string name="theme_mode_title">Chose the theme</string>
     <string name="mode_off">Deactivate</string>
     <string name="mode_on">Activate</string>
     <string name="expiring_notification_summary">Show notifications for expiring Contracts</string>
-    <string name="expiring_notification_display_interval_summary">When to frequently show notifications</string>
+    <string name="expiring_notification_display_interval_summary">The maximum due date.</string>
 
     <!-- SETTINGS KEYS-->
-    <string name="predefined_key" translatable="false">predefined_message</string>
     <string name="theme_mode_key" translatable="false">theme_mode</string>
     <string name="languages_key" translatable="false">languages</string>
-    <string name="notifications_key" translatable="false">notifications</string>
-    <string name="expiring_notifications_key" translatable="false">expiring_notification_check_interval</string>
+    <string name="expiring_contracts_notifications_key" translatable="false">expiring_contracts_notifications</string>
+    <string name="expiring_notifications_periodicity_key" translatable="false">expiring_notification_check_interval</string>
+    <string name="predefined_message_key" translatable="false">predefined_message</string>
+    <string name="first_install_key" translatable="false">newly_installed</string>
 
     <string-array name="expandable_group_titles_list">
         <item>FILTER PRICES</item>

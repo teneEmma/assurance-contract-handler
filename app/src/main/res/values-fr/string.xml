@@ -125,13 +125,28 @@
     <string name="Notification_header">NOTIFICATION</string>
     <string name="language_title">Langue</string>
     <string name="language_summary">Choisir une langue</string>
-    <string name="message_summary">Le message par défaut à envoyé aux clients par whatsapp ou SMS</string>
+    <string name="predefined_message_summary">Le message par défaut à envoyé aux clients par whatsapp ou SMS</string>
+    <string name="predefined_message_edition_summary_no_colors">Mettez ces mots(en bleu) pour permettre à l\'application de les remplacer automatiquement avec les valeurs du contrat.VEHICLE_ID (marque du véhicule), START_DATE_ID (date de début), END_DATE_ID (date d\'échéance) et PLATE_NUMBER_ID (plaque d\'immatriculation)
+    </string>
+    <string name="predefined_message_edition_summary_with_colors">Mettez ces mots(en bleu) pour permettre à l\'application de les remplacer automatiquement avec les valeurs du contrat.</string>
+    <string name="predefined_message_edition_fields_1_with_colors">
+        \n<font fgcolor='#0037FF'>VEHICLE_ID</font>(marque du véhicule),
+        \n<font fgcolor='#0037FF'>START_DATE_ID</font>(date de début),
+        \n<font fgcolor='#0037FF'>END_DATE_ID</font>(date d\'échéance) et
+        \n<font fgcolor='#0037FF'>PLATE_NUMBER_ID</font>(plaque d\'immatriculation).
+    </string>
+    <string name="predefined_message_edition_fields_2_with_colors">
+        \n<font fgcolor='#0037FF'>ASSURER_ID</font>(nom de l\'assureur),
+        \n<font fgcolor='#0037FF'>PINK_CARD_ID</font>(numero carte rose),
+        \n<font fgcolor='#0037FF'>CATEGORY_ID</font>(categorie) et
+        \n<font fgcolor='#0037FF'>REGISTRATION_ID</font>(attestation).
+    </string>
     <string name="default_message_title">Message par défaut</string>
     <string name="theme_mode_title">Choisir le theme</string>
     <string name="mode_off">Désactivé</string>
     <string name="mode_on">Activé</string>
     <string name="expiring_notification_summary">Montrer les notifications pour les contrats qui arrivent a échéance</string>
-    <string name="expiring_notification_display_interval_summary">La frequence d\'affichage des notification</string>
+    <string name="expiring_notification_display_interval_summary">La date maximale pour l\'échéance:</string>
 
     <string-array name="expandable_group_titles_list">
         <item>FILTRER LES PRIX</item>
