@@ -1,32 +1,26 @@
-<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory
             app:title="@string/General_header"
             app:layout="@layout/root_preference_general_category">
 
         <EditTextPreference
-                app:key="@string/predefined_key"
-                app:summary="@string/message_summary"
-                app:dialogMessage="@string/message_summary"
-                app:title="@string/default_message_title"/>
+                app:key="@string/predefined_message_key"
+                app:summary="@string/predefined_message_edition_summary_no_colors"
+                android:positiveButtonText="@string/save"
+                android:negativeButtonText="@string/cancel_text"
+                android:dialogLayout="@layout/root_preference_edit_text_dialog_preference"/>
 
         <ListPreference
                 app:key="@string/theme_mode_key"
-                app:title="@string/theme_mode_title"
                 app:entries="@array/entries_theme"
                 app:entryValues="@array/entry_values_theme"
-                app:summaryOff="@string/mode_off"
+                app:summary="@string/mode_on"
+                app:useSimpleSummaryProvider="true"
+                android:dialogLayout="@null"
+                android:layout="@layout/root_preference_list_preference"
                 app:summaryOn="@string/mode_on"
                 app:allowDividerBelow="false"/>
-
-        <!--        <ListPreference-->
-        <!--            app:summary="@string/language_summary"-->
-        <!--            app:entries="@array/entries_languages"-->
-        <!--            app:entryValues="@array/entry_values_languages"-->
-        <!--            app:defaultValue="reply"-->
-        <!--            app:key="@string/languages_key"-->
-        <!--            app:title="@string/language_title"-->
-        <!--            app:useSimpleSummaryProvider="true" />-->
 
     </PreferenceCategory>
 
@@ -35,7 +29,7 @@
             app:layout="@layout/root_preference_notification_category">
 
         <SwitchPreferenceCompat
-                app:key="@string/notifications_key"
+                app:key="@string/expiring_contracts_notifications_key"
                 app:title="@string/expiring_notification_title"
                 app:defaultValue="true"
                 app:summary="@string/expiring_notification_summary"
@@ -43,10 +37,10 @@
                 app:allowDividerAbove="false"/>
 
         <DropDownPreference
-                app:dependency="notifications"
+                app:dependency="@string/expiring_contracts_notifications_key"
                 app:entries="@array/entries_expiring_contracts"
                 app:entryValues="@array/entry_values_expiring_contracts"
-                app:key="@string/expiring_notifications_key"
+                app:key="@string/expiring_notifications_periodicity_key"
                 app:title="@string/expiring_notification_display_interval_summary"
                 app:useSimpleSummaryProvider="true"/>
 
