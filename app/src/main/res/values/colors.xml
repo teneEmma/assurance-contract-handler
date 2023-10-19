@@ -34,4 +34,6 @@
     <color name="highlighted_actual_contract">#36FEAA0C</color>
     <color name="btn_modify_step_size">@color/white</color>
 
+    <color name="setting_header_category_title">@color/dark_green</color>
+
 </resources>
