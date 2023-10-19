@@ -14,4 +14,7 @@
 
     <color name="ic_edit_color">@color/light_green</color>
     <color name="btn_modify_step_size">@color/light_green</color>
+
+    <color name="setting_header_category_title">@color/bright_green</color>
+
 </resources>
