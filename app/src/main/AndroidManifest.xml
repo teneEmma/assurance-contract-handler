@@ -1,50 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.kod.assurancecontracthandler" >
+          xmlns:tools="http://schemas.android.com/tools"
+          package="com.kod.assurancecontracthandler">
 
     <queries>
-        <package android:name="com.whatsapp" />
-        <package android:name="com.gbwhatsapp" />
-        <package android:name="com.whatsapp.w4b" />
+        <package android:name="com.whatsapp"/>
+        <package android:name="com.gbwhatsapp"/>
+        <package android:name="com.whatsapp.w4b"/>
     </queries>
 
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
-                     android:maxSdkVersion="32"/>
-    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+    <uses-permission
+            android:name="android.permission.READ_EXTERNAL_STORAGE"
+            android:maxSdkVersion="32"/>
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"/>
 
     <application
-        android:name=".common.AppApplication"
-        android:allowBackup="true"
-        android:dataExtractionRules="@xml/data_extraction_rules"
-        android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:requestLegacyExternalStorage="true"
-        android:roundIcon="@mipmap/ic_launcher_round"
-        android:supportsRtl="true"
-        android:theme="@style/AppTheme.AssuranceContractHandler"
-        tools:targetApi="31">
+            android:name=".common.AppApplication"
+            android:allowBackup="true"
+            android:dataExtractionRules="@xml/data_extraction_rules"
+            android:fullBackupContent="@xml/backup_rules"
+            android:icon="@mipmap/ic_launcher"
+            android:label="@string/app_name"
+            android:requestLegacyExternalStorage="true"
+            android:roundIcon="@mipmap/ic_launcher_round"
+            android:supportsRtl="true"
+            android:theme="@style/AppTheme.AssuranceContractHandler"
+            tools:targetApi="31">
         <activity
-            android:name=".views.main.MainActivity"
-            android:exported="true"
-            android:theme="@style/AppTheme.AssuranceContractHandler.NoActionBar">
+                android:name=".views.main.MainActivity"
+                android:exported="true"
+                android:theme="@style/AppTheme.AssuranceContractHandler.NoActionBar">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
         <activity
-            android:name=".views.customerdetails.CustomerDetailsActivity"
-            android:label="@string/optional_field_text"
-            android:theme="@style/AppTheme.AssuranceContractHandler.NoActionBar" />
+                android:name=".views.customerdetails.CustomerDetailsActivity"
+                android:label="@string/optional_field_text"
+                android:theme="@style/AppTheme.AssuranceContractHandler.NoActionBar"/>
         <activity
                 android:name=".views.expiringactivity.ExpiringContractsActivity"
                 android:exported="false"
                 android:label="@string/expiring_contracts"
                 android:theme="@style/AppTheme.AssuranceContractHandler.NoActionBar"/>
+        <activity
+                android:name=".views.settings.SettingsActivity"
+                android:exported="false"
+                android:label="@string/action_settings"
+                android:theme="@style/AppTheme.AssuranceContractHandler.NoActionBar"/>
+
     </application>
 
 </manifest>

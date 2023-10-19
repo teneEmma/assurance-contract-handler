@@ -35,7 +35,7 @@ class CustomerContractsAdapter(
             val contractNumberStr = "$attestation-${baseContract.contract?.carteRose}"
             if (baseContract.contract == actualContract) {
                 binding.contractListItem.setBackgroundResource(colorForChosenContract)
-                animateMoreInfoBtn()
+                animateActualContractItem()
             }
             binding.tvContractNumber.text = contractNumberStr
             binding.tvPoliceNumber.text = baseContract.contract?.numeroPolice
@@ -48,7 +48,7 @@ class CustomerContractsAdapter(
                 binding.ivContractActiveState.setColorFilter(Color.RED)
         }
 
-        private fun animateMoreInfoBtn() {
+        private fun animateActualContractItem() {
             val animationImageView = AnimationUtils.loadAnimation(context, R.anim.zoom_in_and_out)
             binding.contractListItem.startAnimation(animationImageView)
         }
