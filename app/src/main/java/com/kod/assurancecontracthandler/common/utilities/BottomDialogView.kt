@@ -2,12 +2,15 @@ package com.kod.assurancecontracthandler.common.utilities
 
 import android.content.Context
 import android.view.View
-import com.kod.assurancecontracthandler.common.constants.ConstantsVariables
 import com.kod.assurancecontracthandler.databinding.ContractDetailsBinding
 import com.kod.assurancecontracthandler.model.Contract
 import com.kod.assurancecontracthandler.views.main.fragmentListContracts.GridViewItemAdapter
 
-class BottomDialogView(private val carDetailsTitle: List<String>, private val pricesTitle: List<String>) {
+class BottomDialogView(
+    private val carDetailsTitle: List<String>,
+    private val pricesTitle: List<String>,
+    private val providerTitle: String,
+) {
 
     fun manageContractDetailViews(contractItemBinding: ContractDetailsBinding, c: Contract?, context: Context) {
         contractItemBinding.assurerName.text = c?.assure
@@ -37,7 +40,7 @@ class BottomDialogView(private val carDetailsTitle: List<String>, private val pr
             c?.PN?.let { DataTypesConversionAndFormattingUtils.formatIntegerPrice(it) },
             c?.ACC?.let { DataTypesConversionAndFormattingUtils.formatIntegerPrice(it) },
             c?.FC?.let { DataTypesConversionAndFormattingUtils.formatIntegerPrice(it) },
-            c?.TVA?.let { DataTypesConversionAndFormattingUtils.formatIntegerPrice(it)},
+            c?.TVA?.let { DataTypesConversionAndFormattingUtils.formatIntegerPrice(it) },
             c?.CR?.let { DataTypesConversionAndFormattingUtils.formatIntegerPrice(it) },
             c?.PTTC?.let { DataTypesConversionAndFormattingUtils.formatIntegerPrice(it) },
             c?.COM_PN?.let { DataTypesConversionAndFormattingUtils.formatIntegerPrice(it) },
@@ -60,8 +63,7 @@ class BottomDialogView(private val carDetailsTitle: List<String>, private val pr
             c?.zone,
             DataTypesConversionAndFormattingUtils.notStringifyingNull(c?.duree)
         )
-        val providerText = ConstantsVariables.searchBarChipsTitles[0]
-        val provider = "${providerText}: ${c?.APPORTEUR}"
+        val provider = "$providerTitle ${c?.APPORTEUR}"
 
 
         contractItemBinding.tvProvider.text = provider

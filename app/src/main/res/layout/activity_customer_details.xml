@@ -70,6 +70,7 @@
                 android:layout_below="@id/tv_contact_customer_text"
                 android:background="@drawable/elevated_zone"
                 android:paddingHorizontal="10dp"
+                tools:itemCount="2"
                 tools:listitem="@layout/contact_list_item"
                 android:layout_marginTop="5dp" android:layout_marginStart="5dp" android:layout_marginEnd="5dp" android:layout_marginBottom="5dp"/>
 
@@ -177,6 +178,7 @@
                 android:layout_below="@id/tv_active_contract_text"
                 app:cardBackgroundColor="@color/transparent_elevated"
                 app:cardCornerRadius="15dp"
+                app:cardElevation="0dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="5dp"

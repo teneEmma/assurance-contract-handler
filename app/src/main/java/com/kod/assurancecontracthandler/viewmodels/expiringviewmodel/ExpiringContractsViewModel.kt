@@ -2,7 +2,6 @@ package com.kod.assurancecontracthandler.viewmodels.expiringviewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.kod.assurancecontracthandler.common.constants.ConstantsVariables
 import com.kod.assurancecontracthandler.common.utilities.TimeConverters
 import com.kod.assurancecontracthandler.model.BaseContract
 import com.kod.assurancecontracthandler.repository.ContractRepository
@@ -13,6 +12,7 @@ import java.time.ZoneOffset
 class ExpiringContractsViewModel(private val contractRepository: ContractRepository) : BaseViewModel() {
     private val _contractsToExpire = MutableLiveData<List<BaseContract>?>()
     private var _thereIsNoContractToExpire = false
+    private var _expiringContractsMaxNumberOfDays = 1L
 
     val contractsToExpire: LiveData<List<BaseContract>?>
         get() = _contractsToExpire
@@ -25,7 +25,7 @@ class ExpiringContractsViewModel(private val contractRepository: ContractReposit
         }
         val todayInLong = LocalDateTime.now().toEpochSecond(ZoneOffset.UTC) * 1000
         val todayString = TimeConverters.formatLongToLocaleDate(todayInLong)
-        val maxDateInLong = LocalDateTime.now().plusMonths(ConstantsVariables.maxMonthForExpiringContracts)
+        val maxDateInLong = LocalDateTime.now().plusDays(_expiringContractsMaxNumberOfDays)
             .toEpochSecond(ZoneOffset.UTC) * 1000
         val maxDateString = TimeConverters.formatLongToLocaleDate(maxDateInLong)
         val concatenatedName = "%$newText%"
@@ -37,10 +37,11 @@ class ExpiringContractsViewModel(private val contractRepository: ContractReposit
         }
     }
 
-    fun getExpiringContracts() {
+    fun getExpiringContracts(numberOfDays: Long) {
+        _expiringContractsMaxNumberOfDays = numberOfDays
         val todayInLong = LocalDateTime.now().toEpochSecond(ZoneOffset.UTC) * 1000
         val todayString = TimeConverters.formatLongToLocaleDate(todayInLong)
-        val maxDateInLong = LocalDateTime.now().plusMonths(ConstantsVariables.maxMonthForExpiringContracts)
+        val maxDateInLong = LocalDateTime.now().plusDays(_expiringContractsMaxNumberOfDays)
             .toEpochSecond(ZoneOffset.UTC) * 1000
         val maxDateString = TimeConverters.formatLongToLocaleDate(maxDateInLong)
 

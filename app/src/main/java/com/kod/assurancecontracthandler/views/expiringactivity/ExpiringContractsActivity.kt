@@ -1,6 +1,7 @@
 package com.kod.assurancecontracthandler.views.expiringactivity
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -11,6 +12,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.SearchView
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
@@ -31,6 +33,7 @@ import com.kod.assurancecontracthandler.views.main.fragmentListContracts.Contrac
 class ExpiringContractsActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
     private lateinit var binding: ActivityExpiringContractsBinding
     private var adapter: ContractListAdapter? = null
+    private lateinit var sharedPrefs: SharedPreferences
     private val expiringContractViewModel by viewModels<ExpiringContractsViewModel> {
         val contractDao = ContractDatabase.getDatabase(this).contractDao()
         val contractRepository = ContractRepository(contractDao)
@@ -41,14 +44,16 @@ class ExpiringContractsActivity : AppCompatActivity(), SearchView.OnQueryTextLis
         adapter = null
         super.onDestroy()
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityExpiringContractsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         setSupportActionBar(binding.toolbar)
+        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this)
         expiringContractViewModel.contractsToExpire.observe(this) { contracts2Expire ->
-            if(contracts2Expire.isNullOrEmpty() && expiringContractViewModel.thereIsNoContractToExpire){
+            if (contracts2Expire.isNullOrEmpty() && expiringContractViewModel.thereIsNoContractToExpire) {
                 binding.activityContent.ivNoExpiringContract.visibility = View.VISIBLE
                 binding.activityContent.tvNoExpiringContract.visibility = View.VISIBLE
                 binding.activityContent.rvExpiringContracts.visibility = View.GONE
@@ -61,7 +66,9 @@ class ExpiringContractsActivity : AppCompatActivity(), SearchView.OnQueryTextLis
             adapter?.setContractList(contracts2Expire!!)
         }
 
-        expiringContractViewModel.getExpiringContracts()
+        val maxNumber =
+            sharedPrefs.getString(resources.getString(R.string.expiring_notifications_periodicity_key), "1")
+        expiringContractViewModel.getExpiringContracts(maxNumber?.toLong() ?: 1L)
         setUpSearchBar()
         setupRecyclerView()
     }
@@ -89,7 +96,9 @@ class ExpiringContractsActivity : AppCompatActivity(), SearchView.OnQueryTextLis
         val carDetailsListTitles = resources.getStringArray(R.array.car_details_title).toList()
         val priceDetailsListTitles = resources.getStringArray(R.array.price_details_title).toList()
         BottomDialogView(
-            carDetailsTitle = carDetailsListTitles, pricesTitle = priceDetailsListTitles
+            carDetailsTitle = carDetailsListTitles,
+            pricesTitle = priceDetailsListTitles,
+            providerTitle = resources.getString(R.string.provider_text),
         ).manageContractDetailViews(contractItemBinding, c, this)
 
         val width = (resources.displayMetrics.widthPixels * 0.90).toInt()
