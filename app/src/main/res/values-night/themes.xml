@@ -31,6 +31,12 @@
 
         <!--  Slider style  -->
         <item name="sliderStyle">@style/AppTheme.AssuranceContractHandler.SliderStyle</item>
+
+        <!--  Alert dialogs  -->
+        <item name="alertDialogTheme">@style/AppTheme.AssuranceContractHandler.AlertDialogTheme</item>
+
+        <!--  Settings page  -->
+        <item name="preferenceTheme">@style/AppTheme.AssuranceContractHandler.PreferenceTheme</item>
     </style>
 
     <style name="AppTabLayout" parent="Widget.Design.TabLayout">
@@ -46,7 +52,7 @@
     </style>
 
     <style name="AppTheme.AssuranceContractHandler.BottomSheetStyle"
-           parent="Theme.Design.Light.BottomSheetDialog">
+           parent="Theme.Design.BottomSheetDialog">
         <item name="bottomSheetStyle">@style/AppTheme.AssuranceContractHandler.BottomSheetStyle.AppModalStyle</item>
     </style>
 
@@ -86,6 +92,27 @@
         <item name="colorPrimary">?android:colorAccent</item>
         <item name="colorOnPrimary">?android:colorPrimary</item>
         <item name="colorOnSurface">?android:colorAccent</item>
+    </style>
+
+    <style name="AppTheme.AssuranceContractHandler.PreferenceTheme" parent="PreferenceThemeOverlay">
+        <item name="switchPreferenceCompatStyle">
+            @style/AppTheme.AssuranceContractHandler.SwitchPreferenceStyle
+        </item>
+        <item name="dropdownPreferenceStyle">
+            @style/AppTheme.AssuranceContractHandler.DropDownPreferenceStyle
+        </item>
+        <item name="editTextPreferenceStyle">
+            @style/AppTheme.AssuranceContractHandler.EditTextPreferenceStyle
+        </item>
+        <item name="dialogPreferenceStyle">
+            @style/AppTheme.AssuranceContractHandler.DialogPreferenceStyle.EditTextPreference
+        </item>
+    </style>
+
+    <style name="AppTheme.AssuranceContractHandler.AlertDialogTheme" parent="Theme.MaterialComponents.DayNight.Dialog.Alert">
+        <item name="android:windowBackground">@drawable/dialog_round</item>
+        <item name="buttonBarPositiveButtonStyle">@style/AppButton.Primary.AlertDialog</item>
+        <item name="buttonBarNegativeButtonStyle">@style/AppButton.Secondary</item>
     </style>
 
 </resources>
