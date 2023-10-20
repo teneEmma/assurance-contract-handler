@@ -87,4 +87,7 @@ dependencies {
 
     //WorkManager
     implementation 'androidx.work:work-runtime-ktx:2.7.1'
+
+    //For setting page
+    implementation 'androidx.preference:preference-ktx:1.2.1'
 }

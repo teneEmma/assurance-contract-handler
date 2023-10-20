@@ -1,7 +1,6 @@
 package com.kod.assurancecontracthandler.views.customerdetails
 
 import android.app.Dialog
-import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
@@ -17,6 +16,7 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doOnTextChanged
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.kod.assurancecontracthandler.R
@@ -48,33 +48,32 @@ class CustomerDetailsActivity : AppCompatActivity() {
         val contractRepository = ContractRepository(contractDao)
         CustomerDetailsViewModelFactory(customerRepository, contractRepository)
     }
-    private val sharedPreferences: SharedPreferences by lazy {
-        getSharedPreferences(ConstantsVariables.sharedPreferenceMsg, Context.MODE_PRIVATE)
-    }
+    private lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCustomerDetailsBinding.inflate(layoutInflater)
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
         setContentView(binding.root)
-        dataStore = DataStoreRepository(sharedPreferences)
+        dataStore = DataStoreRepository(
+            sharedPreferences,
+            resources.getString(R.string.predefined_message_key),
+            resources.getString(R.string.first_install_key)
+        )
 
         customerDetailsViewModel.customerContracts.observe(this) { contracts ->
-            val contractRecyclerAdapter = CustomerContractsAdapter(
-                listContracts = contracts,
+            val contractRecyclerAdapter = CustomerContractsAdapter(listContracts = contracts,
                 colorForChosenContract = R.color.highlighted_actual_contract,
                 actualContract = customerDetailsViewModel.relatedContract?.contract,
                 itemClicked = { contract ->
                     contractItemSelected(contract)
-                }, copyBtnTouched = { contract ->
-                    val message = formatMessageToSend(
-                        vehicleMark = contract?.mark ?: "",
-                        plateNumber = contract?.immatriculation ?: "",
-                        dueDate = contract?.echeance ?: "",
-                        isActive = contract?.isContractActive() == true
-                    )
+                },
+                copyBtnTouched = { contract ->
+                    val message = formatMessageToSend(contract)
                     customerDetailsViewModel.setMessageToSend(message)
                     binding.etMessageToSend.setText(customerDetailsViewModel.messageToSend)
-                }, activeStateTouched = { isActive ->
+                },
+                activeStateTouched = { isActive ->
                     if (isActive) shortToast(resources.getString(R.string.active_contract_text))
                     else shortToast(resources.getString(R.string.contract_state_inactive))
                 })
@@ -195,12 +194,7 @@ class CustomerDetailsActivity : AppCompatActivity() {
             customerDetailsViewModel.setMessageToSend(null)
             binding.btnSendMessage.isEnabled = false
         } else {
-            val message = formatMessageToSend(
-                vehicleMark = contract?.mark ?: "",
-                plateNumber = contract?.immatriculation ?: "",
-                dueDate = contract?.echeance ?: "",
-                isActive = contract?.isContractActive() == true
-            )
+            val message = formatMessageToSend(contract)
             customerDetailsViewModel.setMessageToSend(message)
             binding.etMessageToSend.setText(customerDetailsViewModel.messageToSend)
             binding.btnSendMessage.isEnabled = true
@@ -222,22 +216,22 @@ class CustomerDetailsActivity : AppCompatActivity() {
         }
     }
 
-    private fun formatMessageToSend(
-        vehicleMark: String,
-        dueDate: String,
-        plateNumber: String,
-        isActive: Boolean
-    ): String {
+    private fun formatMessageToSend(contract: Contract?): String {
         var message = dataStore.readPredefinedMessage()
         if (message.isNullOrEmpty()) {
             message = resources.getString(R.string.predefined_message)
         }
-        if (!isActive) {
+        if (contract?.isContractActive() != true) {
             message = message.replace(ConstantsVariables.futureTenseExpire, ConstantsVariables.pastTenseExpire)
         }
-        return message.replace(ConstantsVariables.predefinedMsgVehicleId, vehicleMark)
-            .replace(ConstantsVariables.predefinedMsgDateId, dueDate)
-            .replace(ConstantsVariables.predefinedImmatricualtionId, plateNumber)
+        return message.replace(ConstantsVariables.predefinedMsgVehicleId, contract?.mark ?: "")
+            .replace(ConstantsVariables.predefinedMsgEndDateId, contract?.echeance ?: "")
+            .replace(ConstantsVariables.predefinedMsgStartDateId, contract?.effet ?: "")
+            .replace(ConstantsVariables.predefinedMsgAssurerId, contract?.assure ?: "")
+            .replace(ConstantsVariables.predefinedMsgPinkCardId, contract?.carteRose ?: "")
+            .replace(ConstantsVariables.predefinedMsgCategoryId, contract?.categorie.toString() ?: "")
+            .replace(ConstantsVariables.predefinedMsgAttestationId, contract?.attestation ?: "")
+            .replace(ConstantsVariables.predefinedImmatricualtionId, contract?.immatriculation ?: "")
     }
 
     private fun sendSMS(msg: String) {
@@ -255,8 +249,7 @@ class CustomerDetailsActivity : AppCompatActivity() {
                 val whatsappURI = Uri.parse(
                     "whatsapp://send?phone=" + "${ConstantsVariables.phoneIndex}${customer?.phoneNumber}" + "&text=${
                         URLEncoder.encode(
-                            msg,
-                            "UTF-8"
+                            msg, "UTF-8"
                         )
                     }"
                 )
@@ -295,10 +288,12 @@ class CustomerDetailsActivity : AppCompatActivity() {
 
         val carDetailsListTitles = resources.getStringArray(R.array.car_details_title).toList()
         val priceDetailsListTitles = resources.getStringArray(R.array.price_details_title).toList()
-        BottomDialogView(carDetailsListTitles, priceDetailsListTitles).manageContractDetailViews(
-            contractItemBinding,
-            contract,
-            this
+        BottomDialogView(
+            carDetailsListTitles,
+            priceDetailsListTitles,
+            resources.getString(R.string.provider_text),
+        ).manageContractDetailViews(
+            contractItemBinding, contract, this
         )
 
         val width = (resources.displayMetrics.widthPixels * 0.90).toInt()

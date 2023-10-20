@@ -5,6 +5,7 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.preference.PreferenceManager
 import androidx.work.*
 import com.kod.assurancecontracthandler.R
 import com.kod.assurancecontracthandler.common.constants.ConstantsVariables
@@ -14,13 +15,15 @@ import com.kod.assurancecontracthandler.common.workmanager.FirstUsageWorker
 import java.util.concurrent.TimeUnit
 
 class AppApplication : Application() {
-    private val sharedPrefs: SharedPreferences by lazy {
-        getSharedPreferences(ConstantsVariables.APP_USAGE_STATE, Context.MODE_PRIVATE)
-    }
 
     override fun onCreate() {
         super.onCreate()
-        val dataStore = DataStoreRepository(sharedPrefs)
+        val sharedPrefs: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
+        val dataStore = DataStoreRepository(
+            sharedPrefs,
+            resources.getString(R.string.predefined_message_key),
+            resources.getString(R.string.first_install_key),
+        )
         if (dataStore.isFirstTime()) {
             dataStore.setFirstTimeNot()
             setupAndSendFirstTimeNotification()
@@ -77,7 +80,7 @@ class AppApplication : Application() {
             .setRequiresBatteryNotLow(false)
             .build()
         val workManager = WorkManager.getInstance(this)
-        val workRequest = PeriodicWorkRequestBuilder<ExpirationWorker>(12, TimeUnit.HOURS)
+        val workRequest = PeriodicWorkRequestBuilder<ExpirationWorker>(1, TimeUnit.DAYS)
             .setConstraints(constraints)
             .build()
         workManager.enqueueUniquePeriodicWork(

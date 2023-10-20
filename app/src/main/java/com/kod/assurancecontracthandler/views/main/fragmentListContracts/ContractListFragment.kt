@@ -39,6 +39,7 @@ import com.kod.assurancecontracthandler.viewmodels.contractListViewModel.Contrac
 import com.kod.assurancecontracthandler.viewmodels.contractListViewModel.ContractListViewModelFactory
 import com.kod.assurancecontracthandler.views.customerdetails.CustomerDetailsActivity
 import com.kod.assurancecontracthandler.views.expiringactivity.ExpiringContractsActivity
+import com.kod.assurancecontracthandler.views.settings.SettingsActivity
 
 class ContractListFragment : Fragment(), SearchView.OnQueryTextListener {
 
@@ -371,7 +372,9 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener {
             intent.flags = Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS
             startActivity(intent)
         } else if (item.itemId == R.id.action_settings) {
-            shortSnack(resources.getString(R.string.to_be_implemented_text))
+            val intent = Intent(activity, SettingsActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+            startActivity(intent)
         }
         return true
     }
@@ -423,7 +426,11 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener {
         val c = baseContract.contract
         val carDetailsListTitles = resources.getStringArray(R.array.car_details_title).toList()
         val priceDetailsListTitles = resources.getStringArray(R.array.price_details_title).toList()
-        BottomDialogView(carDetailsListTitles, priceDetailsListTitles).manageContractDetailViews(
+        BottomDialogView(
+            carDetailsListTitles,
+            priceDetailsListTitles,
+            resources.getString(R.string.provider_text),
+        ).manageContractDetailViews(
             contractItemBinding,
             c,
             requireContext()
