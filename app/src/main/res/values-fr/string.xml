@@ -50,7 +50,8 @@
     <string name="provider_text">APPORTEUR:</string>
     <string name="non_valid_option">Option non valide</string>
     <string name="no_selected_chips">Aucune palette n\'a été choisie</string>
-    <string name="select_date">Selectioner une date</string>
+    <string name="start_date_hint_text">Effet</string>
+    <string name="due_date_date_hint_text">Echéance</string>
     <string name="filter_provider_name">Filtrer le nom de l\'apporteur</string>
     <string name="plate_number_number">N° d\'immatriculation</string>
     <string name="name_of_company_text">Nom de la compagnie</string>
@@ -64,7 +65,8 @@
     <string name="reset">Réinitialiser</string>
     <string name="apply">Appliquer</string>
     <string name="main_group_slider_title">Filtrer les prix</string>
-    <string name="chose_time_interval">Choisir L\'Interval</string>
+    <string name="select_start_date">Selectioner la date d\'éffet</string>
+    <string name="select_due_date">Selectioner la date d\'échéance</string>
     <string name="date_selected">Interval choisi:</string>
     <string name="and_text">et</string>
     <string name="start_date_text">effet</string>
