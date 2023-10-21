@@ -72,4 +72,6 @@ object DataTypesConversionAndFormattingUtils {
             else -> "$price"
         }
     }
+
+    fun concatenateStringForDBQuery(stringValue: String): String = "%$stringValue%"
 }

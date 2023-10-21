@@ -6,7 +6,7 @@ import androidx.sqlite.db.SimpleSQLiteQuery
 import com.google.android.material.textfield.TextInputEditText
 import com.kod.assurancecontracthandler.R
 import com.kod.assurancecontracthandler.common.constants.ConstantsVariables
-import com.kod.assurancecontracthandler.common.utilities.DataTypesConversionAndFormattingUtils
+import com.kod.assurancecontracthandler.common.utilities.DataTypesConversionAndFormattingUtils.concatenateStringForDBQuery
 import com.kod.assurancecontracthandler.common.utilities.TimeConverters
 import com.kod.assurancecontracthandler.model.BaseContract
 import com.kod.assurancecontracthandler.repository.ContractRepository
@@ -19,6 +19,7 @@ class ContractListViewModel(
 ) : BaseViewModel() {
     private var _selectedSearchChip: Int? = null
     private var _searchText: String = ""
+    private var initialSearchString: String? = null
     private val _shouldDisplayFabFilter = MutableLiveData<Boolean>(false)
     private val _messageResourceId = MutableLiveData<Int>()
     private var _minDate: Long? = null
@@ -107,7 +108,7 @@ class ContractListViewModel(
             _messageResourceId.postValue(R.string.no_selected_chips)
             return
         }
-        _shouldDisplayFabFilter.postValue(newText.isNotEmpty())
+        _shouldDisplayFabFilter.postValue(true)
 
         executeFunctionWithAnimation {
             makeQueryToDB(newText)
@@ -116,7 +117,7 @@ class ContractListViewModel(
 
     private fun makeQueryToDB(str: String) {
         val result = repository.searchForClient(generateQuery(str))
-        if(result.isEmpty()){
+        if (result.isEmpty()) {
             _messageResourceId.postValue(R.string.no_result_found)
         }
         _allContracts.postValue(result)
@@ -128,14 +129,15 @@ class ContractListViewModel(
         if (indexQueryTitle > ConstantsVariables.searchBarChipsTitles.size) {
             throw IndexOutOfBoundsException("chip index is greater than title's indices")
         }
-        val initialQuery =
+        initialSearchString =
             "SELECT * FROM contract WHERE" + """ ${ConstantsVariables.searchBarChipsTitles[indexQueryTitle]} LIKE "%$str%" """
 
-        return SimpleSQLiteQuery(initialQuery)
+        return SimpleSQLiteQuery(initialSearchString)
     }
 
     fun deactivateAllSearchChips() {
         _selectedSearchChip = null
+        initialSearchString = null
         _shouldDisplayFabFilter.postValue(false)
     }
 
@@ -174,28 +176,35 @@ class ContractListViewModel(
             return
         }
         var filteredValues: List<BaseContract> = _allContracts.value ?: emptyList()
-
         filteredValues = filterContractsUsingTextInputFields(filteredValues)
-        filteredValues = filterContractsUsingDates(filteredValues)
-        filteredValues = filterContractsUsingSliders(filteredValues)
+        val datesSuffixFilterQuery = filterContractsUsingDates(filteredValues)
+        val slidersSuffixFilterQuery = filterContractsUsingSliders(filteredValues)
+        var suffixFilterQuery = datesSuffixFilterQuery + slidersSuffixFilterQuery
 
-        if (filteredValues.isEmpty()) {
-            _messageResourceId.postValue(R.string.no_result_found)
+        executeFunctionWithAnimation {
+            // Removing the first AND in query
+            suffixFilterQuery = suffixFilterQuery.removeRange(0, 3)
+            val filterQuery = "SELECT * FROM ($initialSearchString) WHERE $suffixFilterQuery"
+            val query = SimpleSQLiteQuery(filterQuery)
+            val filteredValues111 = repository.filterContracts(query)
+            if (filteredValues111.isEmpty()) {
+                _messageResourceId.postValue(R.string.no_result_found)
+            }
+            _allContracts.postValue(filteredValues111)
         }
-        _allContracts.postValue(filteredValues)
+
     }
 
-    private fun filterContractsUsingDates(contracts: List<BaseContract>): List<BaseContract> {
-        var filteredValues: List<BaseContract> = contracts
+    private fun filterContractsUsingDates(contracts: List<BaseContract>): String {
+        var filterQuery = ""
         if (shouldFilterField(this._minDate) && shouldFilterField(this._maxDate)) {
             val minDate = TimeConverters.formatLongToLocaleDate(_minDate) ?: ""
             val maxDate = TimeConverters.formatLongToLocaleDate(_maxDate) ?: ""
-            filteredValues = filteredValues.filter {
-                it.contract?.effet?.let { startDate -> startDate >= minDate } == true &&
-                        it.contract.echeance?.let { endDate -> endDate <= maxDate } == true
-            }
+            filterQuery = filterQuery.plus(
+                """AND effet >= "$minDate" and echeance <= "$maxDate" """
+            )
         }
-        return filteredValues
+        return filterQuery
     }
 
     private fun filterContractsUsingTextInputFields(contracts: List<BaseContract>): List<BaseContract> {
@@ -250,60 +259,92 @@ class ContractListViewModel(
         return filteredValues
     }
 
-    private fun filterContractsUsingSliders(contracts: List<BaseContract>): List<BaseContract> {
-        var filteredValues: List<BaseContract> = contracts
+    private fun filterContractsUsingSliders(contracts: List<BaseContract>): String {
+        var filterQuery = ""
         slidersValues.entries.forEach { groups ->
             groups.value.entries.forEach { children ->
                 val childValue = children.value
                 val childKey = children.key
 
                 when (childKey to childValue.isNotNull()) {
-                    expandableChildrenTitlesList[0][0] to true -> filteredValues =
-                        filteredValues.filter { c -> (c.contract?.ACC?.let { it >= childValue!!.first && it <= childValue.second }) == true }
+                    expandableChildrenTitlesList[0][0] to true -> filterQuery = filterQuery.plus(
+                        """AND ACC BETWEEN "${concatenateStringForDBQuery(childValue!!.first.toString())}" and 
+                            "${concatenateStringForDBQuery(childValue.second.toString())}" """
+                    )
 
-                    expandableChildrenTitlesList[0][1] to true -> filteredValues =
-                        filteredValues.filter { c -> c.contract?.COMM_APPORT?.let { it >= childValue!!.first && it <= childValue.second } == true }
+                    expandableChildrenTitlesList[0][1] to true -> filterQuery = filterQuery.plus(
+                        """AND COMM_APPORT BETWEEN "${concatenateStringForDBQuery(childValue!!.first.toString())}" and 
+                            "${concatenateStringForDBQuery(childValue.second.toString())}" """
+                    )
 
-                    expandableChildrenTitlesList[0][2] to true -> filteredValues =
-                        filteredValues.filter { c -> c.contract?.CR?.let { it >= childValue!!.first && it <= childValue.second } == true }
+                    expandableChildrenTitlesList[0][2] to true -> filterQuery = filterQuery.plus(
+                        """AND CR BETWEEN "${concatenateStringForDBQuery(childValue!!.first.toString())}" and 
+                            "${concatenateStringForDBQuery(childValue.second.toString())}" """
+                    )
 
-                    expandableChildrenTitlesList[0][3] to true -> filteredValues =
-                        filteredValues.filter { c -> c.contract?.DTA?.let { it >= childValue!!.first && it <= childValue.second } == true }
+                    expandableChildrenTitlesList[0][3] to true -> filterQuery = filterQuery.plus(
+                        """AND DTA BETWEEN "${concatenateStringForDBQuery(childValue!!.first.toString())}" and 
+                            "${concatenateStringForDBQuery(childValue.second.toString())}" """
+                    )
 
-                    expandableChildrenTitlesList[0][4] to true -> filteredValues =
-                        filteredValues.filter { c -> c.contract?.ENCAIS?.let { it >= childValue!!.first && it <= childValue.second } == true }
+                    expandableChildrenTitlesList[0][4] to true -> filterQuery = filterQuery.plus(
+                        """AND ENCAIS BETWEEN "${concatenateStringForDBQuery(childValue!!.first.toString())}" and 
+                            "${concatenateStringForDBQuery(childValue.second.toString())}" """
+                    )
 
-                    expandableChildrenTitlesList[0][5] to true -> filteredValues =
-                        filteredValues.filter { c -> c.contract?.FC?.let { it >= childValue!!.first && it <= childValue.second } == true }
+                    expandableChildrenTitlesList[0][5] to true -> filterQuery = filterQuery.plus(
+                        """AND FC BETWEEN "${concatenateStringForDBQuery(childValue!!.first.toString())}" and 
+                            "${concatenateStringForDBQuery(childValue.second.toString())}" """
+                    )
 
-                    expandableChildrenTitlesList[0][6] to true -> filteredValues =
-                        filteredValues.filter { c -> c.contract?.NET_A_REVERSER?.let { it >= childValue!!.first && it <= childValue.second } == true }
+                    expandableChildrenTitlesList[0][6] to true -> filterQuery = filterQuery.plus(
+                        """AND NET_A_REVERSER BETWEEN "${concatenateStringForDBQuery(childValue!!.first.toString())}" and 
+                            "${concatenateStringForDBQuery(childValue.second.toString())}" """
+                    )
 
-                    expandableChildrenTitlesList[0][7] to true -> filteredValues =
-                        filteredValues.filter { c -> c.contract?.PN?.let { it >= childValue!!.first && it <= childValue.second } == true }
+                    expandableChildrenTitlesList[0][7] to true -> filterQuery = filterQuery.plus(
+                        """AND PN BETWEEN "${concatenateStringForDBQuery(childValue!!.first.toString())}" and 
+                            "${concatenateStringForDBQuery(childValue.second.toString())}" """
+                    )
 
-                    expandableChildrenTitlesList[0][8] to true -> filteredValues =
-                        filteredValues.filter { c -> c.contract?.PTTC?.let { it >= childValue!!.first && it <= childValue.second } == true }
+                    expandableChildrenTitlesList[0][8] to true -> filterQuery = filterQuery.plus(
+                        """AND PTTC BETWEEN "${concatenateStringForDBQuery(childValue!!.first.toString())}" and 
+                            "${concatenateStringForDBQuery(childValue.second.toString())}" """
+                    )
 
-                    expandableChildrenTitlesList[0][9] to true -> filteredValues =
-                        filteredValues.filter { c -> c.contract?.TVA?.let { it >= childValue!!.first && it <= childValue.second } == true }
+                    expandableChildrenTitlesList[0][9] to true -> filterQuery = filterQuery.plus(
+                        """AND TVA BETWEEN "${concatenateStringForDBQuery(childValue!!.first.toString())}" and 
+                            "${concatenateStringForDBQuery(childValue.second.toString())}" """
+                    )
 
-                    expandableChildrenTitlesList[1][0] to true -> filteredValues = filteredValues.filter { c ->
+//                    expandableChildrenTitlesList[1][0] to true -> {
+//
+//                        filterQuery = filterQuery.plus(
+//                            """AND ACC BETWEEN "${concatenateStringForDBQuery(childValue!!.first.toString())}" and
+//                            "${concatenateStringForDBQuery(childValue.second.toString())}" """
+//                        )
+//                    }
 
-                        val vehiclePower =
-                            DataTypesConversionAndFormattingUtils.convertPowerFieldStringToFloat(c.contract?.puissanceVehicule)
-                                ?: return@filter false
+                    expandableChildrenTitlesList[2][0] to true -> filterQuery = filterQuery.plus(
+                        """AND duree BETWEEN "${concatenateStringForDBQuery(childValue!!.first.toString())}" and 
+                            "${concatenateStringForDBQuery(childValue.second.toString())}" """
+                    )
 
-                        vehiclePower >= childValue!!.first && vehiclePower <= childValue.second
-
-                    }
-
-                    expandableChildrenTitlesList[2][0] to true -> filteredValues =
-                        filteredValues.filter { c -> c.contract?.duree?.let { it >= childValue!!.first && it <= childValue.second } == true }
+//                    expandableChildrenTitlesList[1][0] to true -> filteredValues = filteredValues.filter { c ->
+//
+//                        val vehiclePower =
+//                            DataTypesConversionAndFormattingUtils.convertPowerFieldStringToFloat(c.contract?.puissanceVehicule)
+//                                ?: return@filter false
+//
+//                        vehiclePower >= childValue!!.first && vehiclePower <= childValue.second
+//
+//                    }
                 }
             }
         }
-        return filteredValues
+
+
+        return filterQuery
     }
 
     private fun shouldFilterField(field: String?): Boolean = !field.isNullOrEmpty()

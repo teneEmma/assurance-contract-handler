@@ -71,8 +71,7 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding = FragmentListContractsBinding.inflate(inflater, container, false)
         return binding.root
@@ -102,9 +101,7 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener {
 
         lifecycleScope.launchWhenStarted {
             contractListViewModel.allContracts.observe(viewLifecycleOwner) { listContracts ->
-                if (listContracts.isNullOrEmpty() && contractListViewModel.searchText.isEmpty() &&
-                    contractListViewModel.selectedSearchChip == null
-                ) {
+                if (listContracts.isNullOrEmpty() && contractListViewModel.searchText.isEmpty() && contractListViewModel.selectedSearchChip == null) {
                     binding.ivEmptyDatabase.visibility = View.VISIBLE
                     binding.tvEmptyDatabase.visibility = View.VISIBLE
                     binding.rvListContract.visibility = View.GONE
@@ -146,7 +143,8 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener {
             if (!binding.chipGroupSearch.isActivated) {
                 onClickFilterFab()
                 showChips(
-                    binding.chipGroupSearch, ConstantsVariables.searchBarChipsTitles,
+                    binding.chipGroupSearch,
+                    ConstantsVariables.searchBarChipsTitles,
                     com.google.android.material.R.style.Widget_MaterialComponents_Chip_Action
                 )
             }
@@ -176,7 +174,8 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener {
             filterDialogBinding = FilterDialogBinding.inflate(layoutInflater)
             showFilterDialog()
             showChips(
-                filterDialogBinding.chipGroupFilter, contractListViewModel.filterChipsToShow,
+                filterDialogBinding.chipGroupFilter,
+                contractListViewModel.filterChipsToShow,
                 com.google.android.material.R.style.Widget_MaterialComponents_Chip_Filter
             )
 
@@ -192,17 +191,25 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener {
         // This order of appearance of textInputLayouts in this list has been order with respect to
         // ConstantsVariables.filterDialogChips
         val listTextInputLayoutsViews = listOf(
-            filterDialogBinding.ilFilterApporteur, filterDialogBinding.ilFilterAssurer,
-            filterDialogBinding.ilFilterAttestation, filterDialogBinding.ilFilterCarteRose,
-            filterDialogBinding.ilFilterCategory, filterDialogBinding.ilFilterCompagnie,
-            filterDialogBinding.ilFilterImmatriculation, filterDialogBinding.ilFilterMark,
+            filterDialogBinding.ilFilterApporteur,
+            filterDialogBinding.ilFilterAssurer,
+            filterDialogBinding.ilFilterAttestation,
+            filterDialogBinding.ilFilterCarteRose,
+            filterDialogBinding.ilFilterCategory,
+            filterDialogBinding.ilFilterCompagnie,
+            filterDialogBinding.ilFilterImmatriculation,
+            filterDialogBinding.ilFilterMark,
             filterDialogBinding.ilFilterNumeroPolice
         )
         val listEditTextViews = listOf(
-            filterDialogBinding.etFilterApporteur, filterDialogBinding.etFilterAssurer,
-            filterDialogBinding.etFilterAttestation, filterDialogBinding.etFilterCarteRose,
-            filterDialogBinding.etFilterCategory, filterDialogBinding.etFilterCompagnie,
-            filterDialogBinding.etFilterImmatriculation, filterDialogBinding.etFilterMark,
+            filterDialogBinding.etFilterApporteur,
+            filterDialogBinding.etFilterAssurer,
+            filterDialogBinding.etFilterAttestation,
+            filterDialogBinding.etFilterCarteRose,
+            filterDialogBinding.etFilterCategory,
+            filterDialogBinding.etFilterCompagnie,
+            filterDialogBinding.etFilterImmatriculation,
+            filterDialogBinding.etFilterMark,
             filterDialogBinding.etFilterPolice
         )
 
@@ -263,8 +270,7 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener {
             groupTitleList,
             childrenTitleList,
             contractListViewModel.slidersValues,
-            sliderListenerCallback =
-            { groupChildPositions, minMaxValues ->
+            sliderListenerCallback = { groupChildPositions, minMaxValues ->
                 contractListViewModel.onSliderTouched(groupChildPositions, minMaxValues)
             },
         )
@@ -278,8 +284,7 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setContentView(filterDialogBinding.root)
 
-        val layoutParams = dialog.window
-            ?.let { window ->
+        val layoutParams = dialog.window?.let { window ->
                 setNewDialogParams(window)
             }
 
@@ -297,12 +302,11 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener {
 
     private fun showDatePickerDialog() {
         val dateSelectionInterval = Pair(
-            MaterialDatePicker.thisMonthInUtcMilliseconds(),
-            MaterialDatePicker.todayInUtcMilliseconds()
+            MaterialDatePicker.thisMonthInUtcMilliseconds(), MaterialDatePicker.todayInUtcMilliseconds()
         )
-        val dateRangePicker = MaterialDatePicker.Builder.dateRangePicker()
-            .setTitleText(resources.getString(R.string.chose_time_interval))
-            .setSelection(dateSelectionInterval).build()
+        val dateRangePicker =
+            MaterialDatePicker.Builder.dateRangePicker().setTitleText(resources.getString(R.string.chose_time_interval))
+                .setSelection(dateSelectionInterval).build()
 
         dateRangePicker.show(requireActivity().supportFragmentManager, ConstantsVariables.datePickerTag)
         dateRangePicker.addOnPositiveButtonClickListener { dates ->
@@ -312,12 +316,10 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener {
     }
 
     private fun setDatesTextViewsValues() {
-        filterDialogBinding.startDate.text =
-            TimeConverters.formatLongToLocaleDate(contractListViewModel.startDate)
-                ?: resources.getString(R.string.start_date_text)
-        filterDialogBinding.endDate.text =
-            TimeConverters.formatLongToLocaleDate(contractListViewModel.endDate)
-                ?: resources.getString(R.string.end_date_text)
+        filterDialogBinding.startDate.text = TimeConverters.formatLongToLocaleDate(contractListViewModel.startDate)
+            ?: resources.getString(R.string.start_date_text)
+        filterDialogBinding.endDate.text = TimeConverters.formatLongToLocaleDate(contractListViewModel.endDate)
+            ?: resources.getString(R.string.end_date_text)
     }
 
     private fun deactivateAllSearchChips() {
@@ -431,9 +433,7 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener {
             priceDetailsListTitles,
             resources.getString(R.string.provider_text),
         ).manageContractDetailViews(
-            contractItemBinding,
-            c,
-            requireContext()
+            contractItemBinding, c, requireContext()
         )
 
         val width = (resources.displayMetrics.widthPixels * 0.90).toInt()
@@ -475,14 +475,14 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener {
     }
 
     override fun onQueryTextSubmit(query: String?): Boolean {
-        if (!query.isNullOrEmpty()) {
+        if (query != null) {
             contractListViewModel.onSearchText(query)
         }
         return true
     }
 
     override fun onQueryTextChange(newText: String?): Boolean {
-        if (!newText.isNullOrEmpty()) {
+        if (newText != null) {
             contractListViewModel.onSearchText(newText)
         }
         return true
