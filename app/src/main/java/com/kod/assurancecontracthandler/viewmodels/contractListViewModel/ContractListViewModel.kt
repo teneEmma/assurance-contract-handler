@@ -175,12 +175,10 @@ class ContractListViewModel(
         if (_allContracts.value.isNullOrEmpty()) {
             return
         }
-        var filteredValues: List<BaseContract> = _allContracts.value ?: emptyList()
-        filteredValues = filterContractsUsingTextInputFields(filteredValues)
-
+        val textInputsSuffixFilterQuery = filterContractsUsingTextInputFields()
         val datesSuffixFilterQuery = filterContractsUsingDates()
         val slidersSuffixFilterQuery = filterContractsUsingSliders()
-        var suffixFilterQuery = datesSuffixFilterQuery + slidersSuffixFilterQuery
+        var suffixFilterQuery = datesSuffixFilterQuery + slidersSuffixFilterQuery + textInputsSuffixFilterQuery
 
         executeFunctionWithAnimation {
             // Removing the first AND in query
@@ -197,128 +195,127 @@ class ContractListViewModel(
     }
 
     private fun filterContractsUsingDates(): String {
-        var filterQuery = ""
+        var suffixFilterQuery = ""
         if (shouldFilterField(this._minDate)) {
             val minDate = TimeConverters.formatLongToLocaleDate(_minDate)
-            filterQuery = filterQuery.plus(
+            suffixFilterQuery = suffixFilterQuery.plus(
                 """AND effet >= "$minDate" """
             )
         }
         if (shouldFilterField(this._maxDate)) {
             val maxDate = TimeConverters.formatLongToLocaleDate(_maxDate) ?: ""
-            filterQuery = filterQuery.plus(
+            suffixFilterQuery = suffixFilterQuery.plus(
                 """AND echeance <= "$maxDate" """
             )
         }
-        return filterQuery
+        return suffixFilterQuery
     }
 
-    private fun filterContractsUsingTextInputFields(contracts: List<BaseContract>): List<BaseContract> {
-        var filteredValues: List<BaseContract> = contracts
+    private fun filterContractsUsingTextInputFields(): String {
+        var suffixFilterQuery = ""
         if (shouldFilterField(_filterChipsAndTextFieldsValues[0])) {
-            filteredValues = filteredValues.filter {
-                it.contract?.APPORTEUR?.contains(_filterChipsAndTextFieldsValues[0] ?: "", ignoreCase = true) == true
-            }
+            suffixFilterQuery = suffixFilterQuery.plus(
+                """AND APPORTEUR LIKE "${concatenateStringForDBQuery(_filterChipsAndTextFieldsValues[0]!!)}" """
+            )
         }
         if (shouldFilterField(_filterChipsAndTextFieldsValues[1])) {
-            filteredValues = filteredValues.filter {
-                it.contract?.assure?.contains(_filterChipsAndTextFieldsValues[1] ?: "", ignoreCase = true) == true
-            }
+            suffixFilterQuery = suffixFilterQuery.plus(
+                """AND assure LIKE "${concatenateStringForDBQuery(_filterChipsAndTextFieldsValues[1]!!)}" """
+            )
         }
         if (shouldFilterField(_filterChipsAndTextFieldsValues[2])) {
-            filteredValues = filteredValues.filter {
-                it.contract?.attestation?.contains(_filterChipsAndTextFieldsValues[2] ?: "", ignoreCase = true) == true
-            }
+            suffixFilterQuery = suffixFilterQuery.plus(
+                """AND attestation LIKE "${concatenateStringForDBQuery(_filterChipsAndTextFieldsValues[2]!!)}" """
+            )
         }
         if (shouldFilterField(_filterChipsAndTextFieldsValues[3])) {
-            filteredValues = filteredValues.filter {
-                it.contract?.carteRose?.contains(_filterChipsAndTextFieldsValues[3] ?: "", ignoreCase = true) == true
-            }
+            suffixFilterQuery = suffixFilterQuery.plus(
+                """AND carteRose LIKE "${concatenateStringForDBQuery(_filterChipsAndTextFieldsValues[3]!!)}" """
+            )
         }
         if (shouldFilterField(_filterChipsAndTextFieldsValues[4])) {
-            filteredValues = filteredValues.filter {
-                it.contract?.categorie == _filterChipsAndTextFieldsValues[4]?.toInt()
-            }
+            suffixFilterQuery = suffixFilterQuery.plus(
+                """AND categorie LIKE "${concatenateStringForDBQuery(_filterChipsAndTextFieldsValues[4]!!)}" """
+            )
         }
         if (shouldFilterField(_filterChipsAndTextFieldsValues[5])) {
-            filteredValues = filteredValues.filter {
-                it.contract?.compagnie?.contains(_filterChipsAndTextFieldsValues[4] ?: "", ignoreCase = true) == true
-            }
+            suffixFilterQuery = suffixFilterQuery.plus(
+                """AND compagnie LIKE "${concatenateStringForDBQuery(_filterChipsAndTextFieldsValues[5]!!)}" """
+            )
         }
         if (shouldFilterField(_filterChipsAndTextFieldsValues[6])) {
-            filteredValues = filteredValues.filter {
-                it.contract?.immatriculation?.contains(
-                    _filterChipsAndTextFieldsValues[6] ?: "", ignoreCase = true
-                ) == true
-            }
+            suffixFilterQuery = suffixFilterQuery.plus(
+                """AND immatriculation LIKE "${concatenateStringForDBQuery(_filterChipsAndTextFieldsValues[6]!!)}" """
+            )
         }
         if (shouldFilterField(_filterChipsAndTextFieldsValues[7])) {
-            filteredValues = filteredValues.filter {
-                it.contract?.mark?.contains(_filterChipsAndTextFieldsValues[7] ?: "", ignoreCase = true) == true
-            }
+            suffixFilterQuery = suffixFilterQuery.plus(
+                """AND mark LIKE "${concatenateStringForDBQuery(_filterChipsAndTextFieldsValues[7]!!)}" """
+            )
         }
         if (shouldFilterField(_filterChipsAndTextFieldsValues[8])) {
-            filteredValues = filteredValues.filter {
-                it.contract?.numeroPolice?.contains(_filterChipsAndTextFieldsValues[8] ?: "", ignoreCase = true) == true
-            }
+            suffixFilterQuery = suffixFilterQuery.plus(
+                """AND numeroPolice LIKE "${concatenateStringForDBQuery(_filterChipsAndTextFieldsValues[8]!!)}" """
+            )
         }
-        return filteredValues
+
+        return suffixFilterQuery
     }
 
     private fun filterContractsUsingSliders(): String {
-        var filterQuery = ""
+        var suffixFilterQuery = ""
         slidersValues.entries.forEach { groups ->
             groups.value.entries.forEach { children ->
                 val childValue = children.value
                 val childKey = children.key
 
                 when (childKey to childValue.isNotNull()) {
-                    expandableChildrenTitlesList[0][0] to true -> filterQuery = filterQuery.plus(
+                    expandableChildrenTitlesList[0][0] to true -> suffixFilterQuery = suffixFilterQuery.plus(
                         """AND ACC BETWEEN "${concatenateStringForDBQuery(childValue!!.first.toString())}" and 
                             "${concatenateStringForDBQuery(childValue.second.toString())}" """
                     )
 
-                    expandableChildrenTitlesList[0][1] to true -> filterQuery = filterQuery.plus(
+                    expandableChildrenTitlesList[0][1] to true -> suffixFilterQuery = suffixFilterQuery.plus(
                         """AND COMM_APPORT BETWEEN "${concatenateStringForDBQuery(childValue!!.first.toString())}" and 
                             "${concatenateStringForDBQuery(childValue.second.toString())}" """
                     )
 
-                    expandableChildrenTitlesList[0][2] to true -> filterQuery = filterQuery.plus(
+                    expandableChildrenTitlesList[0][2] to true -> suffixFilterQuery = suffixFilterQuery.plus(
                         """AND CR BETWEEN "${concatenateStringForDBQuery(childValue!!.first.toString())}" and 
                             "${concatenateStringForDBQuery(childValue.second.toString())}" """
                     )
 
-                    expandableChildrenTitlesList[0][3] to true -> filterQuery = filterQuery.plus(
+                    expandableChildrenTitlesList[0][3] to true -> suffixFilterQuery = suffixFilterQuery.plus(
                         """AND DTA BETWEEN "${concatenateStringForDBQuery(childValue!!.first.toString())}" and 
                             "${concatenateStringForDBQuery(childValue.second.toString())}" """
                     )
 
-                    expandableChildrenTitlesList[0][4] to true -> filterQuery = filterQuery.plus(
+                    expandableChildrenTitlesList[0][4] to true -> suffixFilterQuery = suffixFilterQuery.plus(
                         """AND ENCAIS BETWEEN "${concatenateStringForDBQuery(childValue!!.first.toString())}" and 
                             "${concatenateStringForDBQuery(childValue.second.toString())}" """
                     )
 
-                    expandableChildrenTitlesList[0][5] to true -> filterQuery = filterQuery.plus(
+                    expandableChildrenTitlesList[0][5] to true -> suffixFilterQuery = suffixFilterQuery.plus(
                         """AND FC BETWEEN "${concatenateStringForDBQuery(childValue!!.first.toString())}" and 
                             "${concatenateStringForDBQuery(childValue.second.toString())}" """
                     )
 
-                    expandableChildrenTitlesList[0][6] to true -> filterQuery = filterQuery.plus(
+                    expandableChildrenTitlesList[0][6] to true -> suffixFilterQuery = suffixFilterQuery.plus(
                         """AND NET_A_REVERSER BETWEEN "${concatenateStringForDBQuery(childValue!!.first.toString())}" and 
                             "${concatenateStringForDBQuery(childValue.second.toString())}" """
                     )
 
-                    expandableChildrenTitlesList[0][7] to true -> filterQuery = filterQuery.plus(
+                    expandableChildrenTitlesList[0][7] to true -> suffixFilterQuery = suffixFilterQuery.plus(
                         """AND PN BETWEEN "${concatenateStringForDBQuery(childValue!!.first.toString())}" and 
                             "${concatenateStringForDBQuery(childValue.second.toString())}" """
                     )
 
-                    expandableChildrenTitlesList[0][8] to true -> filterQuery = filterQuery.plus(
+                    expandableChildrenTitlesList[0][8] to true -> suffixFilterQuery = suffixFilterQuery.plus(
                         """AND PTTC BETWEEN "${concatenateStringForDBQuery(childValue!!.first.toString())}" and 
                             "${concatenateStringForDBQuery(childValue.second.toString())}" """
                     )
 
-                    expandableChildrenTitlesList[0][9] to true -> filterQuery = filterQuery.plus(
+                    expandableChildrenTitlesList[0][9] to true -> suffixFilterQuery = suffixFilterQuery.plus(
                         """AND TVA BETWEEN "${concatenateStringForDBQuery(childValue!!.first.toString())}" and 
                             "${concatenateStringForDBQuery(childValue.second.toString())}" """
                     )
@@ -331,7 +328,7 @@ class ContractListViewModel(
 //                        )
 //                    }
 
-                    expandableChildrenTitlesList[2][0] to true -> filterQuery = filterQuery.plus(
+                    expandableChildrenTitlesList[2][0] to true -> suffixFilterQuery = suffixFilterQuery.plus(
                         """AND duree BETWEEN "${concatenateStringForDBQuery(childValue!!.first.toString())}" and 
                             "${concatenateStringForDBQuery(childValue.second.toString())}" """
                     )
@@ -350,7 +347,7 @@ class ContractListViewModel(
         }
 
 
-        return filterQuery
+        return suffixFilterQuery
     }
 
     private fun shouldFilterField(field: String?): Boolean = !field.isNullOrEmpty()
