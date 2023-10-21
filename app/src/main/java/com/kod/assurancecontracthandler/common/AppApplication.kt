@@ -5,6 +5,7 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.preference.PreferenceManager
 import androidx.work.*
 import com.kod.assurancecontracthandler.R
@@ -18,6 +19,7 @@ class AppApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        setAppTheme()
         val sharedPrefs: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
         val dataStore = DataStoreRepository(
             sharedPrefs,
@@ -32,6 +34,18 @@ class AppApplication : Application() {
 
         setupExpiryNotification()
         creatingWorkManager()
+    }
+
+    private fun setAppTheme() {
+        val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this)
+        val theme = sharedPrefs.getString(resources.getString(R.string.theme_mode_key), null)
+        val defaultThemeValues = resources.getStringArray(R.array.entry_values_theme)
+
+        when (theme) {
+            defaultThemeValues[1] -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            defaultThemeValues[2] -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            else -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+        }
     }
 
     private fun setupExpiryNotification() {
