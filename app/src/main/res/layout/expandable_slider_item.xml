@@ -53,7 +53,7 @@
                     android:textAppearance="@style/normal"
                     android:textSize="24sp"
                     android:textStyle="bold"
-                    android:text="@string/priceSeperator"/>
+                    android:text="@string/price_separator"/>
 
                 <TextView
                     android:id="@+id/et_price_range_max"

@@ -177,8 +177,9 @@ class ContractListViewModel(
         }
         var filteredValues: List<BaseContract> = _allContracts.value ?: emptyList()
         filteredValues = filterContractsUsingTextInputFields(filteredValues)
-        val datesSuffixFilterQuery = filterContractsUsingDates(filteredValues)
-        val slidersSuffixFilterQuery = filterContractsUsingSliders(filteredValues)
+
+        val datesSuffixFilterQuery = filterContractsUsingDates()
+        val slidersSuffixFilterQuery = filterContractsUsingSliders()
         var suffixFilterQuery = datesSuffixFilterQuery + slidersSuffixFilterQuery
 
         executeFunctionWithAnimation {
@@ -195,13 +196,18 @@ class ContractListViewModel(
 
     }
 
-    private fun filterContractsUsingDates(contracts: List<BaseContract>): String {
+    private fun filterContractsUsingDates(): String {
         var filterQuery = ""
-        if (shouldFilterField(this._minDate) && shouldFilterField(this._maxDate)) {
-            val minDate = TimeConverters.formatLongToLocaleDate(_minDate) ?: ""
+        if (shouldFilterField(this._minDate)) {
+            val minDate = TimeConverters.formatLongToLocaleDate(_minDate)
+            filterQuery = filterQuery.plus(
+                """AND effet >= "$minDate" """
+            )
+        }
+        if (shouldFilterField(this._maxDate)) {
             val maxDate = TimeConverters.formatLongToLocaleDate(_maxDate) ?: ""
             filterQuery = filterQuery.plus(
-                """AND effet >= "$minDate" and echeance <= "$maxDate" """
+                """AND echeance <= "$maxDate" """
             )
         }
         return filterQuery
@@ -259,7 +265,7 @@ class ContractListViewModel(
         return filteredValues
     }
 
-    private fun filterContractsUsingSliders(contracts: List<BaseContract>): String {
+    private fun filterContractsUsingSliders(): String {
         var filterQuery = ""
         slidersValues.entries.forEach { groups ->
             groups.value.entries.forEach { children ->

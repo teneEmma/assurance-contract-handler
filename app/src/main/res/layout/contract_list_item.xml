@@ -59,7 +59,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/start_date_color"
-                android:text="@string/priceSeperator"
+                android:text="@string/price_separator"
                 android:textAppearance="@style/small"
                 android:textStyle="bold"/>
 

@@ -12,7 +12,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
-import androidx.core.util.Pair
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -27,6 +26,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import com.kod.assurancecontracthandler.R
 import com.kod.assurancecontracthandler.common.constants.ConstantsVariables
+import com.kod.assurancecontracthandler.common.usecases.DateType
 import com.kod.assurancecontracthandler.common.utilities.BottomDialogView
 import com.kod.assurancecontracthandler.common.utilities.TimeConverters
 import com.kod.assurancecontracthandler.databinding.ContractDetailsBinding
@@ -179,8 +179,11 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener {
                 com.google.android.material.R.style.Widget_MaterialComponents_Chip_Filter
             )
 
-            filterDialogBinding.btnDatePicker.setOnClickListener {
-                showDatePickerDialog()
+            filterDialogBinding.btnPickStartDate.setOnClickListener {
+                showDatePickerDialog(resources.getString(R.string.select_start_date), DateType.START_DATE)
+            }
+            filterDialogBinding.btnPickDueDate.setOnClickListener {
+                showDatePickerDialog(resources.getString(R.string.select_due_date), DateType.DUE_DATE)
             }
             setupExpandableListView()
             filterChipsChecked()
@@ -285,8 +288,8 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener {
         dialog.setContentView(filterDialogBinding.root)
 
         val layoutParams = dialog.window?.let { window ->
-                setNewDialogParams(window)
-            }
+            setNewDialogParams(window)
+        }
 
         dialog.show()
         dialog.window?.attributes = layoutParams
@@ -300,17 +303,18 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener {
         return layoutParams
     }
 
-    private fun showDatePickerDialog() {
-        val dateSelectionInterval = Pair(
-            MaterialDatePicker.thisMonthInUtcMilliseconds(), MaterialDatePicker.todayInUtcMilliseconds()
-        )
+    private fun showDatePickerDialog(calendarTitle: String, dateType: DateType) {
         val dateRangePicker =
-            MaterialDatePicker.Builder.dateRangePicker().setTitleText(resources.getString(R.string.chose_time_interval))
-                .setSelection(dateSelectionInterval).build()
+            MaterialDatePicker.Builder.datePicker().setTitleText(calendarTitle)
+                .setSelection(MaterialDatePicker.todayInUtcMilliseconds()).build()
 
         dateRangePicker.show(requireActivity().supportFragmentManager, ConstantsVariables.datePickerTag)
-        dateRangePicker.addOnPositiveButtonClickListener { dates ->
-            contractListViewModel.onDateChanged(maxDate = dates.second, minDate = dates.first)
+        dateRangePicker.addOnPositiveButtonClickListener { date ->
+            if (dateType == DateType.START_DATE) {
+                contractListViewModel.onDateChanged(minDate = date, maxDate = null)
+            } else {
+                contractListViewModel.onDateChanged(minDate = null, maxDate = date)
+            }
             setDatesTextViewsValues()
         }
     }
