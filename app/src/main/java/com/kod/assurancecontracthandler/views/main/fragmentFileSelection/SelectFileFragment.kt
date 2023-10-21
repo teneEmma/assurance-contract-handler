@@ -1,13 +1,16 @@
 package com.kod.assurancecontracthandler.views.main.fragmentFileSelection
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.database.Cursor
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
+import android.provider.OpenableColumns
 import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
@@ -46,10 +49,10 @@ class SelectFileFragment : Fragment() {
     private var fileName: String? = null
     private val documentLauncher = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
         if (uri != null) {
+            fileName = getFileName(uri)
             val excelFile = requireContext().contentResolver?.openFileDescriptor(uri, "r")
             val fileDescriptor = excelFile?.fileDescriptor
             val inputStream = FileInputStream(fileDescriptor)
-            fileName = uri.path?.substringAfter(":")
             readDocument(inputStream)
         } else shortSnack(resources.getString(R.string.file_select_not))
     }
@@ -127,6 +130,28 @@ class SelectFileFragment : Fragment() {
         }
     }
 
+    @SuppressLint("Range")
+    fun getFileName(uri: Uri): String? {
+        var result: String? = null
+        if (uri.scheme == "content") {
+            val cursor: Cursor? = requireContext().contentResolver.query(uri, null, null, null, null)
+            try {
+                if (cursor != null && cursor.moveToFirst()) {
+                    result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME))
+                }
+            } finally {
+                cursor?.close()
+            }
+        }
+        if (result == null) {
+            result = uri.path
+            val cut = result!!.lastIndexOf('/')
+            if (cut != -1) {
+                result = result.substring(cut + 1)
+            }
+        }
+        return result
+    }
     private fun checkPermissionsStatus() {
         when {
             ContextCompat.checkSelfPermission(
