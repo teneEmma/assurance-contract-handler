@@ -40,7 +40,6 @@ open class ExpirationWorker(val context: Context, workerParams: WorkerParameters
         val sharedPrefs: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
         val timeUnit =
             sharedPrefs.getString(context.resources.getString(R.string.expiring_notifications_periodicity_key), "1")
-        Log.e("periodicity", "--> $timeUnit <--")
         val todayInLong = LocalDateTime.now().toEpochSecond(ZoneOffset.UTC) * 1000
         val todayString = TimeConverters.formatLongToLocaleDate(todayInLong)
         val maxDateInLong = LocalDateTime.now().plusDays(timeUnit?.toLong() ?: 1L)
