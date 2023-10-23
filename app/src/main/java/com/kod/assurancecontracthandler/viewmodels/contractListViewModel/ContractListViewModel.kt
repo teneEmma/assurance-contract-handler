@@ -1,5 +1,6 @@
 package com.kod.assurancecontracthandler.viewmodels.contractListViewModel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.sqlite.db.SimpleSQLiteQuery
@@ -54,10 +55,7 @@ class ContractListViewModel(
         val nullPair: Pair<Float, Float>? = null
         return expandableGroupTitlesList.zip(expandableChildrenTitlesList).associate { (key, value) ->
             key to value.associateWith {
-                when (key) {
-                    expandableGroupTitlesList[0] -> nullPair
-                    else -> nullPair
-                }
+                nullPair
             } as MutableMap
         } as MutableMap
     }
@@ -320,28 +318,18 @@ class ContractListViewModel(
                             "${concatenateStringForDBQuery(childValue.second.toString())}" """
                     )
 
-//                    expandableChildrenTitlesList[1][0] to true -> {
-//
-//                        filterQuery = filterQuery.plus(
-//                            """AND ACC BETWEEN "${concatenateStringForDBQuery(childValue!!.first.toString())}" and
-//                            "${concatenateStringForDBQuery(childValue.second.toString())}" """
-//                        )
-//                    }
+                    expandableChildrenTitlesList[1][0] to true -> {
+                        Log.e("WTF POWER", "--> $childValue <--")
+                        suffixFilterQuery = suffixFilterQuery.plus(
+                            """AND puissanceVehicule >= "${childValue?.first?.toInt()}%" AND """ +
+                                    """puissanceVehicule <= "${childValue?.second?.toInt()}%" """
+                        )
+                    }
 
                     expandableChildrenTitlesList[2][0] to true -> suffixFilterQuery = suffixFilterQuery.plus(
                         """AND duree BETWEEN "${concatenateStringForDBQuery(childValue!!.first.toString())}" and 
                             "${concatenateStringForDBQuery(childValue.second.toString())}" """
                     )
-
-//                    expandableChildrenTitlesList[1][0] to true -> filteredValues = filteredValues.filter { c ->
-//
-//                        val vehiclePower =
-//                            DataTypesConversionAndFormattingUtils.convertPowerFieldStringToFloat(c.contract?.puissanceVehicule)
-//                                ?: return@filter false
-//
-//                        vehiclePower >= childValue!!.first && vehiclePower <= childValue.second
-//
-//                    }
                 }
             }
         }

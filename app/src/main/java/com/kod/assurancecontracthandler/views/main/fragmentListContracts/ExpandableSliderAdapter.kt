@@ -82,7 +82,7 @@ class ExpandableSliderAdapter(
                 expandableSBinding.priceSlider.stepSize = _stepSizeForTime
                 expandableSBinding.priceSlider.values = mutableListOf(minValue, maxValue)
                 expandableSBinding.priceSlider.setLabelFormatter { value ->
-                    "$value${ConstantsVariables.timeUnit}"
+                    "${value.toInt()}${ConstantsVariables.timeUnit}"
                 }
                 setTextViewValues(expandableSBinding, minValue, maxValue, groupPosition)
             }
