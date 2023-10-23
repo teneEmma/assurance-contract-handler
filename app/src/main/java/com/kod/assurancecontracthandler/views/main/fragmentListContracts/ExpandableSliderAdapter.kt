@@ -223,12 +223,12 @@ class ExpandableSliderAdapter(
         return myConvertView!!
     }
 
-    private fun displayPopupWindow(anchorView: View, stepSize: String) {
+    private fun displayPopupWindow(anchorView: View, stepSize: String, ) {
         val popup = PopupWindow(context)
         val layoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val popUpBinding = StepZizePopUpContentBinding.inflate(layoutInflater)
 
-        popUpBinding.tvCaption.text = "+".plus(stepSize)
+        popUpBinding.tvCaption.text = stepSize
         popup.contentView = popUpBinding.root
         popup.height = WindowManager.LayoutParams.WRAP_CONTENT
         popup.width = WindowManager.LayoutParams.WRAP_CONTENT
