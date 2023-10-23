@@ -288,7 +288,7 @@ class ExpandableSliderAdapter(
                 val value: Float = getPrecedentStepSizeForDesiredNumber(
                     actualStepSize = _stepSizeForPrices.toInt(),
                     desiredNumber = ConstantsVariables.maxPriceValue,
-                    multiple = 5000
+                    multiple = 1000
                 )
                 if (value <= ConstantsVariables.maxPriceValue) {
                     _stepSizeForPrices = value
