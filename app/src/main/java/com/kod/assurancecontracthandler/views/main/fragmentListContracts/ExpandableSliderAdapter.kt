@@ -1,19 +1,26 @@
 package com.kod.assurancecontracthandler.views.main.fragmentListContracts
 
 import android.content.Context
+import android.graphics.drawable.BitmapDrawable
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.BaseExpandableListAdapter
 import android.widget.ImageView
+import android.widget.PopupWindow
 import android.widget.TextView
 import androidx.core.view.isVisible
 import com.kod.assurancecontracthandler.R
 import com.kod.assurancecontracthandler.common.constants.ConstantsVariables
 import com.kod.assurancecontracthandler.common.utilities.DataTypesConversionAndFormattingUtils
 import com.kod.assurancecontracthandler.databinding.ExpandableSliderItemBinding
+import com.kod.assurancecontracthandler.databinding.StepZizePopUpContentBinding
 import kotlin.math.roundToInt
+
 
 class ExpandableSliderAdapter(
     private val context: Context,
@@ -203,19 +210,40 @@ class ExpandableSliderAdapter(
         }
 
         val groupListTextView = myConvertView?.findViewById<TextView>(R.id.textView3)
-        myConvertView?.findViewById<ImageView>(R.id.iv_btn_add)?.setOnClickListener {
-            onStepSizeIncreased(groupPosition)
+        myConvertView?.findViewById<ImageView>(R.id.iv_btn_add)?.setOnClickListener { v ->
+            val stepSize = onStepSizeIncreased(groupPosition)
+            displayPopupWindow(v, stepSize)
         }
 
-        myConvertView?.findViewById<ImageView>(R.id.iv_btn_reduce)?.setOnClickListener {
-            onStepSizeDecreased(groupPosition)
+        myConvertView?.findViewById<ImageView>(R.id.iv_btn_reduce)?.setOnClickListener { v ->
+            val stepSize = onStepSizeDecreased(groupPosition)
+            displayPopupWindow(v, stepSize)
         }
         groupListTextView?.text = getGroup(groupPosition) as String
         return myConvertView!!
     }
 
-    private fun onStepSizeIncreased(groupPosition: Int) {
-        when (groupPosition) {
+    private fun displayPopupWindow(anchorView: View, stepSize: String, ) {
+        val popup = PopupWindow(context)
+        val layoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val popUpBinding = StepZizePopUpContentBinding.inflate(layoutInflater)
+
+        popUpBinding.tvCaption.text = stepSize
+        popup.contentView = popUpBinding.root
+        popup.height = WindowManager.LayoutParams.WRAP_CONTENT
+        popup.width = WindowManager.LayoutParams.WRAP_CONTENT
+        popup.isOutsideTouchable = true
+        popup.isFocusable = false
+        popup.setBackgroundDrawable(BitmapDrawable())
+        popup.showAsDropDown(anchorView)
+
+        Handler(Looper.getMainLooper()).postDelayed({
+            popup.dismiss()
+        }, 800L)
+    }
+
+    private fun onStepSizeIncreased(groupPosition: Int): String {
+        return when (groupPosition) {
             0 -> {
                 val value: Float = getNextStepSizeForDesiredNumber(
                     actualStepSize = _stepSizeForPrices.toInt(),
@@ -225,6 +253,7 @@ class ExpandableSliderAdapter(
                 if (value <= ConstantsVariables.maxPriceValue) {
                     _stepSizeForPrices = value
                 }
+                _stepSizeForPrices.toInt().toString()
             }
 
             1 -> {
@@ -236,6 +265,7 @@ class ExpandableSliderAdapter(
                 if (value <= ConstantsVariables.maxPowerValue) {
                     _stepSizeForPower = value
                 }
+                _stepSizeForPower.toInt().toString()
             }
 
             else -> {
@@ -247,12 +277,13 @@ class ExpandableSliderAdapter(
                 if (value <= ConstantsVariables.maxTimeValue) {
                     _stepSizeForTime = value
                 }
+                _stepSizeForTime.toInt().toString()
             }
         }
     }
 
-    private fun onStepSizeDecreased(groupPosition: Int) {
-        when (groupPosition) {
+    private fun onStepSizeDecreased(groupPosition: Int): String {
+        return when (groupPosition) {
             0 -> {
                 val value: Float = getPrecedentStepSizeForDesiredNumber(
                     actualStepSize = _stepSizeForPrices.toInt(),
@@ -262,6 +293,7 @@ class ExpandableSliderAdapter(
                 if (value <= ConstantsVariables.maxPriceValue) {
                     _stepSizeForPrices = value
                 }
+                _stepSizeForPrices.toInt().toString()
             }
 
             1 -> {
@@ -274,6 +306,7 @@ class ExpandableSliderAdapter(
                     // Removing unwanted non multiples of 5
                     _stepSizeForPower = value
                 }
+                _stepSizeForPower.toInt().toString()
             }
 
             else -> {
@@ -286,6 +319,7 @@ class ExpandableSliderAdapter(
                     // Removing unwanted non multiples of 5
                     _stepSizeForTime = value
                 }
+                _stepSizeForTime.toInt().toString()
             }
         }
     }
