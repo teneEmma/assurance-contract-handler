@@ -48,7 +48,9 @@ class ContractListAdapter(
     override fun getItemCount(): Int = contractList.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContractViewHolder =
-        ContractViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.rv_contract_item, parent, false))
+        ContractViewHolder(
+            LayoutInflater.from(parent.context).inflate(R.layout.rv_contract_item, parent, false)
+        )
 
     fun setContractList(contractList: List<BaseContract>) {
         if (this.contractList.isEmpty()) {

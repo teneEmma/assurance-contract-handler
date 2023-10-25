@@ -2,6 +2,7 @@ package com.kod.assurancecontracthandler.views.main.fragmentListContracts
 
 import android.app.Dialog
 import android.content.Intent
+import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -16,7 +17,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
@@ -47,6 +50,38 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener {
     private lateinit var filterDialogBinding: FilterDialogBinding
     private lateinit var dialog: Dialog
     private lateinit var expandableAdapter: ExpandableSliderAdapter
+    val simpleItemTouchCallback =
+        object : ItemTouchHelper.SimpleCallback(
+            0, ItemTouchHelper.LEFT
+        ) {
+            override fun onChildDraw(
+                c: Canvas,
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                dX: Float,
+                dY: Float,
+                actionState: Int,
+                isCurrentlyActive: Boolean
+            ) {
+                val color = resources.getColor(R.color.chip_background_color_unchecked)
+                val color2 = ColorDrawable(Color.YELLOW)
+                color2.setBounds(0, viewHolder.itemView.top, (viewHolder.itemView.left + dX).toInt(), viewHolder.itemView.bottom)
+                color2.draw(c)
+                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+            }
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean = true
+
+            override fun onSwiped(
+                viewHolder: RecyclerView.ViewHolder,
+                direction: Int
+            ) {
+                Log.e("SWIPPED", "SWIPPED")
+            }
+        }
     private val contractListViewModel by viewModels<ContractListViewModel> {
         val contractDao = ContractDatabase.getDatabase(requireContext()).contractDao()
         val contractRepository = ContractRepository(contractDao)
@@ -414,8 +449,9 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener {
             touchListener()
         })
         binding.rvListContract.adapter = rvAdapter
-        binding.rvListContract.layoutManager = LinearLayoutManager(context)
+        binding.rvListContract.layoutManager = LinearLayoutManager(requireContext())
         binding.rvListContract.setHasFixedSize(true)
+        ItemTouchHelper(simpleItemTouchCallback).attachToRecyclerView(binding.rvListContract)
     }
 
     private fun touchListener() {
