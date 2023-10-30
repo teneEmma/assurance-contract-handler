@@ -83,7 +83,7 @@ class SimpleItemTouchCallback(private val context: Context, private val rvAdapte
 
     private fun vibrate(){
         val vibrator = context.getSystemService(Vibrator::class.java)
-        vibrator!!.vibrate(VibrationEffect.createOneShot(25, VibrationEffect.DEFAULT_AMPLITUDE))
+        vibrator!!.vibrate(VibrationEffect.createOneShot(10, VibrationEffect.DEFAULT_AMPLITUDE))
     }
 
     override fun onMove(
