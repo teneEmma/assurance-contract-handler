@@ -1,11 +1,17 @@
 package com.kod.assurancecontracthandler.views.main.fragmentListContracts
 
 import android.app.Dialog
+import android.content.Context
 import android.content.Intent
 import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.RectF
 import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.util.Log
 import android.view.*
 import android.widget.ImageView
@@ -44,44 +50,104 @@ import com.kod.assurancecontracthandler.views.customerdetails.CustomerDetailsAct
 import com.kod.assurancecontracthandler.views.expiringactivity.ExpiringContractsActivity
 import com.kod.assurancecontracthandler.views.settings.SettingsActivity
 
+
+class SimpleItemTouchCallback(private val context: Context, private val rvAdapter: ContractListAdapter) :
+    ItemTouchHelper.SimpleCallback(
+        0, ItemTouchHelper.LEFT
+    ) {
+    private var icon: Drawable? = ContextCompat.getDrawable(context, R.drawable.ic_export)
+    private var initiated: Boolean = false
+
+    private fun initSwipeView() {
+        initiated = true
+    }
+
+    override fun onChildDraw(
+        canvas: Canvas, recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder,
+        dX: Float, dY: Float, actionState: Int, isCurrentlyActive: Boolean
+    ) {
+        val itemView = viewHolder.itemView
+        if (!initiated) {
+            initSwipeView()
+        }
+
+        if (dX <= 0.0f && dX != 0.0f) {
+            val intrinsicHeight = icon?.intrinsicWidth ?: 0
+            val xMarkTop = itemView.top + ((itemView.bottom - itemView.top) - intrinsicHeight) / 2
+            val xMarkBottom = xMarkTop + intrinsicHeight
+            val backGroundColor: Int =
+                MaterialColors.getColor(context, androidx.appcompat.R.attr.colorPrimary, Color.GREEN)
+
+            colorCanvas(
+                canvas,
+                backGroundColor,
+                itemView.right + dX.toInt(),
+                itemView.top,
+                itemView.right,
+                itemView.bottom
+            )
+
+            drawIconOnCanVas(
+                canvas, icon,
+                itemView.right - 2 * (icon?.intrinsicWidth ?: 0),
+                xMarkTop,
+                itemView.right - (icon?.intrinsicWidth ?: 0),
+                xMarkBottom
+            )
+        }
+
+        super.onChildDraw(canvas, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+    }
+
+
+    private fun colorCanvas(canvas: Canvas, canvasColor: Int, left: Int, top: Int, right: Int, bottom: Int) {
+
+        val paint = Paint()
+        paint.color = canvasColor
+        paint.isAntiAlias = true
+
+        val rect = RectF(left.toFloat(), top.toFloat(), right.toFloat(), bottom.toFloat())
+        canvas.drawRoundRect(rect, 80f, 80f, paint)
+    }
+
+    private fun drawIconOnCanVas(
+        canvas: Canvas, icon: Drawable?, left: Int, top: Int, right: Int, bottom: Int
+    ) {
+        icon?.setBounds(left, top, right, bottom)
+        icon?.draw(canvas)
+    }
+
+    private fun vibrate(){
+        val vibrator = context.getSystemService(Vibrator::class.java)
+        vibrator!!.vibrate(VibrationEffect.createOneShot(25, VibrationEffect.DEFAULT_AMPLITUDE))
+    }
+
+    override fun onMove(
+        recyclerView: RecyclerView,
+        viewHolder: RecyclerView.ViewHolder,
+        target: RecyclerView.ViewHolder
+    ): Boolean = true
+
+    override fun onSwiped(
+        viewHolder: RecyclerView.ViewHolder,
+        direction: Int
+    ) {
+        vibrate()
+        rvAdapter.notifyItemChanged(viewHolder.adapterPosition)
+    }
+
+    override fun getSwipeThreshold(viewHolder: RecyclerView.ViewHolder): Float {
+        return 0.6f
+    }
+}
+
 class ContractListFragment : Fragment(), SearchView.OnQueryTextListener {
 
     private lateinit var binding: FragmentListContractsBinding
     private lateinit var filterDialogBinding: FilterDialogBinding
     private lateinit var dialog: Dialog
     private lateinit var expandableAdapter: ExpandableSliderAdapter
-    val simpleItemTouchCallback =
-        object : ItemTouchHelper.SimpleCallback(
-            0, ItemTouchHelper.LEFT
-        ) {
-            override fun onChildDraw(
-                c: Canvas,
-                recyclerView: RecyclerView,
-                viewHolder: RecyclerView.ViewHolder,
-                dX: Float,
-                dY: Float,
-                actionState: Int,
-                isCurrentlyActive: Boolean
-            ) {
-                val color = resources.getColor(R.color.chip_background_color_unchecked)
-                val color2 = ColorDrawable(Color.YELLOW)
-                color2.setBounds(0, viewHolder.itemView.top, (viewHolder.itemView.left + dX).toInt(), viewHolder.itemView.bottom)
-                color2.draw(c)
-                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
-            }
-            override fun onMove(
-                recyclerView: RecyclerView,
-                viewHolder: RecyclerView.ViewHolder,
-                target: RecyclerView.ViewHolder
-            ): Boolean = true
 
-            override fun onSwiped(
-                viewHolder: RecyclerView.ViewHolder,
-                direction: Int
-            ) {
-                Log.e("SWIPPED", "SWIPPED")
-            }
-        }
     private val contractListViewModel by viewModels<ContractListViewModel> {
         val contractDao = ContractDatabase.getDatabase(requireContext()).contractDao()
         val contractRepository = ContractRepository(contractDao)
@@ -451,7 +517,12 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener {
         binding.rvListContract.adapter = rvAdapter
         binding.rvListContract.layoutManager = LinearLayoutManager(requireContext())
         binding.rvListContract.setHasFixedSize(true)
-        ItemTouchHelper(simpleItemTouchCallback).attachToRecyclerView(binding.rvListContract)
+        ItemTouchHelper(
+            SimpleItemTouchCallback(
+                requireContext(),
+                rvAdapter!!
+            )
+        ).attachToRecyclerView(binding.rvListContract)
     }
 
     private fun touchListener() {
