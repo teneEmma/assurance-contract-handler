@@ -120,6 +120,7 @@
     <string name="action_settings">Parametres</string>
     <string name="action_exp_contracts">Contrats arrivant à échéance</string>
     <string name="action_sort">Trier</string>
+    <string name="export_file">Exporter</string>
 
     <!-- SETTINGS -->
     <!-- Preference Titles -->
