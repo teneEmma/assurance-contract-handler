@@ -101,6 +101,7 @@
     <string name="expiration_notification_message">Some contracts are about to expire. Come take a look.</string>
     <string name="welcome_notification_message">😃 From the entire ORION team. We wish you a good experience</string>
     <string name="see_text">Take a look</string>
+    <string name="export_file">Export</string>
 
     <string name="column_attestation" translatable="false">000*Z*0112233</string>
     <string name="column_carteRose" translatable="false">00011333</string>
