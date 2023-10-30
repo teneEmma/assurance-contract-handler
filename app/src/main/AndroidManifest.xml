@@ -15,6 +15,8 @@
             android:maxSdkVersion="32"/>
     <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"/>
 
+    <uses-permission android:name="android.permission.VIBRATE"/>
+
     <application
             android:name=".common.AppApplication"
             android:allowBackup="true"
