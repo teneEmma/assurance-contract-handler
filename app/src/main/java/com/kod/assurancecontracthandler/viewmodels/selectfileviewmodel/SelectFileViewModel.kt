@@ -70,7 +70,6 @@ class SelectFileViewModel(private val contractRepository: ContractRepository) : 
     private fun readRowsFromSheet(rowIterator: Iterator<Row>, numberOfRows: Int): List<BaseContract> {
         var headers: Map<String, String> = mutableMapOf()
         val contracts: MutableList<BaseContract> = mutableListOf()
-        val hashCodes = mutableListOf<Int>()
 
         while (rowIterator.hasNext()) {
             val row = rowIterator.next()

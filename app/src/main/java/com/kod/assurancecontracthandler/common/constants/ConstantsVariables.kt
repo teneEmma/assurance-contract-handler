@@ -28,6 +28,7 @@ object ConstantsVariables {
     const val smsURIPrefix = "smsto:"
     const val calURIPrefix = "tel:"
     const val phoneIndex = "+237"
+    const val identifierPrefix = "Mr/Mrs"
     const val predefinedMsgAssurerId = "ASSURER_ID"
     const val predefinedMsgPinkCardId = "PINK_CARD_ID"
     const val predefinedMsgCategoryId = "CATEGORY_ID"
