@@ -15,7 +15,11 @@ import com.google.android.material.color.MaterialColors
 import com.kod.assurancecontracthandler.R
 import com.kod.assurancecontracthandler.views.main.fragmentListContracts.ContractListAdapter
 
-class SimpleItemTouchCallback(private val context: Context, private val rvAdapter: ContractListAdapter) :
+class SimpleItemTouchCallback(
+    private val context: Context,
+    private val rvAdapter: ContractListAdapter,
+    private val onSwipeCallback: (Int) -> Unit
+) :
     ItemTouchHelper.SimpleCallback(
         0, ItemTouchHelper.LEFT
     ) {
@@ -81,7 +85,7 @@ class SimpleItemTouchCallback(private val context: Context, private val rvAdapte
         icon?.draw(canvas)
     }
 
-    private fun vibrate(){
+    private fun vibrate() {
         val vibrator = context.getSystemService(Vibrator::class.java)
         vibrator!!.vibrate(VibrationEffect.createOneShot(10, VibrationEffect.DEFAULT_AMPLITUDE))
     }
@@ -97,6 +101,7 @@ class SimpleItemTouchCallback(private val context: Context, private val rvAdapte
         direction: Int
     ) {
         vibrate()
+        onSwipeCallback(viewHolder.adapterPosition)
         rvAdapter.notifyItemChanged(viewHolder.adapterPosition)
     }
 

@@ -19,6 +19,7 @@ object ConstantsVariables {
     ).sorted()
     const val isoDatePattern = "yyyy-MM-dd'T'HH:mm"
     const val desiredDatePattern = "yyyy-MM-dd"
+    const val desiredDateTimePattern = "yyyy-MM-dd HH:mm:ss"
     const val datePickerTag = "DATE_RANGE_PICKER"
     const val priceUnit = "XAF"
     const val powerUnit = "CV"

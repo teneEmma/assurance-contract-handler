@@ -1,5 +1,6 @@
 package com.kod.assurancecontracthandler.viewmodels.contractListViewModel
 
+import android.content.res.AssetManager
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -12,6 +13,7 @@ import com.kod.assurancecontracthandler.common.utilities.TimeConverters
 import com.kod.assurancecontracthandler.model.BaseContract
 import com.kod.assurancecontracthandler.repository.ContractRepository
 import com.kod.assurancecontracthandler.viewmodels.baseviewmodel.BaseViewModel
+import java.io.File
 
 class ContractListViewModel(
     private val repository: ContractRepository,
@@ -321,8 +323,7 @@ class ContractListViewModel(
                     expandableChildrenTitlesList[1][0] to true -> {
                         Log.e("WTF POWER", "--> $childValue <--")
                         suffixFilterQuery = suffixFilterQuery.plus(
-                            """AND puissanceVehicule >= "${childValue?.first?.toInt()}%" AND """ +
-                                    """puissanceVehicule <= "${childValue?.second?.toInt()}%" """
+                            """AND puissanceVehicule >= "${childValue?.first?.toInt()}%" AND """ + """puissanceVehicule <= "${childValue?.second?.toInt()}%" """
                         )
                     }
 
@@ -336,6 +337,19 @@ class ContractListViewModel(
 
 
         return suffixFilterQuery
+    }
+
+    fun exportContractToFile(
+        contractIndex: Int, assetManager: AssetManager, fileDir: File
+    ): Boolean {
+        val baseContract = _allContracts.value?.get(contractIndex)
+        val contractToExport = baseContract?.contract
+        if (contractToExport == null) {
+            _messageResourceId.postValue(R.string.error_on_file_reading)
+            return false
+        }
+
+        return super.exportContractToFile(contractToExport, assetManager, fileDir)
     }
 
     private fun shouldFilterField(field: String?): Boolean = !field.isNullOrEmpty()

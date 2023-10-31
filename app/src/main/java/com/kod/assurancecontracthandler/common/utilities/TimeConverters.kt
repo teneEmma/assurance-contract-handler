@@ -81,4 +81,14 @@ object TimeConverters {
             SimpleDateFormat(ConstantsVariables.desiredDatePattern, ConstantsVariables.appLocal)
         return formattedDate.format(date)
     }
+
+    fun formatLongToLocaleDateTime(dateInLong: Long?): String? {
+        if (dateInLong == null) {
+            return null
+        }
+        val date = Date(dateInLong)
+        val formattedDate =
+            SimpleDateFormat(ConstantsVariables.desiredDateTimePattern, ConstantsVariables.appLocal)
+        return formattedDate.format(date)
+    }
 }

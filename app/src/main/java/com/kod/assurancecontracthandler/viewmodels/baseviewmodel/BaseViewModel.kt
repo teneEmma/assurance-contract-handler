@@ -1,11 +1,21 @@
 package com.kod.assurancecontracthandler.viewmodels.baseviewmodel
 
+import android.content.res.AssetManager
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kod.assurancecontracthandler.R
+import com.kod.assurancecontracthandler.common.utilities.TimeConverters
 import com.kod.assurancecontracthandler.model.BaseContract
+import com.kod.assurancecontracthandler.model.Contract
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.apache.poi.ss.usermodel.Row
+import org.apache.poi.xssf.usermodel.XSSFWorkbook
+import java.io.*
+import java.util.*
+
 
 /**
  *  The base ViewModel for all our viewModels. It contains the base values which each viewModel can contain.
@@ -34,10 +44,83 @@ abstract class BaseViewModel : ViewModel() {
         }
     }
 
-
     fun executeFunctionWithoutAnimation(execute: suspend () -> Unit) {
         viewModelScope.launch(Dispatchers.IO) {
             execute()
         }
+    }
+
+    fun exportContractToFile(contract: Contract, assetManager: AssetManager, fileDir: File): Boolean {
+        val inputStream: InputStream
+        val outputStream: OutputStream
+        try {
+            inputStream = assetManager.open("export_to_file.xlsx")
+            val dateTime = TimeConverters.formatLongToLocaleDateTime(Date().time)
+            val fileName = "${contract.assure}-$dateTime.xlsx"
+
+            val outFile = File(fileDir, fileName)
+            outputStream = FileOutputStream(outFile)
+            val workBookEdited = editWorkbook(inputStream, outputStream, contract)
+            if (!workBookEdited) {
+                return false
+            }
+            copyFile(inputStream, outputStream)
+            inputStream.close()
+            outputStream.flush()
+            outputStream.close()
+            return true
+        } catch (e: IOException) {
+            Log.e("tag", "Failed to copy asset file: export_to_file", e)
+            return false
+        }
+    }
+
+    @Throws(IOException::class)
+    private fun copyFile(inputStream: InputStream, outputStream: OutputStream) {
+        val buffer = ByteArray(1024)
+        var read: Int
+        while (inputStream.read(buffer).also { read = it } != -1) {
+            outputStream.write(buffer, 0, read)
+        }
+    }
+
+    private fun editWorkbook(inputStream: InputStream, outputStream: FileOutputStream, contract: Contract): Boolean {
+        val workbook = XSSFWorkbook(inputStream)
+        val sheet = workbook.getSheet("CONTRATS")
+        if (sheet == null) {
+            _messageResourceId.postValue(R.string.error_on_file_reading)
+            return false
+        }
+
+        val data: MutableMap<Int, MutableMap<Pair<Int, Int>, String?>> = mutableMapOf()
+
+        data[0] = mutableMapOf((7 to 1) to contract.assure)
+        data[1] = mutableMapOf((8 to 1) to contract.telephone)
+        data[2] = mutableMapOf((8 to 4) to contract.numeroPolice)
+        data[3] = mutableMapOf((9 to 5) to TimeConverters.formatLongToLocaleDate(Date().time))
+        data[4] = mutableMapOf((9 to 9) to contract.duree.toString())
+        data[5] = mutableMapOf((11 to 1) to contract.assure)
+        data[6] = mutableMapOf((11 to 5) to contract.compagnie)
+        data[7] = mutableMapOf((12 to 1) to contract.assure)
+        data[8] = mutableMapOf((12 to 5) to contract.attestation)
+        data[9] = mutableMapOf((16 to 1) to contract.mark)
+        data[10] = mutableMapOf((16 to 7) to contract.immatriculation)
+        data[11] = mutableMapOf((17 to 4) to contract.categorie.toString())
+        data[12] = mutableMapOf((18 to 1) to contract.puissanceVehicule)
+        data[13] = mutableMapOf((7 to 0) to contract.assure)
+        data[14] = mutableMapOf((7 to 0) to contract.assure)
+
+        for (value in data.values) {
+            for ((rowAndCell, cellContent) in value) {
+                val rowNumber = rowAndCell.first
+                val row: Row = sheet.getRow(rowNumber)
+                val cellNumb = rowAndCell.second
+                val cell = row.getCell(cellNumb)
+                if (cellContent is String) cell.setCellValue(cellContent)
+            }
+        }
+
+        workbook.write(outputStream)
+        return true
     }
 }
