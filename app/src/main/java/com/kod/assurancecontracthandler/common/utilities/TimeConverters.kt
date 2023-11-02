@@ -72,13 +72,16 @@ object TimeConverters {
         return isoDate?.let { formattedDate.format(it) }
     }
 
-    fun formatLongToLocaleDate(dateInLong: Long?): String? {
+    fun formatLongToLocaleDate(
+        dateInLong: Long?,
+        desiredDatePattern: String = ConstantsVariables.desiredDatePattern
+    ): String? {
         if (dateInLong == null) {
             return null
         }
         val date = Date(dateInLong)
         val formattedDate =
-            SimpleDateFormat(ConstantsVariables.desiredDatePattern, ConstantsVariables.appLocal)
+            SimpleDateFormat(desiredDatePattern, ConstantsVariables.appLocal)
         return formattedDate.format(date)
     }
 
