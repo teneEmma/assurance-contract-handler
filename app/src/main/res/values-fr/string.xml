@@ -112,7 +112,7 @@
     <string name="welcome_notification_message">😃 De La part de toute l\'équipe d\'ORION. Nous
         vous souhaitons une bonne expérience</string>
     <string name="see_text">Jeter un coup d\'oeil</string>
-    <string name="error_on_contract">Une erreur c\'est roduite avec ce contrat</string>
+    <string name="error_on_contract">Une erreur c\'est produite avec ce contrat</string>
 
     <string name="content_description_loading_progress">Niveau De Progression</string>
     <string name="content_description_fab_add_document">Ajouter un document</string>
