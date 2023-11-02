@@ -6,6 +6,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kod.assurancecontracthandler.R
+import com.kod.assurancecontracthandler.common.constants.ConstantsVariables
+import com.kod.assurancecontracthandler.common.utilities.DataTypesConversionAndFormattingUtils
 import com.kod.assurancecontracthandler.common.utilities.TimeConverters
 import com.kod.assurancecontracthandler.model.BaseContract
 import com.kod.assurancecontracthandler.model.Contract
@@ -62,6 +64,9 @@ abstract class BaseViewModel : ViewModel() {
             outputStream = FileOutputStream(outFile)
             val workBookEdited = editWorkbook(inputStream, outputStream, contract)
             if (!workBookEdited) {
+                outFile.deleteOnExit()
+                outputStream.close()
+                inputStream.close()
                 return false
             }
             copyFile(inputStream, outputStream)
@@ -86,18 +91,23 @@ abstract class BaseViewModel : ViewModel() {
 
     private fun editWorkbook(inputStream: InputStream, outputStream: FileOutputStream, contract: Contract): Boolean {
         val workbook = XSSFWorkbook(inputStream)
-        val sheet = workbook.getSheet("CONTRATS")
+        val sheet = workbook.getSheet(ConstantsVariables.EXPORT_SHEET_NAME)
+        ConstantsVariables.appLocal
         if (sheet == null) {
             _messageResourceId.postValue(R.string.error_on_file_reading)
             return false
         }
 
         val data: MutableMap<Int, MutableMap<Pair<Int, Int>, String?>> = mutableMapOf()
+        val formattedPhoneNumber =
+            DataTypesConversionAndFormattingUtils.formatPhoneNumberForExporting(contract.telephone)
+        val formattedPowerForExport =
+            DataTypesConversionAndFormattingUtils.removePowerToString(contract.puissanceVehicule)
 
         data[0] = mutableMapOf((7 to 1) to contract.assure)
-        data[1] = mutableMapOf((8 to 1) to contract.telephone)
+        data[1] = mutableMapOf((8 to 1) to formattedPhoneNumber)
         data[2] = mutableMapOf((8 to 4) to contract.numeroPolice)
-        data[3] = mutableMapOf((9 to 5) to TimeConverters.formatLongToLocaleDate(Date().time))
+        data[3] = mutableMapOf((9 to 5) to TimeConverters.formatLongToLocaleDate(Date().time, "dd-MM-yyyy"))
         data[4] = mutableMapOf((9 to 9) to contract.duree.toString())
         data[5] = mutableMapOf((11 to 1) to contract.assure)
         data[6] = mutableMapOf((11 to 5) to contract.compagnie)
@@ -106,9 +116,7 @@ abstract class BaseViewModel : ViewModel() {
         data[9] = mutableMapOf((16 to 1) to contract.mark)
         data[10] = mutableMapOf((16 to 7) to contract.immatriculation)
         data[11] = mutableMapOf((17 to 4) to contract.categorie.toString())
-        data[12] = mutableMapOf((18 to 1) to contract.puissanceVehicule)
-        data[13] = mutableMapOf((7 to 0) to contract.assure)
-        data[14] = mutableMapOf((7 to 0) to contract.assure)
+        data[12] = mutableMapOf((18 to 1) to formattedPowerForExport)
 
         for (value in data.values) {
             for ((rowAndCell, cellContent) in value) {
