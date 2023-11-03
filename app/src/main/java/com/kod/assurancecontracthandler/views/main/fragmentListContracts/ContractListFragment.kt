@@ -1,15 +1,23 @@
 package com.kod.assurancecontracthandler.views.main.fragmentListContracts
 
+import android.Manifest
 import android.app.Dialog
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.os.Environment
+import android.provider.Settings
 import android.util.Log
 import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -34,6 +42,7 @@ import com.kod.assurancecontracthandler.common.utilities.TimeConverters
 import com.kod.assurancecontracthandler.databinding.ContractDetailsBinding
 import com.kod.assurancecontracthandler.databinding.FilterDialogBinding
 import com.kod.assurancecontracthandler.databinding.FragmentListContractsBinding
+import com.kod.assurancecontracthandler.databinding.PermissionDialogBinding
 import com.kod.assurancecontracthandler.model.BaseContract
 import com.kod.assurancecontracthandler.model.database.ContractDatabase
 import com.kod.assurancecontracthandler.repository.ContractRepository
@@ -42,6 +51,7 @@ import com.kod.assurancecontracthandler.viewmodels.contractListViewModel.Contrac
 import com.kod.assurancecontracthandler.views.customerdetails.CustomerDetailsActivity
 import com.kod.assurancecontracthandler.views.expiringactivity.ExpiringContractsActivity
 import com.kod.assurancecontracthandler.views.settings.SettingsActivity
+
 
 class ContractListFragment : Fragment(), SearchView.OnQueryTextListener {
 
@@ -63,6 +73,21 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener {
     }
     private var rvAdapter: ContractListAdapter? = null
     private var dialogTouchContract: BottomSheetDialog? = null
+    private val requiredPermission = Manifest.permission.WRITE_EXTERNAL_STORAGE
+    private var shouldGoToSettingsPage = false
+    private val requestPermissionLauncher: ActivityResultLauncher<String> =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { hasPermission ->
+            if (!hasPermission) {
+                if (!shouldGoToSettingsPage) {
+                    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                    val uri = Uri.fromParts("package", requireContext().packageName, null)
+                    intent.setData(uri)
+                    startActivity(intent)
+                }
+                return@registerForActivityResult
+            }
+            exportContractToFile()
+        }
 
     companion object {
         fun newInstance() = ContractListFragment()
@@ -423,15 +448,70 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener {
             SimpleItemTouchCallback(
                 requireContext(),
                 rvAdapter!!,
-                onSwipeCallback = { idClicked ->
-                    contractListViewModel.exportContractToFile(
-                        idClicked,
-                        requireContext().assets,
-                        requireContext().filesDir
-                    )
+                onSwipeCallback = { idItemSlided ->
+                    contractListViewModel.idItemSlided = idItemSlided
+                    checkPermissionsStatus()
                 }
             )
         ).attachToRecyclerView(binding.rvListContract)
+    }
+
+    private fun checkPermissionsStatus() {
+        when {
+            ContextCompat.checkSelfPermission(
+                requireContext(),
+                requiredPermission
+            ) == PackageManager.PERMISSION_GRANTED -> {
+                checkManageExternalStoragePermission()
+            }
+
+            shouldShowRequestPermissionRationale(requiredPermission) -> {
+                shouldGoToSettingsPage = true
+                showPermissionDialog()
+            }
+
+            else -> {
+                shouldGoToSettingsPage = false
+                checkManageExternalStoragePermission()
+            }
+        }
+    }
+
+    private fun checkManageExternalStoragePermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            if (!Environment.isExternalStorageManager()) {
+                val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
+                val uri = Uri.fromParts("package", requireContext().packageName, null)
+                intent.setData(uri)
+                startActivity(intent)
+                requestPermissionLauncher.launch(
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                )
+                return
+            }
+        }
+        requestPermissionLauncher.launch(
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+        )
+    }
+
+    private fun showPermissionDialog() {
+        val dialogBinding = PermissionDialogBinding.inflate(layoutInflater)
+        val dialog = Dialog(requireContext())
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.setContentView(dialogBinding.root)
+        dialog.show()
+
+        dialogBinding.btnDialogPositive.setOnClickListener {
+            checkManageExternalStoragePermission()
+            dialog.dismiss()
+        }
+    }
+
+    private fun exportContractToFile() {
+        contractListViewModel.exportContractToFile(
+            requireContext().assets,
+        )
     }
 
     private fun touchListener() {
