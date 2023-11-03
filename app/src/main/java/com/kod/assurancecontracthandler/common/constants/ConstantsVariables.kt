@@ -19,6 +19,7 @@ object ConstantsVariables {
     ).sorted()
     const val isoDatePattern = "yyyy-MM-dd'T'HH:mm"
     const val desiredDatePattern = "yyyy-MM-dd"
+    const val desiredDateTimePattern = "yyyy-MM-dd HH:mm:ss"
     const val datePickerTag = "DATE_RANGE_PICKER"
     const val priceUnit = "XAF"
     const val powerUnit = "CV"
@@ -41,6 +42,7 @@ object ConstantsVariables {
     const val FIRST_USAGE_CHANNEL_ID_STRING = "FIRST_USAGE_CHANNEL_ID"
     const val WELCOME_WORK_NAME = "SHOWING_WELCOME_MESSAGE"
     const val CHECKING_EXPIRY_CONTRACTS_WORK_NAME = "CHECKING_EXPIRING_CONTRACTS"
+    const val EXPORT_SHEET_NAME = "CONTRATS"
     const val expiryChannelID_int = 1234
     const val firstTimeChannelID_int = 4321
     const val futureTenseExpire = "will expire"
