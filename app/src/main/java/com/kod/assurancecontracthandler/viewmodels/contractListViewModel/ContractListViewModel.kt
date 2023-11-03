@@ -12,7 +12,6 @@ import com.kod.assurancecontracthandler.common.utilities.TimeConverters
 import com.kod.assurancecontracthandler.model.BaseContract
 import com.kod.assurancecontracthandler.repository.ContractRepository
 import com.kod.assurancecontracthandler.viewmodels.baseviewmodel.BaseViewModel
-import java.io.File
 
 class ContractListViewModel(
     private val repository: ContractRepository,
@@ -83,6 +82,7 @@ class ContractListViewModel(
         get() = _maxDate
     val selectedFilteredChips: List<Int>
         get() = _selectedFilteredChips
+    var idItemSlided: Int = -1
 
     @Throws(IndexOutOfBoundsException::class)
     fun onSearchChipCheckChanged(searchChipId: Int?) {
@@ -337,10 +337,8 @@ class ContractListViewModel(
         return suffixFilterQuery
     }
 
-    fun exportContractToFile(
-        contractIndex: Int, assetManager: AssetManager, fileDir: File
-    ) {
-        val baseContract = _allContracts.value?.get(contractIndex)
+    fun exportContractToFile(assetManager: AssetManager) {
+        val baseContract = _allContracts.value?.get(idItemSlided)
         val contractToExport = baseContract?.contract
         if (contractToExport == null) {
             _messageResourceId.postValue(R.string.error_on_file_reading)
@@ -348,7 +346,12 @@ class ContractListViewModel(
         }
 
         executeFunctionWithoutAnimation {
-            super.exportContractToFile(contractToExport, assetManager, fileDir)
+            val result = super.exportContractToFile(contractToExport, assetManager)
+            if (result) {
+                _messageResourceId.postValue(R.string.file_creation_successful)
+            } else {
+                _messageResourceId.postValue(R.string.file_creation_failed)
+            }
         }
     }
 

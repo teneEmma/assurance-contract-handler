@@ -113,6 +113,9 @@
         vous souhaitons une bonne expérience</string>
     <string name="see_text">Jeter un coup d\'oeil</string>
     <string name="error_on_contract">Une erreur c\'est produite avec ce contrat</string>
+    <string name="folder_created_no">Folder couldn\'t be created</string>
+    <string name="file_creation_successful">Fichier crée avec success.</string>
+    <string name="file_creation_failed">Le fichier n\'a pas pu etre cree.</string>
 
     <string name="content_description_loading_progress">Niveau De Progression</string>
     <string name="content_description_fab_add_document">Ajouter un document</string>
