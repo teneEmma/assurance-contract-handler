@@ -18,11 +18,9 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import java.io.*
 import java.util.*
 
-
 /**
  *  The base ViewModel for all our viewModels. It contains the base values which each viewModel can contain.
- *  @param hasQueried A live value which indicates the state of the execution of a function through the
- *  [executeFunctionWithAnimation].
+ *  @property exportContractToFile Creates an Excel file from a given contract.
  *  @property executeFunctionWithAnimation Executes concurrently a given function while updating a live value.
  *  @property executeFunctionWithoutAnimation Just concurrently execute a function.
  */
