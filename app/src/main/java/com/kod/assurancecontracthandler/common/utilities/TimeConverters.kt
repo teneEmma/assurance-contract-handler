@@ -85,7 +85,7 @@ object TimeConverters {
         return formattedDate.format(date)
     }
 
-    fun formatLongToLocaleDateTime(dateInLong: Long?): String? {
+    fun formatLocaleDateTimeForFileName(dateInLong: Long?): String? {
         if (dateInLong == null) {
             return null
         }
