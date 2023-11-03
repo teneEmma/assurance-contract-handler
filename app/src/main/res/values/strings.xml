@@ -106,6 +106,7 @@
     <string name="folder_created_no">Folder couldn\'t be created</string>
     <string name="file_creation_successful">File created successfully.</string>
     <string name="file_creation_failed">File couldn\'t be created.</string>
+    <string name="wait_file_creation_to_complete">Wait for till other file is created.</string>
 
     <string name="column_attestation" translatable="false">000*Z*0112233</string>
     <string name="column_carteRose" translatable="false">00011333</string>

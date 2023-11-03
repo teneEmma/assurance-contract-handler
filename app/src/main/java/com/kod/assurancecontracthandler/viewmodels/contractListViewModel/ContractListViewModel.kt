@@ -345,7 +345,7 @@ class ContractListViewModel(
             return
         }
 
-        executeFunctionWithoutAnimation {
+        executeFunctionWithAnimation {
             val result = super.exportContractToFile(contractToExport, assetManager)
             if (result) {
                 _messageResourceId.postValue(R.string.file_creation_successful)

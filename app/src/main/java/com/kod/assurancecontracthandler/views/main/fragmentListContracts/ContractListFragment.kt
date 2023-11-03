@@ -151,7 +151,7 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener {
                 binding.progressBar.hide()
             }
         }
-            contractListViewModel.messageResourceId.observe(viewLifecycleOwner) { resourceId ->
+        contractListViewModel.messageResourceId.observe(viewLifecycleOwner) { resourceId ->
             shortSnack(resources.getString(resourceId))
         }
 
@@ -450,7 +450,10 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener {
                 rvAdapter!!,
                 onSwipeCallback = { idItemSlided ->
                     contractListViewModel.idItemSlided = idItemSlided
-                    checkPermissionsStatus()
+                    if (contractListViewModel.isLoading.value != true) {
+                        shortSnack(resources.getString(R.string.wait_file_creation_to_complete))
+                        checkPermissionsStatus()
+                    }
                 }
             )
         ).attachToRecyclerView(binding.rvListContract)
