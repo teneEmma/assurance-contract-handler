@@ -151,7 +151,7 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener {
                 binding.progressBar.hide()
             }
         }
-        contractListViewModel.messageResourceId.observe(viewLifecycleOwner) { resourceId ->
+            contractListViewModel.messageResourceId.observe(viewLifecycleOwner) { resourceId ->
             shortSnack(resources.getString(resourceId))
         }
 
@@ -414,7 +414,7 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener {
     }
 
     private fun shortSnack(message: String) {
-        Snackbar.make(requireView(), message, Snackbar.LENGTH_SHORT).show()
+        Snackbar.make(requireActivity().findViewById(android.R.id.content), message, Snackbar.LENGTH_SHORT).show()
     }
 
     private fun swipeToRefreshAfterChipCollapse() {
