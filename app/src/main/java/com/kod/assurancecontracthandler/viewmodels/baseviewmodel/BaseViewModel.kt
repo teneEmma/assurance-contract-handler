@@ -1,7 +1,7 @@
 package com.kod.assurancecontracthandler.viewmodels.baseviewmodel
 
 import android.content.res.AssetManager
-import android.util.Log
+import android.os.Environment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -52,32 +52,39 @@ abstract class BaseViewModel : ViewModel() {
         }
     }
 
-    fun exportContractToFile(contract: Contract, assetManager: AssetManager, fileDir: File): Boolean {
-        val inputStream: InputStream
-        val outputStream: OutputStream
+    fun exportContractToFile(contract: Contract, assetManager: AssetManager): Boolean {
         try {
-            inputStream = assetManager.open("export_to_file.xlsx")
-            val dateTime = TimeConverters.formatLongToLocaleDateTime(Date().time)
+            val inputStream = assetManager.open("export_to_file.xlsx")
+            val dateTime = TimeConverters.formatLocaleDateTimeForFileName(Date().time)
             val fileName = "${contract.assure}-$dateTime.xlsx"
 
-            val outFile = File(fileDir, fileName)
-            outputStream = FileOutputStream(outFile)
-            val workBookEdited = editWorkbook(inputStream, outputStream, contract)
-            if (!workBookEdited) {
+            val folderDirectory = File(Environment.getExternalStorageDirectory(), ConstantsVariables.FOLDER_DIR)
+            if (!folderDirectory.exists() && !folderDirectory.mkdir()) {
+                _messageResourceId.postValue(R.string.folder_created_no)
+                return false
+            }
+
+            val outFile = File(folderDirectory, fileName)
+            val outputStream = FileOutputStream(outFile)
+            val isWorkBookEdited = editWorkbook(inputStream, outputStream, contract)
+            if (!isWorkBookEdited) {
                 outFile.deleteOnExit()
-                outputStream.close()
-                inputStream.close()
+                closeStreams(inputStream, outputStream)
                 return false
             }
             copyFile(inputStream, outputStream)
-            inputStream.close()
             outputStream.flush()
-            outputStream.close()
+            closeStreams(inputStream, outputStream)
             return true
         } catch (e: IOException) {
-            Log.e("tag", "Failed to copy asset file: export_to_file", e)
+            e.printStackTrace()
             return false
         }
+    }
+
+    private fun closeStreams(inputStream: InputStream, outputStream: OutputStream) {
+        inputStream.close()
+        outputStream.close()
     }
 
     @Throws(IOException::class)
