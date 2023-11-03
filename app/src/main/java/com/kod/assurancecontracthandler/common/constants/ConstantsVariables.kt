@@ -19,7 +19,7 @@ object ConstantsVariables {
     ).sorted()
     const val isoDatePattern = "yyyy-MM-dd'T'HH:mm"
     const val desiredDatePattern = "yyyy-MM-dd"
-    const val desiredDateTimePattern = "yyyy-MM-dd HH:mm:ss"
+    const val desiredDateTimePattern = "yyyy-MM-dd_HH_mm_ss"
     const val datePickerTag = "DATE_RANGE_PICKER"
     const val priceUnit = "XAF"
     const val powerUnit = "CV"
@@ -47,6 +47,7 @@ object ConstantsVariables {
     const val firstTimeChannelID_int = 4321
     const val futureTenseExpire = "will expire"
     const val pastTenseExpire = "expired"
+    const val FOLDER_DIR = "/ORION ASSURANCE"
 
     const val minPriceValue = 0
     const val maxPriceValue = 10000000
