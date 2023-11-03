@@ -73,5 +73,20 @@ object DataTypesConversionAndFormattingUtils {
         }
     }
 
+    fun removePowerToString(power: String?): String? {
+        return power?.split(ConstantsVariables.powerUnit)?.first()
+    }
+
+    fun formatPhoneNumberForExporting(phoneNumber: String?): String?{
+        if(phoneNumber == null){
+            return null
+        }
+        if(phoneNumber.length != 9){
+            return null
+        }
+
+        return phoneNumber.substring(0, 3) + "-" + phoneNumber.substring(3, 5) + "-" +
+                phoneNumber.substring(5, 7) + "-" + phoneNumber.substring(7, 9)
+    }
     fun concatenateStringForDBQuery(stringValue: String): String = "%$stringValue%"
 }

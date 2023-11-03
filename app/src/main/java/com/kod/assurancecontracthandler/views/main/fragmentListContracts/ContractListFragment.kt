@@ -422,7 +422,14 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener {
         ItemTouchHelper(
             SimpleItemTouchCallback(
                 requireContext(),
-                rvAdapter!!
+                rvAdapter!!,
+                onSwipeCallback = { idClicked ->
+                    contractListViewModel.exportContractToFile(
+                        idClicked,
+                        requireContext().assets,
+                        requireContext().filesDir
+                    )
+                }
             )
         ).attachToRecyclerView(binding.rvListContract)
     }
