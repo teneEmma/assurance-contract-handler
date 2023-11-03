@@ -55,7 +55,7 @@ abstract class BaseViewModel : ViewModel() {
         val outputStream: OutputStream
         try {
             inputStream = assetManager.open("export_to_file.xlsx")
-            val dateTime = TimeConverters.formatLongToLocaleDateTime(Date().time)
+            val dateTime = TimeConverters.formatLocaleDateTimeForFileName(Date().time)
             val fileName = "${contract.assure}-$dateTime.xlsx"
 
             val outFile = File(fileDir, fileName)
