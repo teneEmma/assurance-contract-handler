@@ -103,6 +103,9 @@
     <string name="see_text">Take a look</string>
     <string name="export_file">Export</string>
     <string name="error_on_contract">An error occurred with this contract</string>
+    <string name="folder_created_no">Folder couldn\'t be created</string>
+    <string name="file_creation_successful">File created successfully.</string>
+    <string name="file_creation_failed">File couldn\'t be created.</string>
 
     <string name="column_attestation" translatable="false">000*Z*0112233</string>
     <string name="column_carteRose" translatable="false">00011333</string>
