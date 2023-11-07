@@ -1,6 +1,7 @@
 package com.kod.assurancecontracthandler.viewmodels.customerdetailsviewmodel
 
 import android.content.Intent
+import android.content.res.AssetManager
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -25,6 +26,7 @@ class CustomerDetailsViewModel(
     private var _btnModifyState: Boolean? = false
     private var _messageToSend: String? = null
     private var _shouldShowRelatedContractBtn: MutableLiveData<Boolean> = MutableLiveData(false)
+    private var _createdFileName: String? = null
 
     val customerContracts: LiveData<List<BaseContract>>
         get() = _customerContracts
@@ -39,7 +41,12 @@ class CustomerDetailsViewModel(
     val shouldShowRelatedContractBtn: LiveData<Boolean>
         get() = _shouldShowRelatedContractBtn
     val messageResourceId: LiveData<Int?>
-        get() = Companion._messageResourceId
+        get() = _messageResourceId
+    val isLoading: LiveData<Boolean>
+        get() = _isLoading
+    var idItemSlided: Int = -1
+    val createdFileName: String?
+        get() = _createdFileName
 
     fun getActualCustomerDetails(intent: Intent) {
         val customerName = intent.getStringExtra(ConstantsVariables.customerNameKey)
@@ -140,6 +147,27 @@ class CustomerDetailsViewModel(
             )
             getActualCustomer(_newCustomerName ?: oldName)
             getContractRelatedToCustomer()
+        }
+    }
+
+    fun exportContractToFile(assetManager: AssetManager) {
+        val baseContract = _customerContracts.value?.get(idItemSlided)
+        val contractToExport = baseContract?.contract
+        if (contractToExport == null) {
+            _messageResourceId.postValue(R.string.error_on_file_reading)
+            return
+        }
+
+        executeFunctionWithAnimation {
+            val result = super.exportContractToFile(contractToExport, assetManager)
+            if (result.first) {
+                _createdFileName = result.second
+                Log.d("MESSAGE111", "$result")
+                _messageResourceId.postValue(R.string.file_creation_successful)
+            } else {
+                Log.d("MESSAGE222", "$result")
+                _messageResourceId.postValue(R.string.file_creation_failed)
+            }
         }
     }
 

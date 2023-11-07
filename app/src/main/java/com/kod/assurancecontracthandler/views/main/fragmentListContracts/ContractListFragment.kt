@@ -468,7 +468,7 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener {
         binding.rvListContract.layoutManager = LinearLayoutManager(requireContext())
         binding.rvListContract.setHasFixedSize(true)
         ItemTouchHelper(
-            SimpleItemTouchCallback(
+            SimpleItemTouchCallback<ContractListAdapter.ContractViewHolder>(
                 requireContext(),
                 rvAdapter!!,
                 onSwipeCallback = { idItemSlided ->
