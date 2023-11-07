@@ -27,6 +27,7 @@ class ContractListViewModel(
     private var _maxDate: Long? = null
     private var _slidersValues: MutableMap<String, MutableMap<String, Pair<Float, Float>?>> = initializeSlidersMap()
     private var _selectedFilteredChips: List<Int> = emptyList()
+    private var _createdFileName: String? = null
 
     /**
      * Here is the structure of this map and what each index represent
@@ -83,6 +84,8 @@ class ContractListViewModel(
     val selectedFilteredChips: List<Int>
         get() = _selectedFilteredChips
     var idItemSlided: Int = -1
+    val createdFileName: String?
+        get() = _createdFileName
 
     @Throws(IndexOutOfBoundsException::class)
     fun onSearchChipCheckChanged(searchChipId: Int?) {
@@ -347,7 +350,8 @@ class ContractListViewModel(
 
         executeFunctionWithAnimation {
             val result = super.exportContractToFile(contractToExport, assetManager)
-            if (result) {
+            if (result.first) {
+                _createdFileName = result.second
                 _messageResourceId.postValue(R.string.file_creation_successful)
             } else {
                 _messageResourceId.postValue(R.string.file_creation_failed)
