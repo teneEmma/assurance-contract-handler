@@ -50,7 +50,7 @@ abstract class BaseViewModel : ViewModel() {
         }
     }
 
-    fun exportContractToFile(contract: Contract, assetManager: AssetManager): Boolean {
+    fun exportContractToFile(contract: Contract, assetManager: AssetManager): Pair<Boolean, String?> {
         try {
             val inputStream = assetManager.open("export_to_file.xlsx")
             val dateTime = TimeConverters.formatLocaleDateTimeForFileName(Date().time)
@@ -59,7 +59,7 @@ abstract class BaseViewModel : ViewModel() {
             val folderDirectory = File(Environment.getExternalStorageDirectory(), ConstantsVariables.FOLDER_DIR)
             if (!folderDirectory.exists() && !folderDirectory.mkdir()) {
                 _messageResourceId.postValue(R.string.folder_created_no)
-                return false
+                return Pair(false, null)
             }
 
             val outFile = File(folderDirectory, fileName)
@@ -68,15 +68,15 @@ abstract class BaseViewModel : ViewModel() {
             if (!isWorkBookEdited) {
                 outFile.deleteOnExit()
                 closeStreams(inputStream, outputStream)
-                return false
+                return Pair(false, null)
             }
             copyFile(inputStream, outputStream)
             outputStream.flush()
             closeStreams(inputStream, outputStream)
-            return true
+            return Pair(true, outFile.path)
         } catch (e: IOException) {
             e.printStackTrace()
-            return false
+            return Pair(false, null)
         }
     }
 

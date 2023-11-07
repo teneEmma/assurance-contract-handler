@@ -20,6 +20,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -33,6 +34,7 @@ import com.google.android.material.color.MaterialColors
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
+import com.kod.assurancecontracthandler.BuildConfig
 import com.kod.assurancecontracthandler.R
 import com.kod.assurancecontracthandler.common.constants.ConstantsVariables
 import com.kod.assurancecontracthandler.common.usecases.DateType
@@ -51,6 +53,7 @@ import com.kod.assurancecontracthandler.viewmodels.contractListViewModel.Contrac
 import com.kod.assurancecontracthandler.views.customerdetails.CustomerDetailsActivity
 import com.kod.assurancecontracthandler.views.expiringactivity.ExpiringContractsActivity
 import com.kod.assurancecontracthandler.views.settings.SettingsActivity
+import java.io.File
 
 
 class ContractListFragment : Fragment(), SearchView.OnQueryTextListener {
@@ -148,11 +151,14 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener {
             if (isLoading) {
                 binding.progressBar.show()
             } else {
-                binding.progressBar.hide()
+                binding.progressBar.hide() 
             }
         }
         contractListViewModel.messageResourceId.observe(viewLifecycleOwner) { resourceId ->
-            shortSnack(resources.getString(resourceId))
+            when (resourceId) {
+                R.string.file_creation_successful -> showSnackWithAction(R.string.file_creation_successful) { openDocument() }
+                else -> shortSnack(resources.getString(resourceId))
+            }
         }
 
         updateContractsList()
@@ -417,6 +423,23 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener {
         Snackbar.make(requireActivity().findViewById(android.R.id.content), message, Snackbar.LENGTH_SHORT).show()
     }
 
+    private fun showSnackWithAction(message: Int, action: () -> Unit) {
+        Snackbar.make(requireActivity().findViewById(android.R.id.content), message, Snackbar.LENGTH_SHORT)
+            .setAction(R.string.view_text) {
+                action()
+            }.show()
+    }
+
+    private fun openDocument() {
+        val fileName = contractListViewModel.createdFileName ?: return
+        val file = File(fileName)
+        val uri = FileProvider.getUriForFile(requireContext(), "${BuildConfig.APPLICATION_ID}.provider", file)
+        val intent = Intent(Intent.ACTION_VIEW)
+        intent.setDataAndType(uri, "application/vnd.ms-excel")
+        intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+        startActivity(intent)
+    }
+
     private fun swipeToRefreshAfterChipCollapse() {
         val arrowColor = MaterialColors.getColor(requireContext(), androidx.appcompat.R.attr.colorPrimary, Color.GREEN)
         val backgroundColor =
@@ -450,10 +473,11 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener {
                 rvAdapter!!,
                 onSwipeCallback = { idItemSlided ->
                     contractListViewModel.idItemSlided = idItemSlided
-                    if (contractListViewModel.isLoading.value != true) {
+                    if (contractListViewModel.isLoading.value == true) {
                         shortSnack(resources.getString(R.string.wait_file_creation_to_complete))
-                        checkPermissionsStatus()
+                        return@SimpleItemTouchCallback
                     }
+                    checkPermissionsStatus()
                 }
             )
         ).attachToRecyclerView(binding.rvListContract)
