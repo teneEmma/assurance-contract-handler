@@ -1,5 +1,6 @@
 package com.kod.assurancecontracthandler.views.customerdetails
 
+import android.Manifest
 import android.app.Dialog
 import android.content.Intent
 import android.content.SharedPreferences
@@ -7,33 +8,47 @@ import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.os.Environment
+import android.provider.Settings
 import android.text.SpannableString
 import android.text.style.UnderlineSpan
+import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.core.widget.doOnTextChanged
 import androidx.preference.PreferenceManager
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.snackbar.Snackbar
+import com.kod.assurancecontracthandler.BuildConfig
 import com.kod.assurancecontracthandler.R
 import com.kod.assurancecontracthandler.common.constants.ConstantsVariables
 import com.kod.assurancecontracthandler.common.usecases.ContactAction
 import com.kod.assurancecontracthandler.common.utilities.BottomDialogView
 import com.kod.assurancecontracthandler.common.utilities.DataStoreRepository
 import com.kod.assurancecontracthandler.common.utilities.DataTypesConversionAndFormattingUtils
+import com.kod.assurancecontracthandler.common.utilities.SimpleItemTouchCallback
 import com.kod.assurancecontracthandler.databinding.ActivityCustomerDetailsBinding
 import com.kod.assurancecontracthandler.databinding.ContractDetailsBinding
 import com.kod.assurancecontracthandler.databinding.EditCustomerDialogBinding
+import com.kod.assurancecontracthandler.databinding.PermissionDialogBinding
 import com.kod.assurancecontracthandler.model.Contract
 import com.kod.assurancecontracthandler.model.database.ContractDatabase
 import com.kod.assurancecontracthandler.repository.ContractRepository
 import com.kod.assurancecontracthandler.repository.CustomerRepository
 import com.kod.assurancecontracthandler.viewmodels.customerdetailsviewmodel.CustomerDetailsViewModel
 import com.kod.assurancecontracthandler.viewmodels.customerdetailsviewmodel.CustomerDetailsViewModelFactory
+import java.io.File
 import java.net.URLEncoder
 
 
@@ -41,6 +56,21 @@ class CustomerDetailsActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityCustomerDetailsBinding
     private lateinit var dataStore: DataStoreRepository
+    private val requiredPermission = Manifest.permission.WRITE_EXTERNAL_STORAGE
+    private var shouldGoToSettingsPage = false
+    private val requestPermissionLauncher: ActivityResultLauncher<String> =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { hasPermission ->
+            if (!hasPermission) {
+                if (!shouldGoToSettingsPage) {
+                    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                    val uri = Uri.fromParts("package", packageName, null)
+                    intent.setData(uri)
+                    startActivity(intent)
+                }
+                return@registerForActivityResult
+            }
+            exportContractToFile()
+        }
     private val customerDetailsViewModel by viewModels<CustomerDetailsViewModel> {
         val customerDao = ContractDatabase.getDatabase(this).customerDao()
         val contractDao = ContractDatabase.getDatabase(this).contractDao()
@@ -80,6 +110,39 @@ class CustomerDetailsActivity : AppCompatActivity() {
             binding.recyclerActiveContracts.adapter = contractRecyclerAdapter
             binding.recyclerActiveContracts.layoutManager = LinearLayoutManager(applicationContext)
             binding.recyclerActiveContracts.setHasFixedSize(true)
+            ItemTouchHelper(
+                SimpleItemTouchCallback<CustomerContractsAdapter.ContractViewHolder>(this,
+                    contractRecyclerAdapter,
+                    onSwipeCallback = { idItemSlided ->
+                        customerDetailsViewModel.idItemSlided = idItemSlided
+                        if (customerDetailsViewModel.isLoading.value == true) {
+                            shortSnack(resources.getString(R.string.wait_file_creation_to_complete))
+                            return@SimpleItemTouchCallback
+                        }
+                        checkPermissionsStatus()
+                    })
+            ).attachToRecyclerView(binding.recyclerActiveContracts)
+        }
+
+        customerDetailsViewModel.isLoading.observe(this) { isLoading ->
+            if (isLoading) {
+                binding.progressBar.show()
+            } else {
+                binding.progressBar.hide()
+            }
+        }
+
+        customerDetailsViewModel.messageResourceId.observe(this) { resourceId ->
+            Log.d("XXX MESSAGE XXX", "${resourceId?.let { resources.getString(it) }}")
+            when (resourceId) {
+                R.string.file_creation_successful -> showSnackWithAction(R.string.file_creation_successful) { openDocument() }
+                else -> {
+                    if (resourceId == null) {
+                        return@observe
+                    }
+                    shortSnack(resources.getString(resourceId))
+                }
+            }
         }
 
         customerDetailsViewModel.actualCustomer.observe(this) {
@@ -93,6 +156,75 @@ class CustomerDetailsActivity : AppCompatActivity() {
 
         customerDetailsViewModel.getActualCustomerDetails(intent)
     }
+
+    private fun checkPermissionsStatus() {
+        when {
+            ContextCompat.checkSelfPermission(
+                this, requiredPermission
+            ) == PackageManager.PERMISSION_GRANTED -> {
+                checkManageExternalStoragePermission()
+            }
+
+            shouldShowRequestPermissionRationale(requiredPermission) -> {
+                shouldGoToSettingsPage = true
+                showPermissionDialog()
+            }
+
+            else -> {
+                shouldGoToSettingsPage = false
+                checkManageExternalStoragePermission()
+            }
+        }
+    }
+
+    private fun showPermissionDialog() {
+        val dialogBinding = PermissionDialogBinding.inflate(layoutInflater)
+        val dialog = Dialog(this)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.setContentView(dialogBinding.root)
+        dialog.show()
+
+        dialogBinding.btnDialogPositive.setOnClickListener {
+            checkManageExternalStoragePermission()
+            dialog.dismiss()
+        }
+    }
+
+    private fun checkManageExternalStoragePermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            if (!Environment.isExternalStorageManager()) {
+                val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
+                val uri = Uri.fromParts("package", packageName, null)
+                intent.setData(uri)
+                startActivity(intent)
+                requestPermissionLauncher.launch(
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                )
+                return
+            }
+        }
+        requestPermissionLauncher.launch(
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+        )
+    }
+
+    private fun shortSnack(message: String) {
+        Snackbar.make(this.findViewById(android.R.id.content), message, Snackbar.LENGTH_SHORT).show()
+    }
+
+    private fun showSnackWithAction(message: Int, action: () -> Unit) {
+        Snackbar.make(this.findViewById(android.R.id.content), message, Snackbar.LENGTH_SHORT)
+            .setAction(R.string.view_text) {
+                action()
+            }.show()
+    }
+
+    private fun exportContractToFile() {
+        customerDetailsViewModel.exportContractToFile(
+            assets,
+        )
+    }
+
 
     private fun showModificationDialog() {
         val editCustomerBinding = EditCustomerDialogBinding.inflate(layoutInflater)
@@ -130,11 +262,6 @@ class CustomerDetailsActivity : AppCompatActivity() {
             customerDetailsViewModel.onDismissModifyCustomerDetailsDialog()
         }
 
-        customerDetailsViewModel.messageResourceId.observe(this) {
-            if (it != null) {
-                shortToast(resources.getString(it))
-            }
-        }
         editCustomerBinding.btnModify.setOnClickListener {
             customerDetailsViewModel.updateCustomerDetails()
             editCustomerDialog.dismiss()
@@ -147,6 +274,16 @@ class CustomerDetailsActivity : AppCompatActivity() {
 
         editCustomerDialog.window?.setLayout(width, WindowManager.LayoutParams.WRAP_CONTENT)
         editCustomerDialog.show()
+    }
+
+    private fun openDocument() {
+        val fileName = customerDetailsViewModel.createdFileName ?: return
+        val file = File(fileName)
+        val uri = FileProvider.getUriForFile(this, "${BuildConfig.APPLICATION_ID}.provider", file)
+        val intent = Intent(Intent.ACTION_VIEW)
+        intent.setDataAndType(uri, "application/vnd.ms-excel")
+        intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+        startActivity(intent)
     }
 
     private fun setViews() {
