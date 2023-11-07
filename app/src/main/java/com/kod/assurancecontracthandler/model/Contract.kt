@@ -18,6 +18,7 @@ data class Contract(
     var puissanceVehicule: String? = null,
     var mark: String? = null,
     var immatriculation: String? = null,
+    var chassis: String? = null,
     var categorie: Int? = null,
     var zone: String? = null,
     var duree: Int? = null,
