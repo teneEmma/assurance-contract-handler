@@ -1,26 +1,41 @@
 package com.kod.assurancecontracthandler.views.expiringactivity
 
+import android.Manifest
+import android.app.Dialog
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.os.Environment
+import android.provider.Settings
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.SearchView
+import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.preference.PreferenceManager
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
+import com.kod.assurancecontracthandler.BuildConfig
 import com.kod.assurancecontracthandler.R
 import com.kod.assurancecontracthandler.common.constants.ConstantsVariables
 import com.kod.assurancecontracthandler.common.utilities.BottomDialogView
+import com.kod.assurancecontracthandler.common.utilities.SimpleItemTouchCallback
 import com.kod.assurancecontracthandler.databinding.ActivityExpiringContractsBinding
 import com.kod.assurancecontracthandler.databinding.ContractDetailsBinding
+import com.kod.assurancecontracthandler.databinding.PermissionDialogBinding
 import com.kod.assurancecontracthandler.model.BaseContract
 import com.kod.assurancecontracthandler.model.Customer
 import com.kod.assurancecontracthandler.model.database.ContractDatabase
@@ -29,16 +44,32 @@ import com.kod.assurancecontracthandler.viewmodels.expiringviewmodel.ExpiringCon
 import com.kod.assurancecontracthandler.viewmodels.expiringviewmodel.ExpiringContractsViewModelFactory
 import com.kod.assurancecontracthandler.views.customerdetails.CustomerDetailsActivity
 import com.kod.assurancecontracthandler.views.main.fragmentListContracts.ContractListAdapter
+import java.io.File
 
 class ExpiringContractsActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
     private lateinit var binding: ActivityExpiringContractsBinding
     private var adapter: ContractListAdapter? = null
     private lateinit var sharedPrefs: SharedPreferences
+    private val requiredPermission = Manifest.permission.WRITE_EXTERNAL_STORAGE
+    private var shouldGoToSettingsPage = false
     private val expiringContractViewModel by viewModels<ExpiringContractsViewModel> {
         val contractDao = ContractDatabase.getDatabase(this).contractDao()
         val contractRepository = ContractRepository(contractDao)
         ExpiringContractsViewModelFactory(contractRepository)
     }
+    private val requestPermissionLauncher: ActivityResultLauncher<String> =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { hasPermission ->
+            if (!hasPermission) {
+                if (!shouldGoToSettingsPage) {
+                    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                    val uri = Uri.fromParts("package", packageName, null)
+                    intent.setData(uri)
+                    startActivity(intent)
+                }
+                return@registerForActivityResult
+            }
+            exportContractToFile()
+        }
 
     override fun onDestroy() {
         adapter = null
@@ -65,12 +96,39 @@ class ExpiringContractsActivity : AppCompatActivity(), SearchView.OnQueryTextLis
             binding.activityContent.rvExpiringContracts.visibility = View.VISIBLE
             adapter?.setContractList(contracts2Expire!!)
         }
-
+        expiringContractViewModel.isLoading.observe(this) { isLoading ->
+            if (isLoading) {
+                binding.activityContent.progressBar.show()
+            } else {
+                binding.activityContent.progressBar.hide()
+            }
+        }
+        expiringContractViewModel.messageResourceId.observe(this) { resourceId ->
+            when (resourceId) {
+                R.string.file_creation_successful -> showSnackWithAction(R.string.file_creation_successful) { openDocument() }
+                else -> {
+                    if (resourceId == null) {
+                        return@observe
+                    }
+                    shortSnack(resources.getString(resourceId))
+                }
+            }
+        }
         val maxNumber =
             sharedPrefs.getString(resources.getString(R.string.expiring_notifications_periodicity_key), "1")
         expiringContractViewModel.getExpiringContracts(maxNumber?.toLong() ?: 1L)
         setUpSearchBar()
         setupRecyclerView()
+    }
+
+    private fun openDocument() {
+        val fileName = expiringContractViewModel.createdFileName ?: return
+        val file = File(fileName)
+        val uri = FileProvider.getUriForFile(this, "${BuildConfig.APPLICATION_ID}.provider", file)
+        val intent = Intent(Intent.ACTION_VIEW)
+        intent.setDataAndType(uri, "application/vnd.ms-excel")
+        intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+        startActivity(intent)
     }
 
     private fun setupRecyclerView() {
@@ -83,6 +141,78 @@ class ExpiringContractsActivity : AppCompatActivity(), SearchView.OnQueryTextLis
             rvExpiringContracts.layoutManager = LinearLayoutManager(applicationContext)
             rvExpiringContracts.setHasFixedSize(true)
         }
+        ItemTouchHelper(
+            SimpleItemTouchCallback(
+                this,
+                adapter!!,
+                onSwipeCallback = { idItemSlided ->
+                    expiringContractViewModel.idItemSlided = idItemSlided
+                    if (expiringContractViewModel.isLoading.value == true) {
+                        shortSnack(resources.getString(R.string.wait_file_creation_to_complete))
+                        return@SimpleItemTouchCallback
+                    }
+                    checkPermissionsStatus()
+                }
+            )
+        ).attachToRecyclerView(binding.activityContent.rvExpiringContracts)
+    }
+
+    private fun checkPermissionsStatus() {
+        when {
+            ContextCompat.checkSelfPermission(
+                this,
+                requiredPermission,
+            ) == PackageManager.PERMISSION_GRANTED -> {
+                checkManageExternalStoragePermission()
+            }
+
+            shouldShowRequestPermissionRationale(requiredPermission) -> {
+                shouldGoToSettingsPage = true
+                showPermissionDialog()
+            }
+
+            else -> {
+                shouldGoToSettingsPage = false
+                checkManageExternalStoragePermission()
+            }
+        }
+    }
+
+    private fun exportContractToFile() {
+        expiringContractViewModel.exportContractToFile(
+            assets,
+        )
+    }
+
+    private fun showPermissionDialog() {
+        val dialogBinding = PermissionDialogBinding.inflate(layoutInflater)
+        val dialog = Dialog(this)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.setContentView(dialogBinding.root)
+        dialog.show()
+
+        dialogBinding.btnDialogPositive.setOnClickListener {
+            checkManageExternalStoragePermission()
+            dialog.dismiss()
+        }
+    }
+
+    private fun checkManageExternalStoragePermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            if (!Environment.isExternalStorageManager()) {
+                val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
+                val uri = Uri.fromParts("package", packageName, null)
+                intent.setData(uri)
+                startActivity(intent)
+                requestPermissionLauncher.launch(
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                )
+                return
+            }
+        }
+        requestPermissionLauncher.launch(
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+        )
     }
 
     private fun showBottomDialog(baseContract: BaseContract) {
@@ -156,6 +286,13 @@ class ExpiringContractsActivity : AppCompatActivity(), SearchView.OnQueryTextLis
         expiringContractViewModel.searchExpiringContractForAssurer(newText)
 
         return true
+    }
+
+    private fun showSnackWithAction(message: Int, action: () -> Unit) {
+        Snackbar.make(findViewById(android.R.id.content), message, Snackbar.LENGTH_SHORT)
+            .setAction(R.string.view_text) {
+                action()
+            }.show()
     }
 
     private fun shortSnack(message: String) {
