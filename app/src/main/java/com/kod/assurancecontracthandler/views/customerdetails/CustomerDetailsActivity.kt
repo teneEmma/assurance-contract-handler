@@ -369,6 +369,7 @@ class CustomerDetailsActivity : AppCompatActivity() {
             .replace(ConstantsVariables.predefinedMsgCategoryId, contract?.categorie.toString() ?: "")
             .replace(ConstantsVariables.predefinedMsgAttestationId, contract?.attestation ?: "")
             .replace(ConstantsVariables.predefinedImmatricualtionId, contract?.immatriculation ?: "")
+            .replace(ConstantsVariables.predefinedChassisId, contract?.chassis ?: "")
     }
 
     private fun sendSMS(msg: String) {
