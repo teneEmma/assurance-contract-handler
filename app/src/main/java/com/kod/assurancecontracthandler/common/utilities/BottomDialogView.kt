@@ -57,6 +57,7 @@ class BottomDialogView(
             c?.compagnie,
             c?.mark,
             c?.immatriculation,
+            c?.chassis,
             c?.puissanceVehicule,
             c?.carteRose,
             c?.categorie?.toString(),

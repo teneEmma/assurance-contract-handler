@@ -52,6 +52,7 @@
     <string name="due_date_date_hint_text">Due date</string>
     <string name="filter_provider_name">Filter by provider\'s name</string>
     <string name="plate_number_number">Plate number</string>
+    <string name="chassis_number">Chassis number</string>
     <string name="name_of_company_text">Name of company</string>
     <string name="name_of_assurer_text">Assurer</string>
     <string name="mark_vehicle_text">Mark of vehicle</string>
@@ -126,7 +127,7 @@
     <string name="phone_number" translatable="false">650123456</string>
     <string name="predefined_message" translatable="false">
         Good Day Dear Client. Just to inform you that, the insurance of your vehicle
-        VEHICLE_ID registered PLATE_NUMBER_ID will expire on the DATE_ID.\n
+        VEHICLE_ID registered PLATE_NUMBER_ID will expire on the END_DATE_ID.\n
         According to the financial law 2023, here are the new prices of vignettes:\n
         01CV to 07CV 30,000frs\n
         08CV to 13CV 50,000frs\n
@@ -160,13 +161,14 @@
     <string name="language_title">Language</string>
     <string name="language_summary">Chose a language</string>
     <string name="predefined_message_summary">Default text message to send to customers via whatsapp or SMS</string>
-    <string name="predefined_message_edition_summary_no_colors">Put these words(in blue) to permit the app to auto replace them with actual values from the contract.VEHICLE_ID(mark of vehicle), START_DATE_ID(start date), END_DATE_ID(due date) and PLATE_NUMBER_ID(plate number).
+    <string name="predefined_message_edition_summary_no_colors">Put these words(in blue) to permit the app to auto replace them with actual values from the contract.VEHICLE_ID(mark of vehicle), START_DATE_ID(start date), END_DATE_ID(due date), CHASSIS_ID (chassis number) and PLATE_NUMBER_ID(plate number).
     </string>
     <string name="predefined_message_edition_summary_with_colors">Put these words(in blue) to permit the app to auto replace them with values from the contract.</string>
     <string name="predefined_message_edition_fields_1_with_colors">
         \n<font fgcolor='#0037FF'>VEHICLE_ID</font>(mark of vehicle),
         \n<font fgcolor='#0037FF'>START_DATE_ID</font>(start date),
-        \n<font fgcolor='#0037FF'>END_DATE_ID</font>(due date) and
+        \n<font fgcolor='#0037FF'>END_DATE_ID</font>(due date),
+        \n<font fgcolor='#0037FF'>CHASSIS_ID</font>(chassis number) and
         \n<font fgcolor='#0037FF'>PLATE_NUMBER_ID</font>(plate number).
     </string>
     <string name="predefined_message_edition_fields_2_with_colors">
@@ -223,6 +225,7 @@
         <item>COMPANY</item>
         <item>MARK</item>
         <item>PLATE NUMBER</item>
+        <item>CHASSIS</item>
         <item>POWER</item>
         <item>PINK CARD</item>
         <item>CATEGORY</item>

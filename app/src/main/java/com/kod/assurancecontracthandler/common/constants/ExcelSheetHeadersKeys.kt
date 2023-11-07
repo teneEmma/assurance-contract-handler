@@ -11,6 +11,7 @@ object ExcelSheetHeadersKeys {
     const val keyPower = "PUISS / ENERGIE"
     const val keyMark = "MARK"
     const val keyRegistration = "IMMATRICULATION"
+    const val keyChassis = "CHASSIS"
     const val keyCategory = "CATEGORIE"
     const val keyZone = "ZONE"
     const val keyDuration = "DUREE (Jours)"
