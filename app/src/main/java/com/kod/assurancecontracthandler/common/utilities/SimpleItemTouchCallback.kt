@@ -13,11 +13,10 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.color.MaterialColors
 import com.kod.assurancecontracthandler.R
-import com.kod.assurancecontracthandler.views.main.fragmentListContracts.ContractListAdapter
 
-class SimpleItemTouchCallback(
+class SimpleItemTouchCallback<T: RecyclerView.ViewHolder>(
     private val context: Context,
-    private val rvAdapter: ContractListAdapter,
+    private val rvAdapter: RecyclerView.Adapter<T>,
     private val onSwipeCallback: (Int) -> Unit
 ) :
     ItemTouchHelper.SimpleCallback(
