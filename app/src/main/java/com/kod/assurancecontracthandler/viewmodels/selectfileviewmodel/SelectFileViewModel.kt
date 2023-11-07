@@ -1,6 +1,7 @@
 package com.kod.assurancecontracthandler.viewmodels.selectfileviewmodel
 
 import ExcelSheetHeadersKeys
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.kod.assurancecontracthandler.R
@@ -31,8 +32,7 @@ class SelectFileViewModel(private val contractRepository: ContractRepository) : 
     val successful: MutableLiveData<ProcessState?>
         get() = _isSuccessful
 
-    private val _messageResourceId = MutableLiveData<Int>()
-    val messageResourceId: LiveData<Int>
+    val messageResourceId: LiveData<Int?>
         get() = _messageResourceId
 
     private val _progression = MutableLiveData<Int>()
@@ -99,7 +99,7 @@ class SelectFileViewModel(private val contractRepository: ContractRepository) : 
                 }
             }
             if (rowMap.isNotEmpty()) {
-                val baseContract = setContractObj2(rowMap)
+                val baseContract = setContractObject(rowMap)
 
                 if (baseContract.contract?.assure == null) {
                     continue
@@ -127,12 +127,12 @@ class SelectFileViewModel(private val contractRepository: ContractRepository) : 
         while (cellIterator.hasNext()) {
             val cell = cellIterator.next()
             val cellValue = getCell(cell)
-            headerMap.add(cellValue.toString())
+            headerMap.add(cellValue.toString().trim())
         }
         return headerMap
     }
 
-    private fun setContractObj2(row: Map<String, Any?>): BaseContract {
+    private fun setContractObject(row: Map<String, Any?>): BaseContract {
         val contract = Contract()
 
         contract.apply {
@@ -145,6 +145,7 @@ class SelectFileViewModel(private val contractRepository: ContractRepository) : 
                 puissanceVehicule = notStringifyingNull(row[ExcelSheetHeadersKeys.keyPower])
                 mark = notStringifyingNull(row[ExcelSheetHeadersKeys.keyMark])
                 immatriculation = notStringifyingNull(row[ExcelSheetHeadersKeys.keyRegistration])
+                chassis = notStringifyingNull(row[ExcelSheetHeadersKeys.keyChassis])
                 zone = notStringifyingNull(row[ExcelSheetHeadersKeys.keyZone])
                 APPORTEUR = notStringifyingNull(row[ExcelSheetHeadersKeys.keyPROVIDER])
                 numeroPolice = notStringifyingNull(row[ExcelSheetHeadersKeys.keyPoliceNumber])?.let {
