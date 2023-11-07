@@ -315,6 +315,31 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/il_filter_chassis"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/SelectFile_text_input"
+                app:hintEnabled="true"
+                app:hintTextAppearance="@style/small"
+                app:hintTextColor="@color/purple_500"
+                android:hint="@string/plate_number_number"
+                app:endIconMode="clear_text"
+                app:endIconTint="?android:colorPrimary"
+                android:visibility="gone">
+
+            <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_filter_chassis"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:textAppearance="@style/normal"
+                    android:textSize="18sp"
+                    android:inputType="text"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/il_filter_mark"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
