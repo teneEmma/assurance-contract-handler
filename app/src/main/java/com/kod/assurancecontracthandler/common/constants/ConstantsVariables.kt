@@ -11,11 +11,11 @@ object ConstantsVariables {
     val possibleHeaderValues = listOf("ATTESTATION", "CARTE ROSE", "ASSURE", "N°")
     val searchBarChipsTitles = listOf(
         "APPORTEUR", "assure", "attestation", "compagnie", "telephone",
-        "immatriculation", "mark", "numeroPolice"
+        "immatriculation", "Chassis", "mark", "numeroPolice"
     ).sorted()
     val filterDialogChips: List<String> = mutableListOf(
         "Apporteur", "Assure", "Attestation", "Carte rose", "Categorie",
-        "Compagnie", "Immatriculation", "Mark", "Numero police"
+        "Compagnie", "Immatriculation", "Chassis", "Mark", "Numero police"
     ).sorted()
     const val isoDatePattern = "yyyy-MM-dd'T'HH:mm"
     const val desiredDatePattern = "yyyy-MM-dd"
@@ -38,6 +38,7 @@ object ConstantsVariables {
     const val predefinedMsgEndDateId = "END_DATE_ID"
     const val predefinedMsgStartDateId = "START_DATE_ID"
     const val predefinedImmatricualtionId = "PLATE_NUMBER_ID"
+    const val predefinedChassisId = "CHASSIS_ID"
     const val EXPIRY_CHANNEL_ID_STRING = "ASSURANCE_CONTRACT_CHANNEL_ID"
     const val FIRST_USAGE_CHANNEL_ID_STRING = "FIRST_USAGE_CHANNEL_ID"
     const val WELCOME_WORK_NAME = "SHOWING_WELCOME_MESSAGE"
