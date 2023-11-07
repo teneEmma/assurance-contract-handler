@@ -39,8 +39,9 @@ class ContractListViewModel(
      *   4=Categorie,
      *   5=Compagnie,
      *   6=Immatriculation,
-     *   7=Mark,
-     *   8=Numero police,
+     *   7=Chassis,
+     *   8=Mark,
+     *   9=Numero police,
      *  }
      */
     private var _filterChipsAndTextFieldsValues: MutableMap<Int, String?> = initializeChipsAndTextFieldsValues()
@@ -252,12 +253,17 @@ class ContractListViewModel(
         }
         if (shouldFilterField(_filterChipsAndTextFieldsValues[7])) {
             suffixFilterQuery = suffixFilterQuery.plus(
-                """AND mark LIKE "${concatenateStringForDBQuery(_filterChipsAndTextFieldsValues[7]!!)}" """
+                """AND chassis LIKE "${concatenateStringForDBQuery(_filterChipsAndTextFieldsValues[7]!!)}" """
             )
         }
         if (shouldFilterField(_filterChipsAndTextFieldsValues[8])) {
             suffixFilterQuery = suffixFilterQuery.plus(
-                """AND numeroPolice LIKE "${concatenateStringForDBQuery(_filterChipsAndTextFieldsValues[8]!!)}" """
+                """AND mark LIKE "${concatenateStringForDBQuery(_filterChipsAndTextFieldsValues[8]!!)}" """
+            )
+        }
+        if (shouldFilterField(_filterChipsAndTextFieldsValues[9])) {
+            suffixFilterQuery = suffixFilterQuery.plus(
+                """AND numeroPolice LIKE "${concatenateStringForDBQuery(_filterChipsAndTextFieldsValues[9]!!)}" """
             )
         }
 
