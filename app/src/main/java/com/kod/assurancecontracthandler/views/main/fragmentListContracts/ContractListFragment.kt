@@ -233,9 +233,9 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener {
             filterDialogBinding.ilFilterAttestation,
             filterDialogBinding.ilFilterCarteRose,
             filterDialogBinding.ilFilterCategory,
+            filterDialogBinding.ilFilterChassis,
             filterDialogBinding.ilFilterCompagnie,
             filterDialogBinding.ilFilterImmatriculation,
-            filterDialogBinding.ilFilterChassis,
             filterDialogBinding.ilFilterMark,
             filterDialogBinding.ilFilterNumeroPolice
         )
@@ -245,9 +245,9 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener {
             filterDialogBinding.etFilterAttestation,
             filterDialogBinding.etFilterCarteRose,
             filterDialogBinding.etFilterCategory,
+            filterDialogBinding.etFilterChassis,
             filterDialogBinding.etFilterCompagnie,
             filterDialogBinding.etFilterImmatriculation,
-            filterDialogBinding.etFilterChassis,
             filterDialogBinding.etFilterMark,
             filterDialogBinding.etFilterPolice
         )

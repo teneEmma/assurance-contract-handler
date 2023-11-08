@@ -322,7 +322,7 @@
                 app:hintEnabled="true"
                 app:hintTextAppearance="@style/small"
                 app:hintTextColor="@color/purple_500"
-                android:hint="@string/plate_number_number"
+                android:hint="@string/chassis_number"
                 app:endIconMode="clear_text"
                 app:endIconTint="?android:colorPrimary"
                 android:visibility="gone">

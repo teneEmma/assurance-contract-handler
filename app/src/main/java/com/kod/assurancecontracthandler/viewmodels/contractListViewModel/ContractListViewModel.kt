@@ -37,9 +37,9 @@ class ContractListViewModel(
      *   2=Attestation,
      *   3=Carte rose,
      *   4=Categorie,
-     *   5=Compagnie,
-     *   6=Immatriculation,
-     *   7=Chassis,
+     *   5=Chassis,
+     *   6=Compagnie,
+     *   7=Immatriculation,
      *   8=Mark,
      *   9=Numero police,
      *  }
@@ -185,6 +185,10 @@ class ContractListViewModel(
 
         executeFunctionWithAnimation {
             // Removing the first AND in query
+            if(suffixFilterQuery.isEmpty()){
+                _messageResourceId.postValue(R.string.filter_not_applied)
+                return@executeFunctionWithAnimation
+            }
             suffixFilterQuery = suffixFilterQuery.removeRange(0, 3)
             val filterQuery = "SELECT * FROM ($initialSearchString) WHERE $suffixFilterQuery"
             val query = SimpleSQLiteQuery(filterQuery)
@@ -243,17 +247,17 @@ class ContractListViewModel(
         }
         if (shouldFilterField(_filterChipsAndTextFieldsValues[5])) {
             suffixFilterQuery = suffixFilterQuery.plus(
-                """AND compagnie LIKE "${concatenateStringForDBQuery(_filterChipsAndTextFieldsValues[5]!!)}" """
+                """AND chassis LIKE "${concatenateStringForDBQuery(_filterChipsAndTextFieldsValues[5]!!)}" """
             )
         }
         if (shouldFilterField(_filterChipsAndTextFieldsValues[6])) {
             suffixFilterQuery = suffixFilterQuery.plus(
-                """AND immatriculation LIKE "${concatenateStringForDBQuery(_filterChipsAndTextFieldsValues[6]!!)}" """
+                """AND compagnie LIKE "${concatenateStringForDBQuery(_filterChipsAndTextFieldsValues[6]!!)}" """
             )
         }
         if (shouldFilterField(_filterChipsAndTextFieldsValues[7])) {
             suffixFilterQuery = suffixFilterQuery.plus(
-                """AND chassis LIKE "${concatenateStringForDBQuery(_filterChipsAndTextFieldsValues[7]!!)}" """
+                """AND immatriculation LIKE "${concatenateStringForDBQuery(_filterChipsAndTextFieldsValues[7]!!)}" """
             )
         }
         if (shouldFilterField(_filterChipsAndTextFieldsValues[8])) {

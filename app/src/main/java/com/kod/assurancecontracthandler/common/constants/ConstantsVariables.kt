@@ -11,11 +11,11 @@ object ConstantsVariables {
     val possibleHeaderValues = listOf("ATTESTATION", "CARTE ROSE", "ASSURE", "N°")
     val searchBarChipsTitles = listOf(
         "APPORTEUR", "assure", "attestation", "compagnie", "telephone",
-        "immatriculation", "Chassis", "mark", "numeroPolice"
+        "immatriculation", "chassis", "mark", "numeroPolice"
     ).sorted()
     val filterDialogChips: List<String> = mutableListOf(
         "Apporteur", "Assure", "Attestation", "Carte rose", "Categorie",
-        "Compagnie", "Immatriculation", "Chassis", "Mark", "Numero police"
+        "Chassis", "Compagnie", "Immatriculation", "Mark", "Numero police"
     ).sorted()
     const val isoDatePattern = "yyyy-MM-dd'T'HH:mm"
     const val desiredDatePattern = "yyyy-MM-dd"
