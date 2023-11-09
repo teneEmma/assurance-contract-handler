@@ -120,6 +120,7 @@
     <string name="wait_file_creation_to_complete">Attendez que la creation de l\'autre fichier soit achevé.</string>
     <string name="view_text">Voir</string>
     <string name="filter_not_applied">Aucune option de filtre n\'a été choisie</string>
+    <string name="settings_applied">Modifications des paramètres appliquées</string>
 
     <string name="content_description_loading_progress">Niveau De Progression</string>
     <string name="content_description_fab_add_document">Ajouter un document</string>
@@ -137,6 +138,7 @@
     <string name="language_title">Langue</string>
     <string name="language_summary">Choisir une langue</string>
     <string name="predefined_message_summary">Le message par défaut à envoyé aux clients par whatsapp ou SMS</string>
+    <string name="predefined_file_export_to_summary">Fichier par défaut qui va être utilisé pour exporter les contrats</string>
     <string name="predefined_message_edition_summary_no_colors">Mettez ces mots(en bleu) pour permettre à l\'application de les remplacer automatiquement avec les valeurs du contrat.VEHICLE_ID (marque du véhicule), START_DATE_ID (date de début), END_DATE_ID (date d\'échéance), CHASSIS_ID (numero de chassis) et PLATE_NUMBER_ID (plaque d\'immatriculation)
     </string>
     <string name="predefined_message_edition_summary_with_colors">Mettez ces mots(en bleu) pour permettre à l\'application de les remplacer automatiquement avec les valeurs du contrat.</string>
@@ -154,6 +156,7 @@
         \n<font fgcolor='#0037FF'>REGISTRATION_ID</font>(attestation).
     </string>
     <string name="default_message_title">Message par défaut</string>
+    <string name="file_export_to_title">Fichier pour exporter les contrats</string>
     <string name="theme_mode_title">Choisir le theme</string>
     <string name="mode_off">Désactivé</string>
     <string name="mode_on">Activé</string>

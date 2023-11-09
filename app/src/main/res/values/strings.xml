@@ -110,6 +110,7 @@
     <string name="wait_file_creation_to_complete">Wait for till other file is created.</string>
     <string name="view_text">View</string>
     <string name="filter_not_applied">No filtering option was applied</string>
+    <string name="settings_applied">Settings changes applied</string>
 
     <string name="column_attestation" translatable="false">000*Z*0112233</string>
     <string name="column_carteRose" translatable="false">00011333</string>
@@ -162,6 +163,7 @@
     <string name="language_title">Language</string>
     <string name="language_summary">Chose a language</string>
     <string name="predefined_message_summary">Default text message to send to customers via whatsapp or SMS</string>
+    <string name="predefined_file_export_to_summary">Default file which is going to be used to export contracts</string>
     <string name="predefined_message_edition_summary_no_colors">Put these words(in blue) to permit the app to auto replace them with actual values from the contract.VEHICLE_ID(mark of vehicle), START_DATE_ID(start date), END_DATE_ID(due date), CHASSIS_ID (chassis number) and PLATE_NUMBER_ID(plate number).
     </string>
     <string name="predefined_message_edition_summary_with_colors">Put these words(in blue) to permit the app to auto replace them with values from the contract.</string>
@@ -179,6 +181,7 @@
         \n<font fgcolor='#0037FF'>REGISTRATION_ID</font>(registration number).
     </string>
     <string name="default_message_title">Default message</string>
+    <string name="file_export_to_title">File model for exporting contracts</string>
     <string name="theme_mode_title">Chose the theme</string>
     <string name="mode_off">Deactivate</string>
     <string name="mode_on">Activate</string>
@@ -191,6 +194,7 @@
     <string name="expiring_contracts_notifications_key" translatable="false">expiring_contracts_notifications</string>
     <string name="expiring_notifications_periodicity_key" translatable="false">expiring_notification_check_interval</string>
     <string name="predefined_message_key" translatable="false">predefined_message</string>
+    <string name="file_for_exporting_key" translatable="false">file_for_exporting_message</string>
     <string name="first_install_key" translatable="false">newly_installed</string>
 
     <string-array name="expandable_group_titles_list">
