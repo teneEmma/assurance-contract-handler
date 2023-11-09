@@ -26,7 +26,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentStart="true"
-                android:text="@string/default_message_title"
+                android:text="@string/file_export_to_title"
                 android:textAppearance="@style/Headers.header_2"
                 android:textSize="18sp"/>
 
@@ -37,7 +37,7 @@
                 android:scrollbars="none"
                 android:layout_below="@+id/title"
                 android:layout_alignParentStart="true"
-                android:text="@string/predefined_message_summary"
+                android:text="@string/predefined_file_export_to_summary"
                 android:textAppearance="@style/normal"
                 android:textSize="12sp"/>
 
