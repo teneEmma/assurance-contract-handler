@@ -50,9 +50,19 @@ abstract class BaseViewModel : ViewModel() {
         }
     }
 
-    fun exportContractToFile(contract: Contract, assetManager: AssetManager): Pair<Boolean, String?> {
+    fun exportContractToFile(
+        contract: Contract,
+        assetManager: AssetManager,
+        internalStorageAbsolutePath: String
+    ): Pair<Boolean, String?> {
         try {
-            val inputStream = assetManager.open("export_to_file.xlsx")
+            val filePath = "$internalStorageAbsolutePath/${ConstantsVariables.EXPORT_FILE_NAME}"
+            val file = File(filePath)
+            val inputStream = if (file.exists()) {
+                FileInputStream(file)
+            } else {
+                assetManager.open("export_to_file.xlsx")
+            }
             val dateTime = TimeConverters.formatLocaleDateTimeForFileName(Date().time)
             val fileName = "${contract.assure}-$dateTime.xlsx"
 

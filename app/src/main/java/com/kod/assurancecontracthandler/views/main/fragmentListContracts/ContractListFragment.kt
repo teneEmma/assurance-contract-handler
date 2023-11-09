@@ -540,6 +540,7 @@ class ContractListFragment : Fragment(), SearchView.OnQueryTextListener {
     private fun exportContractToFile() {
         contractListViewModel.exportContractToFile(
             requireContext().assets,
+            requireContext().filesDir.absolutePath
         )
     }
 

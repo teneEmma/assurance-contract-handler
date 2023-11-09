@@ -181,6 +181,7 @@ class ExpiringContractsActivity : AppCompatActivity(), SearchView.OnQueryTextLis
     private fun exportContractToFile() {
         expiringContractViewModel.exportContractToFile(
             assets,
+            filesDir.absolutePath
         )
     }
 

@@ -67,7 +67,7 @@ class ExpiringContractsViewModel(private val contractRepository: ContractReposit
         }
     }
 
-    fun exportContractToFile(assetManager: AssetManager) {
+    fun exportContractToFile(assetManager: AssetManager, fileAbsolutePath: String) {
         val baseContract = contractsToExpire.value?.get(idItemSlided)
         val contractToExport = baseContract?.contract
         if (contractToExport == null) {
@@ -76,7 +76,7 @@ class ExpiringContractsViewModel(private val contractRepository: ContractReposit
         }
 
         executeFunctionWithAnimation {
-            val result = super.exportContractToFile(contractToExport, assetManager)
+            val result = super.exportContractToFile(contractToExport, assetManager, fileAbsolutePath)
             if (result.first) {
                 _createdFileName = result.second
                 _messageResourceId.postValue(R.string.file_creation_successful)
