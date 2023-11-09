@@ -7,9 +7,14 @@
         <EditTextPreference
                 app:key="@string/predefined_message_key"
                 app:summary="@string/predefined_message_edition_summary_no_colors"
+                android:layout="@layout/root_preference_edit_text_preference_default_message"
                 android:positiveButtonText="@string/save"
                 android:negativeButtonText="@string/cancel_text"
                 android:dialogLayout="@layout/root_preference_edit_text_dialog_preference"/>
+
+        <Preference
+                app:key="@string/file_for_exporting_key"
+                android:layout="@layout/root_preference_edit_text_preference_export_file"/>
 
         <ListPreference
                 app:key="@string/theme_mode_key"
