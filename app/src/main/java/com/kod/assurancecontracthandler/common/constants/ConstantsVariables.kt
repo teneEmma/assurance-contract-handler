@@ -44,6 +44,7 @@ object ConstantsVariables {
     const val WELCOME_WORK_NAME = "SHOWING_WELCOME_MESSAGE"
     const val CHECKING_EXPIRY_CONTRACTS_WORK_NAME = "CHECKING_EXPIRING_CONTRACTS"
     const val EXPORT_SHEET_NAME = "CONTRATS"
+    const val EXPORT_FILE_NAME = "FILE_TO_EXPORT.xlsx"
     const val expiryChannelID_int = 1234
     const val firstTimeChannelID_int = 4321
     const val futureTenseExpire = "will expire"
