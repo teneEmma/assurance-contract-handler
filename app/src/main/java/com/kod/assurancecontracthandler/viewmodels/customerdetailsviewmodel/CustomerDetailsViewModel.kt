@@ -150,7 +150,7 @@ class CustomerDetailsViewModel(
         }
     }
 
-    fun exportContractToFile(assetManager: AssetManager) {
+    fun exportContractToFile(assetManager: AssetManager, fileAbsolutePath: String) {
         val baseContract = _customerContracts.value?.get(idItemSlided)
         val contractToExport = baseContract?.contract
         if (contractToExport == null) {
@@ -159,7 +159,7 @@ class CustomerDetailsViewModel(
         }
 
         executeFunctionWithAnimation {
-            val result = super.exportContractToFile(contractToExport, assetManager)
+            val result = super.exportContractToFile(contractToExport, assetManager, fileAbsolutePath)
             if (result.first) {
                 _createdFileName = result.second
                 Log.d("MESSAGE111", "$result")

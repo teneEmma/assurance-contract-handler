@@ -185,7 +185,7 @@ class ContractListViewModel(
 
         executeFunctionWithAnimation {
             // Removing the first AND in query
-            if(suffixFilterQuery.isEmpty()){
+            if (suffixFilterQuery.isEmpty()) {
                 _messageResourceId.postValue(R.string.filter_not_applied)
                 return@executeFunctionWithAnimation
             }
@@ -350,7 +350,7 @@ class ContractListViewModel(
         return suffixFilterQuery
     }
 
-    fun exportContractToFile(assetManager: AssetManager) {
+    fun exportContractToFile(assetManager: AssetManager, fileAbsolutePath: String) {
         val baseContract = _allContracts.value?.get(idItemSlided)
         val contractToExport = baseContract?.contract
         if (contractToExport == null) {
@@ -359,7 +359,7 @@ class ContractListViewModel(
         }
 
         executeFunctionWithAnimation {
-            val result = super.exportContractToFile(contractToExport, assetManager)
+            val result = super.exportContractToFile(contractToExport, assetManager, fileAbsolutePath)
             if (result.first) {
                 _createdFileName = result.second
                 _messageResourceId.postValue(R.string.file_creation_successful)

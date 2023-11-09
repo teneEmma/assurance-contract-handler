@@ -222,6 +222,7 @@ class CustomerDetailsActivity : AppCompatActivity() {
     private fun exportContractToFile() {
         customerDetailsViewModel.exportContractToFile(
             assets,
+            filesDir.absolutePath
         )
     }
 
