@@ -162,10 +162,8 @@ class CustomerDetailsViewModel(
             val result = super.exportContractToFile(contractToExport, assetManager, fileAbsolutePath)
             if (result.first) {
                 _createdFileName = result.second
-                Log.d("MESSAGE111", "$result")
                 _messageResourceId.postValue(R.string.file_creation_successful)
             } else {
-                Log.d("MESSAGE222", "$result")
                 _messageResourceId.postValue(R.string.file_creation_failed)
             }
         }

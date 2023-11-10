@@ -133,7 +133,6 @@ class CustomerDetailsActivity : AppCompatActivity() {
         }
 
         customerDetailsViewModel.messageResourceId.observe(this) { resourceId ->
-            Log.d("XXX MESSAGE XXX", "${resourceId?.let { resources.getString(it) }}")
             when (resourceId) {
                 R.string.file_creation_successful -> showSnackWithAction(R.string.file_creation_successful) { openDocument() }
                 else -> {
