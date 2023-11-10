@@ -27,8 +27,8 @@
     <string name="attestation_title">ATTESTATION:</string>
     <string name="plate_number_title">IMMATRICULATION:</string>
     <string name="chassis_number">Numero de chassis</string>
-    <string name="due_date_title">Effet:</string>
-    <string name="start_date_title">Echéance:</string>
+    <string name="due_date_title">Echéance:</string>
+    <string name="start_date_title">Effet:</string>
     <string name="customer_name">NOMS Prenoms</string>
     <string name="profile_picture">Photo De Profil</string>
     <string name="save_successful">Base de données mis-à-jour avec success</string>
